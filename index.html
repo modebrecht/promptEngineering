@@ -792,13 +792,28 @@
                     
                     <div class="space-y-4 text-slate-300">
                         <p><strong>Ziel:</strong> Kritisches Denken fördern, indem man nicht nur eine Perspektive (Pro/Contra Liste), sondern echte Dialoge verschiedener Sichtweisen simuliert.</p>
-                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-teal-400 font-bold mb-1">Persona-Tiefe</p>
+                                <p>Klare Rolle + eine prägende Eigenschaft (z.B. "Prüfungsangst") — das erzeugt echte Perspektive.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-teal-400 font-bold mb-1">Konflikt-Potenzial</p>
+                                <p>Personas müssen sich inhaltlich widersprechen können — sonst entsteht kein Dialog.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-teal-400 font-bold mb-1">Moderator</p>
+                                <p>Gibt Struktur, verhindert Monologe und hält alle Personas beim Thema.</p>
+                            </div>
+                        </div>
+
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Der Standard-Prompt</p>
                             <div class="prompt-box p-4 rounded-r-lg relative group/copy">
                                 <p id="prompt7a" class="text-sm">Nenne Vor- und Nachteile der Abschaffung von Schulnoten.</p>
                                 <button onclick="copyText('prompt7a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
+                            <p class="text-xs text-slate-400">Problem: Die KI liefert eine ausgewogene, aber flache Liste — ohne Emotionen, echte Reibung oder persönliche Betroffenheit.</p>
                         </div>
 
                         <div class="space-y-2 mt-4">
@@ -807,13 +822,14 @@
                                 <p id="prompt7b" class="text-sm">Simuliere eine hitzige Talkshow zum Thema "Sollen wir Schulnoten abschaffen?". Die Gäste sind:<br><br>1. Eine extrem strenge, altmodische Lehrerin.<br>2. Ein 15-jähriger Schüler, der oft Prüfungsangst hat.<br>3. Eine moderne Hirnforscherin.<br><br>Lass einen Moderator das Gespräch eröffnen und die Gäste direkt aufeinander reagieren.</p>
                                 <button onclick="copyText('prompt7b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
+                            <p class="text-xs text-slate-400">Der Trick: Unterschiedliche Persönlichkeiten erzeugen echten Widerspruch — das macht Argumente greifbarer und einprägsamer als jede Liste.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quiz Card -->
                 <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-teal-400 rounded-2xl p-8 relative shadow-2xl">
-                    <div class="absolute top-4 right-4 text-sm font-semibold text-teal-400 bg-teal-400/10 px-3 py-1 rounded-full" id="progress-7">0/3 Richtig</div>
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-teal-400 bg-teal-400/10 px-3 py-1 rounded-full" id="progress-7">0/4 Richtig</div>
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-microscope text-teal-400"></i> Reflexions-Check
                     </h3>
@@ -823,6 +839,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q7-1', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Argumente werden emotionaler, lebendiger und aus echten menschlichen Blickwinkeln beleuchtet, was tiefere Einsichten ermöglicht.</button>
                                 <button onclick="revealQuiz('q7-1', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es spart sehr viel Zeit, da die KI viel kürzer antwortet.</button>
+                                <button onclick="revealQuiz('q7-1', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI liefert dadurch faktisch korrektere Aussagen ohne Halluzinationen.</button>
                             </div>
                             <div id="q7-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -831,6 +848,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q7-2', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ohne Moderator weigert sich die KI, kontroverse Themen zu diskutieren.</button>
                                 <button onclick="revealQuiz('q7-2', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er gibt dem simulierten Dialog Struktur, stellt Rückfragen und hält die verschiedenen Persönlichkeiten beim Thema.</button>
+                                <button onclick="revealQuiz('q7-2', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Der Moderator sorgt dafür, dass die KI keine Fehler in den Fakten macht.</button>
                             </div>
                             <div id="q7-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -838,9 +856,20 @@
                             <p class="text-slate-200 mb-3 text-sm font-medium">7.3 Warum ist diese Übung so wertvoll für das "Kritische Denken" in der Schule?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q7-3', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil sie zeigt, dass es oft nicht nur "die eine Wahrheit" gibt, sondern viele berechtigte Perspektiven, die man abwägen muss.</button>
-                                <button onclick="revealQuiz('q7-3', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die Schüler so lernen, dass Lehrer (wie die altmodische Lehrerin) immer recht haben.</button>
+                                <button onclick="revealQuiz('q7-3', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dabei automatisch die objektiv beste Lösung herausfiltert.</button>
+                                <button onclick="revealQuiz('q7-3', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil Dialoge immer kürzer sind als Listen und dadurch leichter zu lesen.</button>
                             </div>
                             <div id="q7-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">7.4 Was macht eine Persona im Multi-Persona-Prompt wirkungsvoll?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q7-4', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Eine klare Rolle plus eine prägende Eigenschaft (z.B. "Prüfungsangst") — das erzeugt eine erkennbare, echte Perspektive.</button>
+                                <button onclick="revealQuiz('q7-4', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ein möglichst langer Name und eine ausführliche Biografie für jede Person.</button>
+                                <button onclick="revealQuiz('q7-4', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Alle Personas sollten ähnliche Meinungen haben, damit kein Konflikt entsteht.</button>
+                            </div>
+                            <div id="q7-4" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
 
                         <div id="restart-container-7" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
@@ -865,10 +894,28 @@
                     
                     <div class="space-y-4 text-slate-300">
                         <p><strong>Ziel:</strong> Erkennen, dass die KI oft viel besser darin ist, hochkomplexe Prompts zu schreiben, als wir selbst.</p>
-                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-brand-pink font-bold mb-1">Was ist Meta?</p>
+                                <p>Die KI schreibt den Prompt für ein anderes Tool — du lieferst das Ziel, sie die Fachsprache.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-brand-pink font-bold mb-1">Wann nutzen?</p>
+                                <p>Wenn das Ziel klar ist, aber die Fachbegriffe (z.B. für Bildgeneratoren, Code, Jura) fehlen.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-brand-pink font-bold mb-1">Grenze</p>
+                                <p>Vages Ziel → vager Meta-Prompt. Müll rein, Müll raus — das Ziel muss klar sein.</p>
+                            </div>
+                        </div>
+
                         <div class="space-y-2 mt-4">
-                            <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Das Problem</p>
-                            <p class="text-sm">Du brauchst ein Bild von einem "Hund im Wald", aber wenn du das in einen Bildgenerator (wie Midjourney oder DALL-E) tippst, sieht es langweilig aus. Dir fehlen die Fachbegriffe für Kamera, Licht und Stil.</p>
+                            <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Der naive Versuch</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative group/copy">
+                                <p id="prompt8a" class="text-sm">Ein fotorealistisches Bild: Golden Retriever im Herbstwald.</p>
+                                <button onclick="copyText('prompt8a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <p class="text-xs text-slate-400">Problem: Du weißt was du willst, aber nicht wie man es einem Bildgenerator sagt. Dir fehlen Begriffe wie Kameraeinstellung, Licht und Stil — das Ergebnis wirkt flach und generisch.</p>
                         </div>
 
                         <div class="space-y-2 mt-4">
@@ -877,13 +924,14 @@
                                 <p id="prompt8b" class="text-sm">Du bist ein Weltklasse-Experte für KI-Bildgeneratoren (Prompt-Engineering). Ich möchte ein Bild von einem Golden Retriever im Herbstwald erstellen.<br><br>Schreibe mir den perfekten, hochdetaillierten englischen Prompt, den ich in die Bild-KI eingeben muss. Erwähne Kameraeinstellungen, Lichtverhältnisse (z.B. Cinematic Lighting), Stil und Atmosphäre, um ein preisgekröntes, fotorealistisches Bild zu erhalten. Gib mir NUR den fertigen Prompt aus, ohne weitere Erklärungen.</p>
                                 <button onclick="copyText('prompt8b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
+                            <p class="text-xs text-slate-400">Besser: Die KI übersetzt dein Ziel in Fachsprache — du lieferst das Was, sie das Wie. Den fertigen Output fügst du direkt in den Bildgenerator ein.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quiz Card -->
                 <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-pink rounded-2xl p-8 relative shadow-2xl">
-                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-pink bg-brand-pink/10 px-3 py-1 rounded-full" id="progress-8">0/3 Richtig</div>
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-pink bg-brand-pink/10 px-3 py-1 rounded-full" id="progress-8">0/4 Richtig</div>
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-microscope text-brand-pink"></i> Reflexions-Check
                     </h3>
@@ -892,25 +940,38 @@
                             <p class="text-slate-200 mb-3 text-sm font-medium">8.1 Warum funktioniert Meta-Prompting so unfassbar gut?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q8-1', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI kennt die Struktur ihrer eigenen Trainingsdaten am besten und weiß genau, auf welche technischen Schlüsselwörter andere Sprachmodelle optimal reagieren.</button>
-                                <button onclick="revealQuiz('q8-1', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dadurch Mitleid mit dem Nutzer bekommt und sich besonders viel Mühe gibt.</button>
+                                <button onclick="revealQuiz('q8-1', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI durch den langen Prompt mehr Zeit zum Nachdenken hat und deshalb genauer wird.</button>
+                                <button onclick="revealQuiz('q8-1', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil das Zauberwort "Weltklasse-Experte" die KI in einen speziellen Modus versetzt.</button>
                             </div>
                             <div id="q8-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">8.2 Wofür eignet sich Meta-Prompting besonders im Alltag?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q8-2', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Nur um lustige Emojis generieren zu lassen.</button>
+                                <button onclick="revealQuiz('q8-2', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn man noch gar nicht weiß, was man will — die KI entscheidet dann selbst über das Ziel.</button>
                                 <button onclick="revealQuiz('q8-2', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn man genau weiß, WAS man will (das Ziel), aber nicht weiß, WIE man es der KI am besten fachlich formulieren soll.</button>
+                                <button onclick="revealQuiz('q8-2', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ausschließlich für Bildgeneratoren — bei Texten funktioniert Meta-Prompting nicht.</button>
                             </div>
                             <div id="q8-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">8.3 Was ist der logisch nächste Schritt, nachdem die KI dir den Meta-Prompt ausgegeben hat?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q8-3', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man kopiert den von ihr geschriebenen Text und fügt ihn als *neuen* Prompt in eine frische KI-Sitzung ein.</button>
-                                <button onclick="revealQuiz('q8-3', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man muss sich den Text ausdrucken und dem Lehrer abgeben.</button>
+                                <button onclick="revealQuiz('q8-3', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man kopiert den von ihr geschriebenen Text und fügt ihn als neuen Prompt in das Zieltool (z.B. Bildgenerator) ein.</button>
+                                <button onclick="revealQuiz('q8-3', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man schickt den Meta-Prompt nochmals an dieselbe KI und lässt sie ihn selbst ausführen.</button>
+                                <button onclick="revealQuiz('q8-3', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man speichert ihn unverändert als Vorlage — Meta-Prompts müssen nie angepasst werden.</button>
                             </div>
                             <div id="q8-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">8.4 Was ist eine wichtige Grenze von Meta-Prompting?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q8-4', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn das eigene Ziel unklar ist, kann auch die KI keinen guten Prompt schreiben — vages Ziel ergibt vagen Output.</button>
+                                <button onclick="revealQuiz('q8-4', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Meta-Prompting funktioniert nur auf Englisch, nicht auf Deutsch.</button>
+                                <button onclick="revealQuiz('q8-4', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es kann nur einmal pro Tag verwendet werden, da es viele Ressourcen verbraucht.</button>
+                            </div>
+                            <div id="q8-4" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
 
                         <div id="restart-container-8" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
@@ -935,7 +996,21 @@
                     
                     <div class="space-y-4 text-slate-300">
                         <p><strong>Ziel:</strong> Die KI daran hindern, "Wissen" aus dem Internet zu erfinden, indem wir ihr exakt vorschreiben, welche Quelle sie nutzen darf.</p>
-                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-blue-400 font-bold mb-1">Anker setzen</p>
+                                <p>Eigenen Text einfügen und als einzige erlaubte Quelle markieren.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-blue-400 font-bold mb-1">Ausschließlich-Regel</p>
+                                <p>"AUSSCHLIESSLICH basierend auf..." verhindert, dass die KI frei rät.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-blue-400 font-bold mb-1">Lücken benennen</p>
+                                <p>"Das steht nicht im Text" ist eine gültige und wertvolle Antwort.</p>
+                            </div>
+                        </div>
+
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Der gefährliche Prompt</p>
                             <div class="prompt-box p-4 rounded-r-lg relative group/copy">
@@ -951,13 +1026,14 @@
                                 <p id="prompt9b" class="text-sm">Hier ist ein Textauszug aus meinem Geschichtsbuch: <br><br>"[Füge hier irgendeinen beliebigen Wikipedia-Satz über Rom ein]"<br><br>Fasse die Ursachen für den Untergang Roms AUSSCHLIESSLICH basierend auf dem oben stehenden Text zusammen. Nutze kein externes Wissen. Wenn der Text die Frage nicht beantwortet, sage: "Das steht nicht im Text."</p>
                                 <button onclick="copyText('prompt9b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
+                            <p class="text-xs text-slate-400">Besser: Die KI wird zum Text-Zusammenfasser statt zum Wissens-Orakel — was nicht im Text steht, muss sie zugeben statt erfinden.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quiz Card -->
                 <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-blue-400 rounded-2xl p-8 relative shadow-2xl">
-                    <div class="absolute top-4 right-4 text-sm font-semibold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full" id="progress-9">0/3 Richtig</div>
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full" id="progress-9">0/4 Richtig</div>
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-microscope text-blue-400"></i> Reflexions-Check
                     </h3>
@@ -966,15 +1042,17 @@
                             <p class="text-slate-200 mb-3 text-sm font-medium">9.1 Warum ist der Daten-Anker bei Hausaufgaben oder Recherchen so unfassbar wichtig?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q9-1', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er verhindert Halluzinationen zu fast 100%, weil die KI als "Text-Zusammenfasser" anstatt als "Wissens-Orakel" agiert.</button>
-                                <button onclick="revealQuiz('q9-1', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er sorgt dafür, dass die KI längere Antworten schreibt.</button>
+                                <button onclick="revealQuiz('q9-1', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er sorgt dafür, dass die KI automatisch die besten Quellen im Internet sucht.</button>
+                                <button onclick="revealQuiz('q9-1', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er verkürzt die Antwortzeit, da die KI weniger nachdenken muss.</button>
                             </div>
                             <div id="q9-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">9.2 Was bedeutet der Profi-Begriff "RAG" (Retrieval-Augmented Generation) in diesem Zusammenhang?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q9-2', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Random AI Generation (Zufällige Erzeugung von Texten).</button>
+                                <button onclick="revealQuiz('q9-2', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Random AI Generation — die KI erzeugt zufällig verschiedene Textvarianten zur Auswahl.</button>
                                 <button onclick="revealQuiz('q9-2', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man "holt" (Retrieval) zuerst verlässliche Fakten (z.B. aus einem PDF) und gibt sie der KI mit, damit sie ihren Text darauf aufbaut (Augmented).</button>
+                                <button onclick="revealQuiz('q9-2', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Rapidly Answers Generated — ein Verfahren, das Antworten automatisch auf Fehler prüft.</button>
                             </div>
                             <div id="q9-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -982,9 +1060,20 @@
                             <p class="text-slate-200 mb-3 text-sm font-medium">9.3 Was passiert, wenn der mitgelieferte Text die Frage gar nicht beantwortet?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q9-3', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn der Prompt gut ist, gibt die KI zu, dass die Info im Text fehlt ("Das steht nicht im Text"), anstatt zu lügen.</button>
-                                <button onclick="revealQuiz('q9-3', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI stürzt ab und der Browser muss neu geladen werden.</button>
+                                <button onclick="revealQuiz('q9-3', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI sucht selbstständig im Internet nach der fehlenden Antwort.</button>
+                                <button onclick="revealQuiz('q9-3', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI gibt einen leeren Text aus und wartet auf weitere Anweisungen.</button>
                             </div>
                             <div id="q9-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.4 Wann ist der Daten-Anker NICHT nötig?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q9-4', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Bei kreativen Aufgaben ohne Faktenanspruch — z.B. beim Schreiben einer Geschichte oder beim Brainstorming.</button>
+                                <button onclick="revealQuiz('q9-4', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn man dem Thema vertraut und keine Zeit hat, Quellen zu suchen — dann ist die KI zuverlässig genug.</button>
+                                <button onclick="revealQuiz('q9-4', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Bei kurzen Texten unter 50 Wörtern — dort halluziniert die KI nachweislich weniger.</button>
+                            </div>
+                            <div id="q9-4" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
 
                         <div id="restart-container-9" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
@@ -1009,7 +1098,21 @@
                     
                     <div class="space-y-4 text-slate-300">
                         <p><strong>Ziel:</strong> Du schreibst nicht mehr für jede Aufgabe einen neuen Fließtext. Du baust dir eine feste Struktur (wie in der Programmierung), in die du nur noch Variablen `[wie diese]` einfüllst.</p>
-                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-brand-gold font-bold mb-1">Sektionen (#)</p>
+                                <p>Gliedern den Prompt klar in Rolle, Aufgabe, Kontext, Regeln und Format.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-brand-gold font-bold mb-1">Variablen [ ]</p>
+                                <p>Platzhalter, die du vor jeder Nutzung durch den echten Wert ersetzt — z.B. [FACH] → Biologie.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-brand-gold font-bold mb-1">Kombination</p>
+                                <p>Fasst alle Techniken der Masterclass in einem einzigen, wiederverwendbaren Prompt zusammen.</p>
+                            </div>
+                        </div>
+
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Die universelle Hausaufgaben-Schablone</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-brand-gold group/copy bg-brand-gold/5">
@@ -1034,14 +1137,14 @@
                                 </p>
                                 <button onclick="copyText('prompt10', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
-                            <p class="text-xs text-slate-400 mt-2">Kopiere dies, ersetze [FACH], [THEMA] und [KLASSE] durch etwas Echtes (z.B. Biologie, Fotosynthese, 8) und teste es!</p>
+                            <p class="text-xs text-slate-400 mt-2">Kopiere dies, ersetze [FACH], [THEMA] und [KLASSE] durch etwas Echtes (z.B. Biologie, Fotosynthese, 8) und teste es! Die Schablone funktioniert für jedes Fach und jede Klassenstufe — du änderst nur die Variablen.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quiz Card -->
                 <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-gold rounded-2xl p-8 relative shadow-2xl">
-                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-gold bg-brand-gold/10 px-3 py-1 rounded-full" id="progress-10">0/3 Richtig</div>
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-gold bg-brand-gold/10 px-3 py-1 rounded-full" id="progress-10">0/4 Richtig</div>
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-microscope text-brand-gold"></i> Reflexions-Check
                     </h3>
@@ -1049,8 +1152,9 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">10.1 Warum nutzen Profis Hashtags (#) und Großbuchstaben in Mega-Prompts?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q10-1', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil es auf dem Bildschirm für den Menschen cooler und nach echtem "Hacking" aussieht.</button>
+                                <button onclick="revealQuiz('q10-1', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil Hashtags die Antwortgeschwindigkeit erhöhen — das Modell verarbeitet sie schneller als normalen Text.</button>
                                 <button onclick="revealQuiz('q10-1', this, true, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es hilft dem Sprachmodell (LLM), die Gewichtung und Struktur des Textes zu verstehen. Markdown-Überschriften ordnen den Kontext.</button>
+                                <button onclick="revealQuiz('q10-1', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI Großbuchstaben als verbindliche Befehle interpretiert und sie deshalb nie ignoriert.</button>
                             </div>
                             <div id="q10-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -1058,7 +1162,8 @@
                             <p class="text-slate-200 mb-3 text-sm font-medium">10.2 Was ist der entscheidende Vorteil dieser "Schablonen-Methode"?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q10-2', this, true, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Skalierbarkeit und Reproduzierbarkeit. Man muss das Rad nicht jedes Mal neu erfinden, sondern tauscht nur noch die Variablen [ ] aus.</button>
-                                <button onclick="revealQuiz('q10-2', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI antwortet dadurch in Sekundenschnelle, fast ohne Wartezeit.</button>
+                                <button onclick="revealQuiz('q10-2', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI liefert dadurch längere und detailliertere Antworten als bei kurzen Prompts.</button>
+                                <button onclick="revealQuiz('q10-2', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Schablone verhindert, dass die KI jemals halluziniert.</button>
                             </div>
                             <div id="q10-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -1070,6 +1175,16 @@
                                 <button onclick="revealQuiz('q10-3', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Chain of Thought</button>
                             </div>
                             <div id="q10-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">10.4 Was unterscheidet einen Mega-Prompt von einem normalen Prompt?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q10-4', this, true, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er hat eine feste Struktur mit austauschbaren Variablen — ein wiederverwendbares System, kein Einmal-Text.</button>
+                                <button onclick="revealQuiz('q10-4', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er ist einfach viel länger — ab 500 Wörtern gilt ein Prompt als "Mega".</button>
+                                <button onclick="revealQuiz('q10-4', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er kann nur einmal verwendet werden, liefert dann aber garantiert perfekte Ergebnisse.</button>
+                            </div>
+                            <div id="q10-4" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
 
                         <div id="restart-container-10" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
@@ -1092,9 +1207,36 @@
                     </h2>
                     <p class="text-emerald-400 text-sm font-semibold mb-6 uppercase tracking-wider">Antworten prüfen, verbessern, iterieren</p>
                     
+                    <!-- Concept Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                        <div class="bg-slate-800/60 border border-emerald-400/20 rounded-xl p-4 text-center">
+                            <div class="text-2xl mb-2"><i class="fa-solid fa-table-list text-emerald-400"></i></div>
+                            <h4 class="font-bold text-white text-sm mb-1">Bewertungsraster</h4>
+                            <p class="text-xs text-slate-400">Klare Kriterien, anhand derer die KI ihre eigene Antwort bewertet – nicht nur "besser machen", sondern woran gemessen.</p>
+                        </div>
+                        <div class="bg-slate-800/60 border border-emerald-400/20 rounded-xl p-4 text-center">
+                            <div class="text-2xl mb-2"><i class="fa-solid fa-arrow-rotate-right text-emerald-400"></i></div>
+                            <h4 class="font-bold text-white text-sm mb-1">Iteratives Prompting</h4>
+                            <p class="text-xs text-slate-400">Nicht ein perfekter Prompt – sondern ein Prozess: Antwort prüfen, gezieltes Feedback geben, in Runden verbessern.</p>
+                        </div>
+                        <div class="bg-slate-800/60 border border-emerald-400/20 rounded-xl p-4 text-center">
+                            <div class="text-2xl mb-2"><i class="fa-solid fa-magnifying-glass text-emerald-400"></i></div>
+                            <h4 class="font-bold text-white text-sm mb-1">Review-Loop</h4>
+                            <p class="text-xs text-slate-400">Die KI wechselt die Rolle: von Antwortgeber zu Prüfer. Sie bewertet, verbessert und erklärt ihre eigenen Änderungen.</p>
+                        </div>
+                    </div>
+
                     <div class="space-y-4 text-slate-300">
                         <p><strong>Ziel:</strong> Nicht die erste Antwort ist das Ziel, sondern eine geprüfte, verbesserte Version. Du gibst der KI ein Bewertungsraster und lässt sie danach gezielt nachbessern.</p>
-                        
+
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-red-400 mr-2"></i>Ohne Review-Loop</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-red-400 opacity-70">
+                                <p class="text-sm whitespace-pre-line">Verbessere deine Antwort.</p>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-1">Kein Kriterium, kein Maßstab – die KI formuliert um, ohne zu wissen, was fehlt oder falsch ist.</p>
+                        </div>
+
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Der Review-Loop</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-emerald-400 group/copy">
@@ -1117,34 +1259,46 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
 
                 <!-- Quiz Card -->
                 <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-emerald-400 rounded-2xl p-8 relative shadow-2xl">
-                    <div class="absolute top-4 right-4 text-sm font-semibold text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full" id="progress-11">0/3 Richtig</div>
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full" id="progress-11">0/4 Richtig</div>
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-microscope text-emerald-400"></i> Reflexions-Check
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">11.1 Warum ist ein Bewertungsraster besser als "Mach es besser"?</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                                 <button onclick="revealQuiz('q11-1', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil es klare Kriterien setzt und die Verbesserung messbarer macht.</button>
                                 <button onclick="revealQuiz('q11-1', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dann automatisch im Internet nach Quellen sucht.</button>
+                                <button onclick="revealQuiz('q11-1', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil kürzere Prompts grundsätzlich bessere Antworten erzeugen.</button>
                             </div>
                             <div id="q11-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">11.2 Was ist der Kern von iterativem Prompting?</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                                 <button onclick="revealQuiz('q11-2', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man schreibt einen extrem langen ersten Prompt und akzeptiert dann jede Antwort.</button>
                                 <button onclick="revealQuiz('q11-2', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man prüft die Antwort, gibt gezieltes Feedback und verbessert sie in mehreren Schritten.</button>
+                                <button onclick="revealQuiz('q11-2', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man sendet denselben Prompt mehrfach und nimmt die häufigste Antwort.</button>
                             </div>
                             <div id="q11-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">11.3 Warum soll die KI erklären, was sie verbessert hat?</p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
                                 <button onclick="revealQuiz('q11-3', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Damit man die Änderung nachvollziehen und beurteilen kann, ob die neue Version wirklich besser ist.</button>
                                 <button onclick="revealQuiz('q11-3', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Damit die Antwort länger aussieht und dadurch professioneller wirkt.</button>
+                                <button onclick="revealQuiz('q11-3', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI sonst nach jeder Runde alle vorherigen Änderungen vergisst.</button>
                             </div>
                             <div id="q11-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">11.4 Welches Element des Review-Loop-Prompts hilft dir beim eigenen Lernen am meisten?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <button onclick="revealQuiz('q11-4', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Nummerierung der Kriterien – ohne Zahlen ignoriert die KI die einzelnen Punkte.</button>
+                                <button onclick="revealQuiz('q11-4', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Länge des Prompts – je mehr Text, desto sorgfältiger die Prüfung.</button>
+                                <button onclick="revealQuiz('q11-4', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Erklärung am Ende, was konkret verbessert wurde – sie zeigt, worauf es wirklich ankommt.</button>
+                            </div>
+                            <div id="q11-4" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
 
                         <div id="restart-container-11" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
@@ -1241,7 +1395,7 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
         let tabProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
         let tabFailed = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false, 11: false };
         let currentCompletedTab = null;
-        const tabMaxQuestions = { 1: 5, 2: 3, 3: 6, 4: 5, 5: 4, 6: 4, 7: 3, 8: 3, 9: 3, 10: 3, 11: 3 };
+        const tabMaxQuestions = { 1: 5, 2: 3, 3: 6, 4: 5, 5: 4, 6: 4, 7: 4, 8: 4, 9: 4, 10: 4, 11: 4 };
 
         function initApp() {
             earnedBadges.forEach(badgeId => {
