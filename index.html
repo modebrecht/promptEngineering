@@ -109,7 +109,7 @@
             </p>
         </header>
 
-        <!-- Tab Navigation (Compact for 10 items) -->
+        <!-- Tab Navigation (Compact for 11 items) -->
         <div class="flex flex-wrap justify-center gap-2 mb-8" id="tab-container">
             <button onclick="showTab(1)" id="tab-btn-1" class="tab-btn px-3 py-1.5 rounded-full bg-brand-primary text-white text-xs font-semibold transition-all shadow-[0_0_15px_rgba(6,182,212,0.5)] border-none">1. CLEAR</button>
             <button onclick="showTab(2)" id="tab-btn-2" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>2. Micro</button>
@@ -121,6 +121,7 @@
             <button onclick="showTab(8)" id="tab-btn-8" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>8. Meta</button>
             <button onclick="showTab(9)" id="tab-btn-9" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>9. Anker</button>
             <button onclick="showTab(10)" id="tab-btn-10" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>10. Mega</button>
+            <button onclick="showTab(11)" id="tab-btn-11" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>11. Check</button>
         </div>
 
         <!-- Exercises Container -->
@@ -866,12 +867,87 @@
                     </div>
                 </div>
             </div>
+            <div id="exercise-11" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8 border-emerald-400/30">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-clipboard-check text-emerald-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-emerald-400/20 text-emerald-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">11</span>
+                        Der Qualitäts-Check
+                    </h2>
+                    <p class="text-emerald-400 text-sm font-semibold mb-6 uppercase tracking-wider">Antworten prüfen, verbessern, iterieren</p>
+                    
+                    <div class="space-y-4 text-slate-300">
+                        <p><strong>Ziel:</strong> Nicht die erste Antwort ist das Ziel, sondern eine geprüfte, verbesserte Version. Du gibst der KI ein Bewertungsraster und lässt sie danach gezielt nachbessern.</p>
+                        
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Der Review-Loop</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-emerald-400 group/copy">
+                                <p id="prompt11" class="text-sm whitespace-pre-line">Überprüfe deine letzte Antwort anhand dieser Kriterien:
+
+1. Ist sie sachlich korrekt?
+2. Ist sie für eine 8. Klasse verständlich?
+3. Fehlen wichtige Punkte?
+4. Ist sie zu lang, zu kurz oder unklar strukturiert?
+
+Gib zuerst eine kurze Bewertung in maximal 5 Bulletpoints.
+Schreibe danach eine verbesserte Version.
+Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
+                                <button onclick="copyText('prompt11', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2">Nutze diesen Prompt nach einer ersten Antwort. Er verwandelt ChatGPT vom Antwortgeber in einen Prüfer und Redaktor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Card -->
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-emerald-400 rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-emerald-400 bg-emerald-400/10 px-3 py-1 rounded-full" id="progress-11">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-emerald-400"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">11.1 Warum ist ein Bewertungsraster besser als "Mach es besser"?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q11-1', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil es klare Kriterien setzt und die Verbesserung messbarer macht.</button>
+                                <button onclick="revealQuiz('q11-1', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dann automatisch im Internet nach Quellen sucht.</button>
+                            </div>
+                            <div id="q11-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">11.2 Was ist der Kern von iterativem Prompting?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q11-2', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man schreibt einen extrem langen ersten Prompt und akzeptiert dann jede Antwort.</button>
+                                <button onclick="revealQuiz('q11-2', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man prüft die Antwort, gibt gezieltes Feedback und verbessert sie in mehreren Schritten.</button>
+                            </div>
+                            <div id="q11-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">11.3 Warum soll die KI erklären, was sie verbessert hat?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q11-3', this, true, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Damit man die Änderung nachvollziehen und beurteilen kann, ob die neue Version wirklich besser ist.</button>
+                                <button onclick="revealQuiz('q11-3', this, false, 11)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Damit die Antwort länger aussieht und dadurch professioneller wirkt.</button>
+                            </div>
+                            <div id="q11-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div id="restart-container-11" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(11)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Inventory Button -->
     <button onclick="toggleInventory()" class="fixed bottom-6 right-6 bg-slate-800 text-white p-4 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:bg-slate-700 transition-all z-40 flex items-center gap-3">
-        <span class="bg-slate-700 px-2 py-1 rounded text-xs font-bold" id="badge-counter">0/10</span>
+        <span class="bg-slate-700 px-2 py-1 rounded text-xs font-bold" id="badge-counter">0/11</span>
         <i class="fa-solid fa-backpack text-xl text-yellow-500"></i>
     </button>
 
@@ -902,12 +978,12 @@
             <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
                 <i class="fa-solid fa-backpack text-yellow-500"></i> Deine Masterclass-Zertifikate
             </h2>
-            <!-- Grid automatically flows to 2 rows for 10 items (5x2) -->
+            <!-- Grid automatically flows responsively for all badges -->
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8" id="inventory-grid">
                 <!-- Badges populated by JS -->
             </div>
             <div class="border-t border-slate-700 pt-6 flex justify-between items-center">
-                <span class="text-slate-400 text-sm" id="inventory-status-text">Sammle alle 10 Abzeichen!</span>
+                <span class="text-slate-400 text-sm" id="inventory-status-text">Sammle alle 11 Abzeichen!</span>
                 <button onclick="resetAllProgress()" class="text-xs px-4 py-2 bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 rounded transition-colors border border-slate-700 hover:border-rose-500/50">
                     <i class="fa-solid fa-trash mr-1"></i> Fortschritt löschen
                 </button>
@@ -927,7 +1003,8 @@
             7: "Multi-Persona",
             8: "Meta-Prompting",
             9: "Daten-Anker (RAG)",
-            10: "Mega-Prompt"
+            10: "Mega-Prompt",
+            11: "Qualitäts-Check"
         };
 
         const badgeData = {
@@ -940,21 +1017,22 @@
             7: { icon: 'fa-users-viewfinder', color: 'text-teal-400', border: 'border-teal-400', shadow: 'shadow-[0_0_15px_rgba(20,184,166,0.5)]', name: 'Das Chamäleon' },
             8: { icon: 'fa-infinity', color: 'text-brand-pink', border: 'border-brand-pink', shadow: 'shadow-[0_0_15px_rgba(236,72,153,0.5)]', name: 'Prompt-Gott' },
             9: { icon: 'fa-anchor', color: 'text-blue-400', border: 'border-blue-400', shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.5)]', name: 'Wissens-Anker' },
-            10: { icon: 'fa-chess-king', color: 'text-brand-gold', border: 'border-brand-gold', shadow: 'shadow-[0_0_30px_rgba(251,191,36,0.8)]', name: 'Prompt-Meister' }
+            10: { icon: 'fa-chess-king', color: 'text-brand-gold', border: 'border-brand-gold', shadow: 'shadow-[0_0_30px_rgba(251,191,36,0.8)]', name: 'Prompt-Meister' },
+            11: { icon: 'fa-clipboard-check', color: 'text-emerald-400', border: 'border-emerald-400', shadow: 'shadow-[0_0_20px_rgba(52,211,153,0.6)]', name: 'Qualitäts-Prüfer' }
         };
 
         let earnedBadges = JSON.parse(localStorage.getItem('prompt_badges')) || [];
         let unlockedTabs = [1];
         let solvedQuestions = new Set();
-        let tabProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0 };
-        let tabFailed = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+        let tabProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
+        let tabFailed = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false, 11: false };
         let currentCompletedTab = null;
 
         function initApp() {
             earnedBadges.forEach(badgeId => {
                 if (!unlockedTabs.includes(badgeId)) unlockedTabs.push(badgeId);
                 let nextTab = badgeId + 1;
-                if (nextTab <= 10 && !unlockedTabs.includes(nextTab)) unlockedTabs.push(nextTab);
+                if (nextTab <= 11 && !unlockedTabs.includes(nextTab)) unlockedTabs.push(nextTab);
             });
 
             unlockedTabs.forEach(tabId => {
@@ -989,7 +1067,7 @@
         function renderInventory() {
             const grid = document.getElementById('inventory-grid');
             grid.innerHTML = '';
-            for(let i=1; i<=10; i++) {
+            for(let i=1; i<=11; i++) {
                 const isEarned = earnedBadges.includes(i);
                 const data = badgeData[i];
                 
@@ -1010,13 +1088,13 @@
                 }
             }
             
-            document.getElementById('badge-counter').innerText = `${earnedBadges.length}/10`;
+            document.getElementById('badge-counter').innerText = `${earnedBadges.length}/11`;
             
             const statusText = document.getElementById('inventory-status-text');
-            if(earnedBadges.length === 10) {
+            if(earnedBadges.length === 11) {
                 statusText.innerHTML = '<span class="text-brand-gold font-bold"><i class="fa-solid fa-trophy mr-2"></i>Du hast die Masterclass zu 100% abgeschlossen!</span>';
             } else {
-                statusText.innerText = `Du hast ${earnedBadges.length} von 10 Zertifikaten gesammelt.`;
+                statusText.innerText = `Du hast ${earnedBadges.length} von 11 Zertifikaten gesammelt.`;
             }
         }
 
@@ -1120,7 +1198,7 @@
             let titleText = "Level abgeschlossen!";
             let btnText = "Nächste Übung starten";
             
-            if (tabId === 10) {
+            if (tabId === 11) {
                 titleText = "🏆 MASTERCLASS ABSOLVIERT!";
                 btnText = "Zertifikate ansehen";
                 document.getElementById('celebration-title').classList.add('text-brand-gold');
@@ -1134,7 +1212,7 @@
             
             document.getElementById('celebration-modal').classList.remove('hidden');
 
-            if (tabId < 10) {
+            if (tabId < 11) {
                 let nextTab = tabId + 1;
                 if (!unlockedTabs.includes(nextTab)) unlockedTabs.push(nextTab);
                 
@@ -1147,9 +1225,9 @@
 
         function closeCelebration() {
             document.getElementById('celebration-modal').classList.add('hidden');
-            if (currentCompletedTab && currentCompletedTab < 10) {
+            if (currentCompletedTab && currentCompletedTab < 11) {
                 showTab(currentCompletedTab + 1);
-            } else if (currentCompletedTab === 10) {
+            } else if (currentCompletedTab === 11) {
                 toggleInventory();
             }
         }
@@ -1169,7 +1247,7 @@
                 return;
             }
 
-            for(let i=1; i<=10; i++) {
+            for(let i=1; i<=11; i++) {
                 document.getElementById('exercise-' + i).classList.add('hidden');
                 document.getElementById('exercise-' + i).classList.remove('block');
                 
@@ -1193,9 +1271,10 @@
             if(tabId === 8) colorClass = 'bg-brand-pink shadow-[0_0_15px_rgba(236,72,153,0.5)] border-none';
             if(tabId === 9) colorClass = 'bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)] border-none';
             if(tabId === 10) colorClass = 'bg-brand-gold shadow-[0_0_15px_rgba(251,191,36,0.5)] border-none text-slate-900'; // Gold needs dark text
+            if(tabId === 11) colorClass = 'bg-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)] border-none text-slate-900';
             
             activeBtn.className = `tab-btn px-3 py-1.5 rounded-full text-white text-xs font-semibold transition-all ${colorClass}`;
-            if(tabId === 10) activeBtn.classList.replace('text-white', 'text-slate-900');
+            if(tabId === 10 || tabId === 11) activeBtn.classList.replace('text-white', 'text-slate-900');
         }
 
         function copyText(elementId, btnElement) {
