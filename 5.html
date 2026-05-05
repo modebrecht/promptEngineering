@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering: Masterclass</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            card: '#1e293b',
+                            primary: '#06b6d4', // Cyan
+                            secondary: '#8b5cf6', // Violet
+                            yellow: '#eab308',
+                            accent: '#f43f5e', // Rose
+                            indigo: '#6366f1',
+                            orange: '#f97316',
+                            teal: '#14b8a6',
+                            pink: '#ec4899',
+                            blue: '#3b82f6',
+                            gold: '#fbbf24'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            background-image: radial-gradient(circle at top right, #1e1b4b 0%, transparent 40%),
+                              radial-gradient(circle at bottom left, #083344 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+        .prompt-box {
+            background: #0f172a;
+            border-left: 4px solid #06b6d4;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #06b6d4, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Animations */
+        @keyframes badgePop {
+            0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+            60% { transform: scale(1.1) translateY(-10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-badge {
+            animation: badgePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 10px rgba(255,215,0, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(255,215,0, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(255,215,0, 0.5); }
+        }
+        .glow-effect {
+            animation: glowPulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-12 px-2 sm:px-6 lg:px-8 antialiased pb-24">
+
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-16 space-y-4">
+            <div class="inline-block p-3 rounded-full bg-slate-800 border border-slate-700 mb-2">
+                <i class="fa-solid fa-robot text-3xl text-brand-primary"></i>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">
+                Prompt Engineering <br>
+                <span class="gradient-text">Masterclass</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                Schließe das Quiz fehlerfrei ab, um das nächste Level freizuschalten. Bewahre Ruhe, wenn du einen Fehler machst.
+            </p>
+        </header>
+
+        <!-- Tab Navigation (Compact for 10 items) -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" id="tab-container">
+            <button onclick="showTab(1)" id="tab-btn-1" class="tab-btn px-3 py-1.5 rounded-full bg-brand-primary text-white text-xs font-semibold transition-all shadow-[0_0_15px_rgba(6,182,212,0.5)] border-none">1. CLEAR</button>
+            <button onclick="showTab(2)" id="tab-btn-2" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>2. Micro</button>
+            <button onclick="showTab(3)" id="tab-btn-3" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>3. Few-Shot</button>
+            <button onclick="showTab(4)" id="tab-btn-4" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>4. Halluzination</button>
+            <button onclick="showTab(5)" id="tab-btn-5" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>5. Negativ</button>
+            <button onclick="showTab(6)" id="tab-btn-6" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>6. CoT</button>
+            <button onclick="showTab(7)" id="tab-btn-7" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>7. Persona</button>
+            <button onclick="showTab(8)" id="tab-btn-8" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>8. Meta</button>
+            <button onclick="showTab(9)" id="tab-btn-9" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>9. Anker</button>
+            <button onclick="showTab(10)" id="tab-btn-10" class="tab-btn px-3 py-1.5 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-1 text-[10px]"></i>10. Mega</button>
+        </div>
+
+        <!-- Exercises Container -->
+        <div class="relative max-w-3xl mx-auto mb-16">
+
+            <!-- TAB 1: CLEAR FORMEL -->
+            <div id="exercise-1" class="block animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-wand-magic-sparkles text-brand-primary"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-brand-primary/20 text-brand-primary w-8 h-8 rounded-lg flex items-center justify-center text-sm">1</span>
+                        Die "CLEAR"-Formel
+                    </h2>
+                    <p class="text-brand-primary text-sm font-semibold mb-6 uppercase tracking-wider">Vom naiven zum strukturierten Prompt</p>
+                    
+                    <div class="space-y-4 text-slate-300">
+                        <p><strong>Ziel:</strong> Verstehen, wie Parameter (Rolle, Kontext, Format) das Ergebnis verändern.</p>
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Der naive Prompt</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative group/copy">
+                                <p id="prompt1a">Schreibe einen Text über den Klimawandel.</p>
+                                <button onclick="copyText('prompt1a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der CLEAR Prompt</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-green-400 group/copy">
+                                <p id="prompt1b">Du bist ein strenger, aber fairer Naturwissenschaftslehrer. Erkläre den Treibhauseffekt für 12-jährige Schüler:innen. Format: Ein kurzer Text mit einer Metapher am Anfang und drei Bulletpoints am Ende.</p>
+                                <button onclick="copyText('prompt1b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-primary rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-primary bg-brand-primary/10 px-3 py-1 rounded-full" id="progress-1">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-brand-primary"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">1.1 Warum ist die Zuweisung einer "Rolle" (z.B. "Du bist ein Lehrer") so effektiv?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q1-1', this, false, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dadurch Zugriff auf geheime Datenbanken bekommt.</button>
+                                <button onclick="revealQuiz('q1-1', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil sie das Sprachmodell zwingt, bestimmte Vokabeln und Tonalitäten zu priorisieren.</button>
+                            </div>
+                            <div id="q1-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">1.2 Welches Element der CLEAR-Formel fehlt im Prompt: "Erkläre mir, wie ein Motor funktioniert. Ich bin 8 Jahre alt."?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <button onclick="revealQuiz('q1-2', this, false, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Zielgruppe</button>
+                                <button onclick="revealQuiz('q1-2', this, false, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Aufgabe (Task)</button>
+                                <button onclick="revealQuiz('q1-2', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Format (z.B. Länge)</button>
+                            </div>
+                            <div id="q1-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">1.3 Was ist die größte Gefahr bei extrem kurzen Prompts ("Schreibe ein Gedicht")?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q1-3', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI greift auf den absoluten Durchschnitt ihrer Daten zurück (Klischees).</button>
+                                <button onclick="revealQuiz('q1-3', this, false, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI verweigert die Antwort wegen fehlendem Kontext.</button>
+                            </div>
+                            <div id="q1-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-1" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten. Bewahre <em>Upekkha</em> (Gleichmut).</p>
+                            <button onclick="resetQuiz(1)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MICRO PROMPTING -->
+            <div id="exercise-2" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-layer-group text-brand-secondary"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-brand-secondary/20 text-brand-secondary w-8 h-8 rounded-lg flex items-center justify-center text-sm">2</span>
+                        Micro-Prompting
+                    </h2>
+                    <p class="text-brand-secondary text-sm font-semibold mb-6 uppercase tracking-wider">Aufgaben in Teilschritte zerlegen</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white">Schritt 1: Macro (Alles sofort)</p>
+                            <div class="prompt-box p-3 rounded-r-lg relative border-l-brand-secondary group/copy">
+                                <p id="prompt2a" class="text-sm">Schreibe eine Kurzgeschichte über eine Mars-Expedition.</p>
+                                <button onclick="copyText('prompt2a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white">Schritt 2: Micro (Schritt für Schritt)</p>
+                            <div class="prompt-box p-3 rounded-r-lg relative border-l-brand-secondary mb-2 group/copy">
+                                <p id="prompt2b" class="text-sm">Nenne 3 unerwartete Konflikte für eine Mars-Expedition.</p>
+                                <button onclick="copyText('prompt2b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <div class="prompt-box p-3 rounded-r-lg relative border-l-brand-secondary mb-2 group/copy">
+                                <p id="prompt2c" class="text-sm">Entwickle eine unkonventionelle Hauptfigur für Konflikt 2 mit einer Schwäche.</p>
+                                <button onclick="copyText('prompt2c', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <div class="prompt-box p-3 rounded-r-lg relative border-l-brand-secondary group/copy">
+                                <p id="prompt2d" class="text-sm">Schreibe nun NUR den ersten Absatz. Starte mitten in der Handlung.</p>
+                                <button onclick="copyText('prompt2d', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-secondary rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-secondary bg-brand-secondary/10 px-3 py-1 rounded-full" id="progress-2">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-brand-secondary"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">2.1 Warum führt Micro-Prompting bei kreativen Aufgaben oft zu besseren Ergebnissen?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q2-1', this, false, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI schneller rechnet.</button>
+                                <button onclick="revealQuiz('q2-1', this, true, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil der Mensch als "Regisseur" eingreifen und lenken kann.</button>
+                            </div>
+                            <div id="q2-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">2.2 Welche Art von Aufgabe profitiert am WENIGSTEN von Micro-Prompting?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q2-2', this, false, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Das Schreiben eines langen Romans.</button>
+                                <button onclick="revealQuiz('q2-2', this, true, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Das Übersetzen eines einzelnen, kurzen Satzes.</button>
+                            </div>
+                            <div id="q2-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">2.3 Im Micro-Prompting haben wir der KI die Wahl gelassen ("Nenne 3 Optionen"). Warum ist das klug?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q2-3', this, true, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es nutzt das divergente Denken der KI für kreative Ideen.</button>
+                                <button onclick="revealQuiz('q2-3', this, false, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es verhindert Halluzinationen zu 100%.</button>
+                            </div>
+                            <div id="q2-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-2" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten. Bewahre <em>Upekkha</em>.</p>
+                            <button onclick="resetQuiz(2)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: FEW-SHOT -->
+            <div id="exercise-3" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-shapes text-yellow-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-yellow-500/20 text-yellow-500 w-8 h-8 rounded-lg flex items-center justify-center text-sm">3</span>
+                        Few-Shot Prompting
+                    </h2>
+                    <p class="text-yellow-500 text-sm font-semibold mb-6 uppercase tracking-wider">Der KI Muster beibringen</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white">Aufgabe: Sende folgenden Textblock ab:</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-yellow-500 group/copy">
+                                <p id="prompt3a" class="whitespace-pre-line text-sm">Übersetze die folgenden Begriffe in maximal drei Emojis. Behalte das Muster exakt bei.
+                                
+                                König der Löwen = 🦁👑🌅
+                                Titanic = 🚢🧊💔
+                                Findet Nemo = 🐠🔍
+                                
+                                Jetzt du: Star Wars, Harry Potter, Jurassic Park.</p>
+                                <button onclick="copyText('prompt3a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-yellow-500 rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-yellow-500 bg-yellow-500/10 px-3 py-1 rounded-full" id="progress-3">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-yellow-500"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">3.1 Was bedeutet "Shot" im Begriff "Few-Shot"?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q3-1', this, true, 3)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ein konkretes Beispiel.</button>
+                                <button onclick="revealQuiz('q3-1', this, false, 3)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ein technischer Neustart.</button>
+                            </div>
+                            <div id="q3-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">3.2 Wenn die KI bei dem Wort "Pausenhof" trotzdem Emojis ausgibt, zeigt das...</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q3-2', this, true, 3)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">...dass KIs stark auf Mustererkennung reagieren und Formate priorisieren.</button>
+                                <button onclick="revealQuiz('q3-2', this, false, 3)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">...dass die KI Emojis lieber mag als Text.</button>
+                            </div>
+                            <div id="q3-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">3.3 Wie nennt man das Gegenteil, also wenn man *keine* Beispiele gibt?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q3-3', this, true, 3)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Zero-Shot Prompting</button>
+                                <button onclick="revealQuiz('q3-3', this, false, 3)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Blind Prompting</button>
+                            </div>
+                            <div id="q3-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-3" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(3)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: HALLUZINATION -->
+            <div id="exercise-4" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-user-secret text-brand-accent"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-brand-accent/20 text-brand-accent w-8 h-8 rounded-lg flex items-center justify-center text-sm">4</span>
+                        Der Halluzinations-Jäger
+                    </h2>
+                    <p class="text-brand-accent text-sm font-semibold mb-6 uppercase tracking-wider">Grenzen testen & Fakten prüfen</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white">Aufgabe: Stelle der KI unmögliche Fragen.</p>
+                            <div class="grid gap-2">
+                                <div class="prompt-box p-3 rounded-r-lg relative border-l-brand-accent group/copy">
+                                    <p id="prompt4a" class="text-sm">Fasse die Biografie der Solothurner Astronautin Klara Sternenstaub zusammen.</p>
+                                    <button onclick="copyText('prompt4a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors"><i class="fa-regular fa-copy"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-accent rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-accent bg-brand-accent/10 px-3 py-1 rounded-full" id="progress-4">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-brand-accent"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">4.1 Was ist die technische Ursache für Halluzinationen?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q4-1', this, false, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI sucht live im Internet und findet dort Fehler.</button>
+                                <button onclick="revealQuiz('q4-1', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI "weiß" nichts, sie berechnet nur das wahrscheinlich nächste Wort.</button>
+                            </div>
+                            <div id="q4-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">4.2 Warum fallen Menschen so leicht auf KI-Lügen herein?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q4-2', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil der Text extrem selbstbewusst und wohlstrukturiert formuliert wird.</button>
+                                <button onclick="revealQuiz('q4-2', this, false, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil Halluzinationen absichtlich grün markiert werden.</button>
+                            </div>
+                            <div id="q4-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">4.3 Wie verringert man das Risiko?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q4-3', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Satz anfügen: "Wenn du es nicht weißt, erfinde nichts, sondern sag es."</button>
+                                <button onclick="revealQuiz('q4-3', this, false, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man schreibt den Prompt komplett in Großbuchstaben.</button>
+                            </div>
+                            <div id="q4-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-4" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(4)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: NEGATIV PROMPT -->
+            <div id="exercise-5" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-ban text-indigo-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-indigo-500/20 text-indigo-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">5</span>
+                        Negative Prompting
+                    </h2>
+                    <p class="text-indigo-400 text-sm font-semibold mb-6 uppercase tracking-wider">Der KI verbieten, was sie am liebsten tut</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der Negative Prompt</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-green-400 group/copy">
+                                <p id="prompt5b">Schreibe einen kurzen Werbetext für ein neues E-Bike. WICHTIG: Verwende auf GAR KEINEN FALL die Wörter "revolutionär", "ultimativ", "innovativ". Verzichte komplett auf Ausrufezeichen (!).</p>
+                                <button onclick="copyText('prompt5b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-indigo-500 rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full" id="progress-5">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-indigo-400"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">5.1 Warum nutzt die KI ohne Negativ-Prompt ständig Wörter wie "bahnbrechend"?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q5-1', this, false, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil sie heimlich Werbung macht.</button>
+                                <button onclick="revealQuiz('q5-1', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil dieses "Klischee-Vokabular" durch das Training statistisch am nächsten liegt.</button>
+                            </div>
+                            <div id="q5-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">5.2 Manchmal ignoriert die KI ein Verbot wie "Benutze kein Ausrufezeichen". Warum?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q5-2', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Sprachmodelle tun sich schwer mit Negationen. Die bloße Nennung kann es auslösen.</button>
+                                <button onclick="revealQuiz('q5-2', this, false, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI rebelliert absichtlich.</button>
+                            </div>
+                            <div id="q5-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">5.3 Was ist oft effektiver als ein reiner Negativ-Prompt?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q5-3', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Eine starke, positive Vorgabe, z.B.: "Schreibe nüchtern und sachlich."</button>
+                                <button onclick="revealQuiz('q5-3', this, false, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Das Verbot in drei verschiedenen Sprachen zu wiederholen.</button>
+                            </div>
+                            <div id="q5-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-5" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(5)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: CHAIN OF THOUGHT -->
+            <div id="exercise-6" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-link text-orange-500"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-orange-500/20 text-orange-500 w-8 h-8 rounded-lg flex items-center justify-center text-sm">6</span>
+                        Chain of Thought
+                    </h2>
+                    <p class="text-orange-500 text-sm font-semibold mb-6 uppercase tracking-wider">Zwinge die KI zum Nachdenken</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Ketten-Denken</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-orange-500 group/copy">
+                                <p id="prompt6b" class="text-sm">Eine Schnecke klettert einen 10 Meter hohen Brunnen hinauf. Tagsüber schafft sie 3 Meter, nachts rutscht sie 2 Meter ab. Wie viele Tage braucht sie, um den Rand zu erreichen? WICHTIG: Denke Schritt für Schritt laut nach und zeige mir deine Rechnung für jeden einzelnen Tag, bevor du die finale Antwort nennst.</p>
+                                <button onclick="copyText('prompt6b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-orange-500 rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-orange-500 bg-orange-500/10 px-3 py-1 rounded-full" id="progress-6">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-orange-500"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.1 Warum hilft der Befehl "Denke Schritt für Schritt"?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q6-1', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er zwingt das Modell, Zwischenschritte als Text auszugeben, wodurch es sich selbst kontrolliert und Rechenfehler verringert.</button>
+                                <button onclick="revealQuiz('q6-1', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er schaltet einen versteckten "Mathe-Prozessor" in der KI ein.</button>
+                            </div>
+                            <div id="q6-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.2 Für welche Art von Aufgaben ist CoT am wichtigsten?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q6-2', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für kreative Gedichte und emotionale Werbetexte.</button>
+                                <button onclick="revealQuiz('q6-2', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für Mathematik, komplexe Logik-Rätsel und Programmierung.</button>
+                            </div>
+                            <div id="q6-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.3 Was ist ein offensichtlicher "Nachteil" dieser Methode?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q6-3', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Generierung dauert länger und der ausgegebene Text ist viel länger.</button>
+                                <button onclick="revealQuiz('q6-3', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI wird dadurch extrem unfreundlich und pedantisch.</button>
+                            </div>
+                            <div id="q6-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-6" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(6)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: MULTI-PERSONA -->
+            <div id="exercise-7" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-users-viewfinder text-teal-400"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-teal-400/20 text-teal-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">7</span>
+                        Multi-Persona
+                    </h2>
+                    <p class="text-teal-400 text-sm font-semibold mb-6 uppercase tracking-wider">Lass Experten diskutieren</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Das Experten-Panel</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-teal-400 group/copy">
+                                <p id="prompt7b" class="text-sm">Simuliere eine hitzige Talkshow zum Thema "Sollen wir Schulnoten abschaffen?". Die Gäste sind:<br><br>1. Eine strenge, altmodische Lehrerin.<br>2. Ein Schüler, der Prüfungsangst hat.<br>3. Eine moderne Hirnforscherin.<br><br>Lass einen Moderator das Gespräch eröffnen und die Gäste direkt aufeinander reagieren.</p>
+                                <button onclick="copyText('prompt7b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-teal-400 rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-teal-400 bg-teal-400/10 px-3 py-1 rounded-full" id="progress-7">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-teal-400"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">7.1 Was ist der Hauptvorteil dieser Methode im Vergleich zu einer simplen Pro/Contra-Liste?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q7-1', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Argumente werden emotionaler und aus echten menschlichen Blickwinkeln beleuchtet.</button>
+                                <button onclick="revealQuiz('q7-1', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es spart sehr viel Zeit, da die KI viel kürzer antwortet.</button>
+                            </div>
+                            <div id="q7-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">7.2 Warum haben wir im Prompt ausdrücklich einen "Moderator" bestellt?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q7-2', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ohne Moderator weigert sich die KI, kontroverse Themen zu diskutieren.</button>
+                                <button onclick="revealQuiz('q7-2', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er gibt dem Dialog Struktur, stellt Rückfragen und hält die Personen beim Thema.</button>
+                            </div>
+                            <div id="q7-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">7.3 Warum ist diese Übung so wertvoll für das "Kritische Denken"?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q7-3', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Sie zeigt, dass es oft nicht nur "die eine Wahrheit" gibt, sondern viele Perspektiven, die man abwägen muss.</button>
+                                <button onclick="revealQuiz('q7-3', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die Schüler lernen, dass die strengste Person immer recht hat.</button>
+                            </div>
+                            <div id="q7-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-7" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(7)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 8: META-PROMPTING -->
+            <div id="exercise-8" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-infinity text-brand-pink"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-brand-pink/20 text-brand-pink w-8 h-8 rounded-lg flex items-center justify-center text-sm">8</span>
+                        Meta-Prompting
+                    </h2>
+                    <p class="text-brand-pink text-sm font-semibold mb-6 uppercase tracking-wider">Lass die KI deine Arbeit machen</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der Meta-Prompt (Die KI baut den Prompt)</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-brand-pink group/copy">
+                                <p id="prompt8b" class="text-sm">Du bist ein Weltklasse-Experte für KI-Bildgeneratoren (Prompt-Engineering). Ich möchte ein Bild von einem Golden Retriever im Herbstwald erstellen.<br><br>Schreibe mir den perfekten, hochdetaillierten englischen Prompt, den ich in die Bild-KI eingeben muss. Erwähne Kameraeinstellungen, Lichtverhältnisse, Stil und Atmosphäre. Gib mir NUR den fertigen Prompt aus, ohne weitere Erklärungen.</p>
+                                <button onclick="copyText('prompt8b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-pink rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-pink bg-brand-pink/10 px-3 py-1 rounded-full" id="progress-8">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-brand-pink"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">8.1 Warum funktioniert Meta-Prompting so unfassbar gut?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q8-1', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI kennt die Struktur ihrer Trainingsdaten am besten und weiß genau, auf welche Schlüsselwörter andere KIs optimal reagieren.</button>
+                                <button onclick="revealQuiz('q8-1', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dadurch Mitleid mit dem Nutzer bekommt.</button>
+                            </div>
+                            <div id="q8-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">8.2 Wofür eignet sich Meta-Prompting besonders im Alltag?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q8-2', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Nur um lustige Emojis generieren zu lassen.</button>
+                                <button onclick="revealQuiz('q8-2', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn man genau weiß, WAS man will, aber nicht weiß, WIE man es der KI am besten fachlich formulieren soll.</button>
+                            </div>
+                            <div id="q8-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">8.3 Was ist der logisch nächste Schritt, nachdem die KI dir den Meta-Prompt ausgegeben hat?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q8-3', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man kopiert den von ihr geschriebenen Text und fügt ihn als *neuen* Prompt ein.</button>
+                                <button onclick="revealQuiz('q8-3', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man muss sich den Text ausdrucken und dem Lehrer abgeben.</button>
+                            </div>
+                            <div id="q8-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-8" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(8)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 9: DATEN-ANKER (RAG) -->
+            <div id="exercise-9" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-anchor text-brand-blue"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-blue-500/20 text-blue-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">9</span>
+                        Der Daten-Anker (RAG)
+                    </h2>
+                    <p class="text-blue-400 text-sm font-semibold mb-6 uppercase tracking-wider">Zwinge die KI auf deine Fakten</p>
+                    <div class="space-y-4 text-slate-300">
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der Daten-Anker</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-blue-400 group/copy bg-blue-500/5">
+                                <p id="prompt9b" class="text-sm">Hier ist ein Textauszug aus meinem Geschichtsbuch: <br><br>"[Füge hier irgendeinen beliebigen Wikipedia-Satz über Rom ein]"<br><br>Fasse die Ursachen für den Untergang Roms AUSSCHLIESSLICH basierend auf dem oben stehenden Text zusammen. Nutze kein externes Wissen. Wenn der Text die Frage nicht beantwortet, sage: "Das steht nicht im Text."</p>
+                                <button onclick="copyText('prompt9b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-blue-400 rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full" id="progress-9">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-blue-400"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.1 Warum ist der Daten-Anker bei Hausaufgaben so unfassbar wichtig?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q9-1', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er verhindert Halluzinationen, weil die KI als "Text-Zusammenfasser" anstatt als "Wissens-Orakel" agiert.</button>
+                                <button onclick="revealQuiz('q9-1', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er sorgt dafür, dass die KI längere Antworten schreibt.</button>
+                            </div>
+                            <div id="q9-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.2 Was bedeutet der Profi-Begriff "RAG" in diesem Zusammenhang?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q9-2', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Random AI Generation.</button>
+                                <button onclick="revealQuiz('q9-2', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man "holt" (Retrieval) zuerst verlässliche Fakten und gibt sie der KI mit, damit sie ihren Text darauf aufbaut (Augmented).</button>
+                            </div>
+                            <div id="q9-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.3 Was passiert, wenn der mitgelieferte Text die Frage gar nicht beantwortet?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q9-3', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn der Prompt gut ist, gibt die KI zu, dass die Info im Text fehlt ("Das steht nicht im Text"), anstatt zu lügen.</button>
+                                <button onclick="revealQuiz('q9-3', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI stürzt ab und der Browser muss neu geladen werden.</button>
+                            </div>
+                            <div id="q9-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div id="restart-container-9" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(9)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 10: DER MEGA-PROMPT (Der wahre Abschluss) -->
+            <div id="exercise-10" class="hidden animate-fade-in">
+                <div class="glass-card rounded-2xl p-8 relative overflow-hidden group mb-8 border-brand-gold/30">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-6xl group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-chess-king text-brand-gold"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
+                        <span class="bg-brand-gold/20 text-brand-gold w-8 h-8 rounded-lg flex items-center justify-center text-sm">10</span>
+                        Der Mega-Prompt (Schablone)
+                    </h2>
+                    <p class="text-brand-gold text-sm font-semibold mb-6 uppercase tracking-wider">Baue dir ein System, keinen Text</p>
+                    
+                    <div class="space-y-4 text-slate-300">
+                        <p><strong>Ziel:</strong> Du schreibst nicht mehr für jede Aufgabe einen neuen Fließtext. Du baust dir eine feste Struktur (wie in der Programmierung), in die du nur noch Variablen `[wie diese]` einfüllst.</p>
+                        
+                        <div class="space-y-2 mt-4">
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Die universelle Hausaufgaben-Schablone</p>
+                            <div class="prompt-box p-4 rounded-r-lg relative border-l-brand-gold group/copy bg-brand-gold/5">
+                                <p id="prompt10" class="text-sm whitespace-pre-line font-mono">
+                                # ROLLE
+                                Du bist ein geduldiger Nachhilfelehrer für das Fach [FACH].
+                                
+                                # AUFGABE
+                                Erkläre mir das Konzept von [THEMA].
+                                
+                                # KONTEXT
+                                Ich bin in der [KLASSE]. Klasse. Ich habe Probleme, trockene Theorien zu verstehen.
+                                
+                                # REGELN (Negativ-Prompt)
+                                - Verwende KEINE komplizierten Fachwörter ohne sie zu erklären.
+                                - Gib mir NICHT einfach nur die Lösung, sondern erkläre den Weg.
+                                
+                                # FORMAT
+                                1. Ein kurzer, ermutigender Einleitungssatz.
+                                2. Eine Alltags-Metapher, die das Thema veranschaulicht.
+                                3. Drei einfache Bullet-Points mit den wichtigsten Fakten.
+                                </p>
+                                <button onclick="copyText('prompt10', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-2">Kopiere dies, ersetze [FACH], [THEMA] und [KLASSE] durch etwas Echtes (z.B. Biologie, Fotosynthese, 8) und teste es!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Card -->
+                <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-brand-gold rounded-2xl p-8 relative shadow-2xl">
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-brand-gold bg-brand-gold/10 px-3 py-1 rounded-full" id="progress-10">0/3 Richtig</div>
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-microscope text-brand-gold"></i> Reflexions-Check
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">10.1 Warum nutzen Profis Hashtags (#) und Großbuchstaben in Mega-Prompts?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q10-1', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil es auf dem Bildschirm für den Menschen cooler und nach echtem "Hacking" aussieht.</button>
+                                <button onclick="revealQuiz('q10-1', this, true, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es hilft dem Sprachmodell (LLM), die Gewichtung und Struktur des Textes zu verstehen. Markdown-Überschriften ordnen den Kontext.</button>
+                            </div>
+                            <div id="q10-1" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">10.2 Was ist der entscheidende Vorteil dieser "Schablonen-Methode"?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q10-2', this, true, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Skalierbarkeit und Reproduzierbarkeit. Man muss das Rad nicht jedes Mal neu erfinden, sondern tauscht nur noch die Variablen [ ] aus.</button>
+                                <button onclick="revealQuiz('q10-2', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI antwortet dadurch in Sekundenschnelle, fast ohne Wartezeit.</button>
+                            </div>
+                            <div id="q10-2" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">10.3 Welches Konzept der Masterclass wurde in der Schablone unter "REGELN" angewandt?</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <button onclick="revealQuiz('q10-3', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Few-Shot Prompting</button>
+                                <button onclick="revealQuiz('q10-3', this, true, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Negative Prompting</button>
+                                <button onclick="revealQuiz('q10-3', this, false, 10)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Chain of Thought</button>
+                            </div>
+                            <div id="q10-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div id="restart-container-10" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
+                            <p class="text-rose-400 mb-4 text-sm"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Ein Fehler! Du musst das Quiz neu starten.</p>
+                            <button onclick="resetQuiz(10)" class="px-6 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all border border-slate-500 shadow-lg">
+                                <i class="fa-solid fa-rotate-right mr-2"></i> Quiz neu starten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Inventory Button -->
+    <button onclick="toggleInventory()" class="fixed bottom-6 right-6 bg-slate-800 text-white p-4 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:bg-slate-700 transition-all z-40 flex items-center gap-3">
+        <span class="bg-slate-700 px-2 py-1 rounded text-xs font-bold" id="badge-counter">0/10</span>
+        <i class="fa-solid fa-backpack text-xl text-yellow-500"></i>
+    </button>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-24 right-6 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-msg">Prompt kopiert!</span>
+    </div>
+
+    <!-- Celebration Modal (Badge Unlock) -->
+    <div id="celebration-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/90 backdrop-blur-sm hidden">
+        <div class="text-center px-4">
+            <h2 class="text-4xl font-extrabold text-white mb-8 drop-shadow-lg" id="celebration-title">Level abgeschlossen!</h2>
+            <div class="inline-flex items-center justify-center w-48 h-48 rounded-full bg-slate-800 border-4 border-slate-600 shadow-[0_0_50px_rgba(255,255,255,0.2)] mb-8 relative animate-badge" id="celebration-badge">
+                <!-- Icon injected via JS -->
+            </div>
+            <p class="text-2xl text-slate-300 mb-8" id="celebration-text">Du hast das Abzeichen <strong class="text-white">CLEAR-Novize</strong> freigeschaltet.</p>
+            <button onclick="closeCelebration()" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-white text-lg rounded-full font-bold shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all transform hover:scale-105">
+                Nächste Übung starten
+            </button>
+        </div>
+    </div>
+
+    <!-- Inventory Modal -->
+    <div id="inventory-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/90 backdrop-blur-sm hidden overflow-y-auto py-10">
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-2xl max-w-5xl w-full mx-4 shadow-2xl relative">
+            <button onclick="toggleInventory()" class="absolute top-4 right-4 text-slate-500 hover:text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+                <i class="fa-solid fa-backpack text-yellow-500"></i> Deine Masterclass-Zertifikate
+            </h2>
+            <!-- Grid automatically flows to 2 rows for 10 items (5x2) -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8" id="inventory-grid">
+                <!-- Badges populated by JS -->
+            </div>
+            <div class="border-t border-slate-700 pt-6 flex justify-between items-center">
+                <span class="text-slate-400 text-sm" id="inventory-status-text">Sammle alle 10 Abzeichen!</span>
+                <button onclick="resetAllProgress()" class="text-xs px-4 py-2 bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 rounded transition-colors border border-slate-700 hover:border-rose-500/50">
+                    <i class="fa-solid fa-trash mr-1"></i> Fortschritt löschen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GAME LOGIC & STATE ---
+        const tabNames = {
+            1: "CLEAR-Formel",
+            2: "Micro-Prompting",
+            3: "Few-Shot",
+            4: "Halluzination",
+            5: "Negativ-Prompt",
+            6: "Chain of Thought",
+            7: "Multi-Persona",
+            8: "Meta-Prompting",
+            9: "Daten-Anker (RAG)",
+            10: "Mega-Prompt"
+        };
+
+        const badgeData = {
+            1: { icon: 'fa-wand-magic-sparkles', color: 'text-brand-primary', border: 'border-brand-primary', shadow: 'shadow-[0_0_15px_rgba(6,182,212,0.5)]', name: 'Der Architekt' },
+            2: { icon: 'fa-layer-group', color: 'text-brand-secondary', border: 'border-brand-secondary', shadow: 'shadow-[0_0_15px_rgba(139,92,246,0.5)]', name: 'Micro-Manager' },
+            3: { icon: 'fa-shapes', color: 'text-yellow-500', border: 'border-yellow-500', shadow: 'shadow-[0_0_15px_rgba(234,179,8,0.5)]', name: 'Muster-Meister' },
+            4: { icon: 'fa-user-secret', color: 'text-brand-accent', border: 'border-brand-accent', shadow: 'shadow-[0_0_15px_rgba(244,63,94,0.5)]', name: 'Fakten-Fuchs' },
+            5: { icon: 'fa-ban', color: 'text-indigo-400', border: 'border-indigo-400', shadow: 'shadow-[0_0_15px_rgba(99,102,241,0.5)]', name: 'Floskel-Filter' },
+            6: { icon: 'fa-link', color: 'text-orange-500', border: 'border-orange-500', shadow: 'shadow-[0_0_15px_rgba(249,115,22,0.5)]', name: 'Ketten-Denker' },
+            7: { icon: 'fa-users-viewfinder', color: 'text-teal-400', border: 'border-teal-400', shadow: 'shadow-[0_0_15px_rgba(20,184,166,0.5)]', name: 'Das Chamäleon' },
+            8: { icon: 'fa-infinity', color: 'text-brand-pink', border: 'border-brand-pink', shadow: 'shadow-[0_0_15px_rgba(236,72,153,0.5)]', name: 'Prompt-Gott' },
+            9: { icon: 'fa-anchor', color: 'text-blue-400', border: 'border-blue-400', shadow: 'shadow-[0_0_15px_rgba(59,130,246,0.5)]', name: 'Wissens-Anker' },
+            10: { icon: 'fa-chess-king', color: 'text-brand-gold', border: 'border-brand-gold', shadow: 'shadow-[0_0_30px_rgba(251,191,36,0.8)]', name: 'Prompt-Meister' }
+        };
+
+        let earnedBadges = JSON.parse(localStorage.getItem('prompt_badges')) || [];
+        let unlockedTabs = [1];
+        let solvedQuestions = new Set();
+        let tabProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0 };
+        let tabFailed = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false };
+        let currentCompletedTab = null;
+
+        function initApp() {
+            earnedBadges.forEach(badgeId => {
+                if (!unlockedTabs.includes(badgeId)) unlockedTabs.push(badgeId);
+                let nextTab = badgeId + 1;
+                if (nextTab <= 10 && !unlockedTabs.includes(nextTab)) unlockedTabs.push(nextTab);
+            });
+
+            unlockedTabs.forEach(tabId => {
+                const btn = document.getElementById('tab-btn-' + tabId);
+                if (btn) {
+                    btn.removeAttribute('data-locked');
+                    btn.classList.remove('bg-slate-800/40', 'text-slate-500', 'cursor-not-allowed', 'border-slate-700');
+                    if (tabId !== 1) {
+                        btn.classList.add('bg-slate-800', 'text-slate-400', 'hover:bg-slate-700');
+                    }
+                }
+
+                if (earnedBadges.includes(tabId)) {
+                    tabProgress[tabId] = 3;
+                    const progressEl = document.getElementById(`progress-${tabId}`);
+                    if(progressEl) progressEl.innerText = `3/3 Richtig (Abgeschlossen)`;
+                    
+                    const tabEl = document.getElementById('exercise-' + tabId);
+                    if (tabEl) {
+                        const allBtns = tabEl.querySelectorAll('.grid button');
+                        allBtns.forEach(b => {
+                            b.disabled = true;
+                            b.classList.add('opacity-40', 'cursor-not-allowed');
+                            b.classList.remove('hover:bg-slate-600');
+                        });
+                    }
+                }
+            });
+            renderInventory();
+        }
+
+        function renderInventory() {
+            const grid = document.getElementById('inventory-grid');
+            grid.innerHTML = '';
+            for(let i=1; i<=10; i++) {
+                const isEarned = earnedBadges.includes(i);
+                const data = badgeData[i];
+                
+                if (isEarned) {
+                    grid.innerHTML += `
+                        <div class="flex flex-col items-center justify-center bg-slate-800 p-4 rounded-xl border ${data.border} ${data.shadow} glow-effect min-h-[120px]">
+                            <i class="fa-solid ${data.icon} text-4xl ${data.color} mb-3"></i>
+                            <span class="text-xs font-bold text-center text-white mt-2">${data.name}</span>
+                        </div>
+                    `;
+                } else {
+                    grid.innerHTML += `
+                        <div class="flex flex-col items-center justify-center bg-slate-800/50 p-4 rounded-xl border border-slate-700 opacity-50 min-h-[120px]">
+                            <i class="fa-solid fa-lock text-4xl text-slate-600 mb-3"></i>
+                            <span class="text-xs font-bold text-center text-slate-500 mt-2">Level ${i}</span>
+                        </div>
+                    `;
+                }
+            }
+            
+            document.getElementById('badge-counter').innerText = `${earnedBadges.length}/10`;
+            
+            const statusText = document.getElementById('inventory-status-text');
+            if(earnedBadges.length === 10) {
+                statusText.innerHTML = '<span class="text-brand-gold font-bold"><i class="fa-solid fa-trophy mr-2"></i>Du hast die Masterclass zu 100% abgeschlossen!</span>';
+            } else {
+                statusText.innerText = `Du hast ${earnedBadges.length} von 10 Zertifikaten gesammelt.`;
+            }
+        }
+
+        function toggleInventory() {
+            const modal = document.getElementById('inventory-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function revealQuiz(containerId, clickedBtn, isCorrect, tabId) {
+            if (solvedQuestions.has(containerId) || tabFailed[tabId] || earnedBadges.includes(tabId)) return;
+
+            const container = document.getElementById(containerId);
+
+            if (isCorrect) {
+                solvedQuestions.add(containerId);
+                tabProgress[tabId]++;
+                
+                document.getElementById(`progress-${tabId}`).innerText = `${tabProgress[tabId]}/3 Richtig`;
+
+                clickedBtn.classList.add('bg-emerald-600/20', 'border-emerald-500', 'text-emerald-400');
+                clickedBtn.classList.remove('bg-slate-700', 'border-slate-600', 'text-slate-300', 'hover:bg-slate-600');
+
+                const siblings = clickedBtn.parentElement.querySelectorAll('button');
+                siblings.forEach(b => {
+                    b.disabled = true;
+                    b.classList.remove('hover:bg-slate-600');
+                    if (b !== clickedBtn) b.classList.add('opacity-30', 'cursor-not-allowed');
+                });
+
+                container.classList.remove('hidden', 'bg-rose-500/10', 'border-rose-500/30', 'text-rose-300');
+                container.classList.add('bg-emerald-500/10', 'border', 'border-emerald-500/30', 'text-emerald-300');
+                container.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i><strong>Korrekt!</strong> Sehr gut.';
+
+                if (tabProgress[tabId] === 3) {
+                    setTimeout(() => completeTab(tabId), 600); // Pacing delay
+                }
+
+            } else {
+                tabFailed[tabId] = true;
+                
+                clickedBtn.classList.add('bg-rose-500/20', 'border-rose-500', 'text-rose-400');
+                clickedBtn.classList.remove('bg-slate-700', 'border-slate-600', 'text-slate-300', 'hover:bg-slate-600');
+
+                container.classList.remove('hidden', 'bg-emerald-500/10', 'border-emerald-500/30', 'text-emerald-300');
+                container.classList.add('bg-rose-500/10', 'border', 'border-rose-500/30', 'text-rose-300');
+                container.innerHTML = '<i class="fa-solid fa-xmark mr-2"></i><strong>Falsch!</strong> Das Quiz muss neu gestartet werden.';
+
+                const tabEl = document.getElementById('exercise-' + tabId);
+                const allBtns = tabEl.querySelectorAll('.grid button');
+                allBtns.forEach(btn => {
+                    btn.disabled = true;
+                    btn.classList.remove('hover:bg-slate-600');
+                    if (!btn.classList.contains('bg-emerald-600/20') && btn !== clickedBtn) {
+                        btn.classList.add('opacity-30', 'cursor-not-allowed');
+                    }
+                });
+
+                document.getElementById(`restart-container-${tabId}`).classList.remove('hidden');
+            }
+        }
+
+        function resetQuiz(tabId) {
+            tabFailed[tabId] = false;
+            tabProgress[tabId] = 0;
+            document.getElementById(`progress-${tabId}`).innerText = `0/3 Richtig`;
+            
+            document.getElementById(`restart-container-${tabId}`).classList.add('hidden');
+
+            for(let q=1; q<=3; q++) {
+                let qId = `q${tabId}-${q}`;
+                solvedQuestions.delete(qId);
+                
+                let container = document.getElementById(qId);
+                if (container) {
+                    container.classList.add('hidden');
+                    container.className = 'hidden mt-3 p-3 rounded text-sm';
+                    
+                    const parent = container.parentElement;
+                    const buttons = parent.querySelectorAll('button');
+                    buttons.forEach(btn => {
+                        btn.disabled = false;
+                        btn.className = 'text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all';
+                    });
+                }
+            }
+        }
+
+        function completeTab(tabId) {
+            if (earnedBadges.includes(tabId)) return;
+            
+            earnedBadges.push(tabId);
+            localStorage.setItem('prompt_badges', JSON.stringify(earnedBadges));
+            
+            renderInventory();
+            currentCompletedTab = tabId;
+
+            const badge = badgeData[tabId];
+            document.getElementById('celebration-badge').className = `inline-flex items-center justify-center w-48 h-48 rounded-full bg-slate-800 border-4 ${badge.border} ${badge.shadow} mb-8 relative animate-badge`;
+            document.getElementById('celebration-badge').innerHTML = `<i class="fa-solid ${badge.icon} text-7xl ${badge.color}"></i>`;
+            
+            let titleText = "Level abgeschlossen!";
+            let btnText = "Nächste Übung starten";
+            
+            if (tabId === 10) {
+                titleText = "🏆 MASTERCLASS ABSOLVIERT!";
+                btnText = "Zertifikate ansehen";
+                document.getElementById('celebration-title').classList.add('text-brand-gold');
+            } else {
+                document.getElementById('celebration-title').classList.remove('text-brand-gold');
+            }
+            
+            document.getElementById('celebration-title').innerText = titleText;
+            document.getElementById('celebration-text').innerHTML = `Du hast das Abzeichen <strong class="text-white">${badge.name}</strong> erhalten!`;
+            document.querySelector('#celebration-modal button').innerText = btnText;
+            
+            document.getElementById('celebration-modal').classList.remove('hidden');
+
+            if (tabId < 10) {
+                let nextTab = tabId + 1;
+                if (!unlockedTabs.includes(nextTab)) unlockedTabs.push(nextTab);
+                
+                const nextBtn = document.getElementById('tab-btn-' + nextTab);
+                nextBtn.removeAttribute('data-locked');
+                nextBtn.classList.remove('bg-slate-800/40', 'text-slate-500', 'cursor-not-allowed', 'border-slate-700');
+                nextBtn.classList.add('bg-slate-800', 'text-slate-400', 'hover:bg-slate-700');
+            }
+        }
+
+        function closeCelebration() {
+            document.getElementById('celebration-modal').classList.add('hidden');
+            if (currentCompletedTab && currentCompletedTab < 10) {
+                showTab(currentCompletedTab + 1);
+            } else if (currentCompletedTab === 10) {
+                toggleInventory();
+            }
+        }
+
+        function resetAllProgress() {
+            if(confirm("Möchtest du wirklich alle Abzeichen und den Lernfortschritt löschen? Dies kann nicht rückgängig gemacht werden.")) {
+                localStorage.removeItem('prompt_badges');
+                location.reload();
+            }
+        }
+
+        function showTab(tabId) {
+            const btn = document.getElementById('tab-btn-' + tabId);
+            
+            if (btn.getAttribute('data-locked') === 'true') {
+                showToast('❌ Dieser Bereich ist noch gesperrt. Löse zuerst das vorherige Quiz!', true);
+                return;
+            }
+
+            for(let i=1; i<=10; i++) {
+                document.getElementById('exercise-' + i).classList.add('hidden');
+                document.getElementById('exercise-' + i).classList.remove('block');
+                
+                const curBtn = document.getElementById('tab-btn-' + i);
+                if (curBtn.getAttribute('data-locked') !== 'true') {
+                    curBtn.className = 'tab-btn px-3 py-1.5 rounded-full bg-slate-800 text-slate-400 text-xs hover:bg-slate-700 font-semibold transition-all border border-transparent';
+                }
+            }
+            
+            document.getElementById('exercise-' + tabId).classList.remove('hidden');
+            document.getElementById('exercise-' + tabId).classList.add('block');
+            
+            const activeBtn = document.getElementById('tab-btn-' + tabId);
+            let colorClass = 'bg-brand-primary shadow-[0_0_15px_rgba(6,182,212,0.5)] border-none'; 
+            if(tabId === 2) colorClass = 'bg-brand-secondary shadow-[0_0_15px_rgba(139,92,246,0.5)] border-none';
+            if(tabId === 3) colorClass = 'bg-yellow-500 shadow-[0_0_15px_rgba(234,179,8,0.5)] border-none';
+            if(tabId === 4) colorClass = 'bg-brand-accent shadow-[0_0_15px_rgba(244,63,94,0.5)] border-none';
+            if(tabId === 5) colorClass = 'bg-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.5)] border-none';
+            if(tabId === 6) colorClass = 'bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)] border-none';
+            if(tabId === 7) colorClass = 'bg-teal-400 shadow-[0_0_15px_rgba(20,184,166,0.5)] border-none';
+            if(tabId === 8) colorClass = 'bg-brand-pink shadow-[0_0_15px_rgba(236,72,153,0.5)] border-none';
+            if(tabId === 9) colorClass = 'bg-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.5)] border-none';
+            if(tabId === 10) colorClass = 'bg-brand-gold shadow-[0_0_15px_rgba(251,191,36,0.5)] border-none text-slate-900'; // Gold needs dark text
+            
+            activeBtn.className = `tab-btn px-3 py-1.5 rounded-full text-white text-xs font-semibold transition-all ${colorClass}`;
+            if(tabId === 10) activeBtn.classList.replace('text-white', 'text-slate-900');
+        }
+
+        function copyText(elementId, btnElement) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = textToCopy;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Prompt kopiert!');
+                const icon = btnElement.querySelector('i');
+                icon.classList.remove('fa-copy', 'fa-regular');
+                icon.classList.add('fa-check', 'fa-solid', 'text-emerald-400');
+                setTimeout(() => {
+                    icon.classList.remove('fa-check', 'fa-solid', 'text-emerald-400');
+                    icon.classList.add('fa-copy', 'fa-regular');
+                }, 2000);
+            } catch (err) {}
+            document.body.removeChild(tempTextArea);
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            
+            if (isError) {
+                toast.classList.replace('bg-emerald-500', 'bg-rose-500');
+                toast.querySelector('i').className = 'fa-solid fa-lock';
+            } else {
+                toast.classList.replace('bg-rose-500', 'bg-emerald-500');
+                toast.querySelector('i').className = 'fa-solid fa-circle-check';
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        initApp();
+    </script>
+</body>
+</html>
