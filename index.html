@@ -689,7 +689,21 @@
                     
                     <div class="space-y-4 text-slate-300">
                         <p><strong>Ziel:</strong> Fehler bei Logik-Rätseln oder Matheaufgaben drastisch reduzieren, indem die KI Zwischenschritte berechnen muss, bevor sie antwortet.</p>
-                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-orange-500 font-bold mb-1">Wann?</p>
+                                <p>Mathe, Logik-Rätsel, Programmierung — überall wo Rechenschritte zählen.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-orange-500 font-bold mb-1">Warum?</p>
+                                <p>Zwischenschritte im Text erzwingen Selbstkontrolle — jeder Schritt baut auf dem letzten auf.</p>
+                            </div>
+                            <div class="bg-slate-900/70 border border-slate-700 rounded-lg p-3">
+                                <p class="text-orange-500 font-bold mb-1">Wie?</p>
+                                <p>"Denke Schritt für Schritt und zeige mir jeden einzelnen Schritt."</p>
+                            </div>
+                        </div>
+
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Der schnelle Fehler</p>
                             <div class="prompt-box p-4 rounded-r-lg relative group/copy">
@@ -705,13 +719,14 @@
                                 <p id="prompt6b" class="text-sm">Eine Schnecke klettert einen 10 Meter hohen Brunnen hinauf. Tagsüber schafft sie 3 Meter, nachts rutscht sie 2 Meter ab. Wie viele Tage braucht sie, um den Rand zu erreichen? WICHTIG: Denke Schritt für Schritt laut nach und zeige mir deine Rechnung für jeden einzelnen Tag, bevor du die finale Antwort nennst.</p>
                                 <button onclick="copyText('prompt6b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
+                            <p class="text-xs text-slate-400">Besser: Die KI rechnet Tag für Tag durch und erkennt am Tag 8, dass die Schnecke den Rand bereits erreicht — ohne noch einmal abzurutschen.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Quiz Card -->
                 <div class="bg-slate-900/80 border border-slate-700/50 border-t-4 border-t-orange-500 rounded-2xl p-8 relative shadow-2xl">
-                    <div class="absolute top-4 right-4 text-sm font-semibold text-orange-500 bg-orange-500/10 px-3 py-1 rounded-full" id="progress-6">0/3 Richtig</div>
+                    <div class="absolute top-4 right-4 text-sm font-semibold text-orange-500 bg-orange-500/10 px-3 py-1 rounded-full" id="progress-6">0/4 Richtig</div>
                     <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
                         <i class="fa-solid fa-microscope text-orange-500"></i> Reflexions-Check
                     </h3>
@@ -719,7 +734,7 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">6.1 Warum hilft der Befehl "Denke Schritt für Schritt"?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q6-1', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es zwingt das Sprachmodell, logische Zwischenschritte in Textform auszugeben, wodurch sich das System selbst kontrolliert und weniger rechenfehler macht.</button>
+                                <button onclick="revealQuiz('q6-1', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es zwingt das Sprachmodell, logische Zwischenschritte in Textform auszugeben, wodurch sich das System selbst kontrolliert und weniger Rechenfehler macht.</button>
                                 <button onclick="revealQuiz('q6-1', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es schaltet einen versteckten "Mathe-Prozessor" in der KI ein, der nur für Zahlen zuständig ist.</button>
                             </div>
                             <div id="q6-1" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -729,6 +744,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q6-2', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für kreative Gedichte und emotionale Werbetexte.</button>
                                 <button onclick="revealQuiz('q6-2', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für Mathematik, komplexe Logik-Rätsel und Programmierung.</button>
+                                <button onclick="revealQuiz('q6-2', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für alle Aufgaben — CoT verbessert jede Art von Antwort.</button>
                             </div>
                             <div id="q6-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -737,8 +753,19 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q6-3', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Antwort dauert länger und der ausgegebene Text ist viel länger, als wenn man nur das nackte Ergebnis bekommt.</button>
                                 <button onclick="revealQuiz('q6-3', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI wird dadurch extrem unfreundlich und pedantisch.</button>
+                                <button onclick="revealQuiz('q6-3', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI weigert sich häufiger, die Aufgabe überhaupt zu lösen.</button>
                             </div>
                             <div id="q6-3" class="hidden mt-3 p-3 rounded text-sm"></div>
+                        </div>
+
+                        <div class="bg-slate-800/50 p-4 rounded-lg">
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.4 Was bedeutet das "Chain" (Kette) in Chain of Thought?</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <button onclick="revealQuiz('q6-4', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Jeder Zwischenschritt baut auf dem vorherigen auf — die Gedankenschritte sind miteinander verkettet.</button>
+                                <button onclick="revealQuiz('q6-4', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI verbindet sich dabei mit einer Kette anderer Modelle im Internet.</button>
+                                <button onclick="revealQuiz('q6-4', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Der Prompt muss immer als nummerierte Liste (Kette) geschrieben sein.</button>
+                            </div>
+                            <div id="q6-4" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
 
                         <div id="restart-container-6" class="hidden mt-6 text-center border-t border-slate-700 pt-6">
@@ -1214,7 +1241,7 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
         let tabProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0 };
         let tabFailed = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false, 10: false, 11: false };
         let currentCompletedTab = null;
-        const tabMaxQuestions = { 1: 5, 2: 3, 3: 6, 4: 5, 5: 4, 6: 3, 7: 3, 8: 3, 9: 3, 10: 3, 11: 3 };
+        const tabMaxQuestions = { 1: 5, 2: 3, 3: 6, 4: 5, 5: 4, 6: 4, 7: 3, 8: 3, 9: 3, 10: 3, 11: 3 };
 
         function initApp() {
             earnedBadges.forEach(badgeId => {
