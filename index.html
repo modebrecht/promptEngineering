@@ -1343,13 +1343,16 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
     </div>
 
     <!-- Inventory Button -->
-    <button onclick="toggleInventory()" class="fixed bottom-6 right-6 bg-slate-800 text-white p-4 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-slate-600 hover:bg-slate-700 transition-all z-40 flex items-center gap-3">
-        <span class="bg-slate-700 px-2 py-1 rounded text-xs font-bold" id="badge-counter">0/11</span>
-        <i class="fa-solid fa-backpack text-xl text-yellow-500"></i>
+    <button onclick="toggleInventory()" class="fixed bottom-6 right-6 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl border border-slate-700 hover:border-yellow-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(251,191,36,0.15)] transition-all z-40 flex items-center gap-3 cursor-pointer">
+        <i class="fa-solid fa-medal text-xl text-yellow-400"></i>
+        <div class="text-left leading-tight">
+            <div class="text-[10px] text-slate-500 uppercase tracking-widest">Inventar</div>
+            <div class="text-sm font-bold text-white"><span id="badge-counter">0</span>/11 Abzeichen</div>
+        </div>
     </button>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-24 right-6 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50">
+    <div id="toast" class="fixed bottom-24 right-6 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 z-50 pointer-events-none">
         <i class="fa-solid fa-circle-check"></i>
         <span id="toast-msg">Prompt kopiert!</span>
     </div>
@@ -1486,10 +1489,10 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
                 
                 if (isEarned) {
                     grid.innerHTML += `
-                        <div class="flex flex-col items-center justify-center bg-slate-800 p-4 rounded-xl border ${data.border} ${data.shadow} glow-effect min-h-[120px]">
+                        <button onclick="previewBadge(${i})" class="flex flex-col items-center justify-center bg-slate-800 p-4 rounded-xl border ${data.border} ${data.shadow} glow-effect min-h-[120px] hover:scale-105 transition-transform w-full">
                             <i class="fa-solid ${data.icon} text-4xl ${data.color} mb-3"></i>
                             <span class="text-xs font-bold text-center text-white mt-2">${data.name}</span>
-                        </div>
+                        </button>
                     `;
                 } else {
                     grid.innerHTML += `
@@ -1501,7 +1504,7 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
                 }
             }
             
-            document.getElementById('badge-counter').innerText = `${earnedBadges.length}/11`;
+            document.getElementById('badge-counter').innerText = earnedBadges.length || 0;
             
             const statusText = document.getElementById('inventory-status-text');
             if(earnedBadges.length === 11) {
@@ -1638,13 +1641,29 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
             }
         }
 
+        function previewBadge(tabId) {
+            const badge = badgeData[tabId];
+            currentCompletedTab = 'preview';
+            document.getElementById('celebration-badge').className = `inline-flex items-center justify-center w-48 h-48 rounded-full bg-slate-800 border-4 ${badge.border} ${badge.shadow} mb-8 relative animate-badge`;
+            document.getElementById('celebration-badge').innerHTML = `<i class="fa-solid ${badge.icon} text-7xl ${badge.color}"></i>`;
+            document.getElementById('celebration-title').innerText = 'Dein Abzeichen';
+            document.getElementById('celebration-title').classList.remove('text-brand-gold');
+            document.getElementById('celebration-text').innerHTML = `Du hast das Abzeichen <strong class="text-white">${badge.name}</strong> verdient!`;
+            document.querySelector('#celebration-modal button').innerText = 'Schließen';
+            document.getElementById('inventory-modal').classList.add('hidden');
+            document.getElementById('celebration-modal').classList.remove('hidden');
+        }
+
         function closeCelebration() {
             document.getElementById('celebration-modal').classList.add('hidden');
-            if (currentCompletedTab && currentCompletedTab < 11) {
+            if (currentCompletedTab === 'preview') {
+                toggleInventory();
+            } else if (currentCompletedTab && currentCompletedTab < 11) {
                 showTab(currentCompletedTab + 1);
             } else if (currentCompletedTab === 11) {
                 toggleInventory();
             }
+            currentCompletedTab = null;
         }
 
         function resetAllProgress() {
