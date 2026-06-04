@@ -119,6 +119,73 @@
             opacity: 0.75;
             line-height: 1;
         }
+
+        .modal-open {
+            overflow: hidden;
+        }
+
+        #inventory-modal {
+            padding-left: max(0.75rem, env(safe-area-inset-left));
+            padding-right: max(0.75rem, env(safe-area-inset-right));
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding-bottom: 7rem;
+            }
+
+            .inventory-card {
+                max-height: calc(100dvh - 1.5rem);
+                overflow-y: auto;
+                border-radius: 1rem;
+            }
+
+            .inventory-grid-item {
+                min-height: 6.5rem;
+                padding: 0.75rem;
+            }
+
+            .inventory-grid-item i {
+                font-size: 1.75rem;
+                margin-bottom: 0.5rem;
+            }
+
+            #celebration-modal > div {
+                max-height: calc(100dvh - 1.5rem);
+                overflow-y: auto;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            #celebration-title {
+                font-size: 1.75rem;
+                line-height: 2.125rem;
+                margin-bottom: 1.5rem;
+            }
+
+            #celebration-badge {
+                width: 9rem;
+                height: 9rem;
+                margin-bottom: 1.5rem;
+            }
+
+            #celebration-badge i {
+                font-size: 3.5rem;
+            }
+
+            #celebration-text {
+                font-size: 1.125rem;
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
+            }
+
+            #celebration-modal button {
+                width: 100%;
+                max-width: 20rem;
+                padding: 0.875rem 1.25rem;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen py-12 px-2 sm:px-6 lg:px-8 antialiased pb-24">
@@ -1351,7 +1418,7 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
     </div>
 
     <!-- Inventory Button -->
-    <button onclick="toggleInventory()" class="fixed bottom-6 right-6 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl border border-slate-700 hover:border-yellow-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(251,191,36,0.15)] transition-all z-40 flex items-center gap-3 cursor-pointer">
+    <button onclick="openInventory()" class="fixed bottom-4 right-3 sm:bottom-6 sm:right-6 bg-slate-900 hover:bg-slate-800 text-white px-4 py-3 sm:px-5 rounded-2xl border border-slate-700 hover:border-yellow-500/50 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_20px_rgba(251,191,36,0.15)] transition-all z-40 flex items-center gap-3 cursor-pointer max-w-[calc(100vw-1.5rem)]">
         <i class="fa-solid fa-medal text-xl text-yellow-400"></i>
         <div class="text-left leading-tight">
             <div class="text-[10px] text-slate-500 uppercase tracking-widest">Inventar</div>
@@ -1380,19 +1447,19 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
     </div>
 
     <!-- Inventory Modal -->
-    <div id="inventory-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-brand-dark/90 backdrop-blur-sm hidden overflow-y-auto py-10">
-        <div class="bg-slate-900 border border-slate-700 p-8 rounded-2xl max-w-5xl w-full mx-4 shadow-2xl relative">
-            <button onclick="toggleInventory()" class="absolute top-4 right-4 text-slate-500 hover:text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+    <div id="inventory-modal" class="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-brand-dark/90 backdrop-blur-sm hidden overflow-y-auto py-3 sm:py-10" onclick="handleInventoryBackdrop(event)">
+        <div class="inventory-card bg-slate-900 border border-slate-700 p-4 sm:p-8 rounded-2xl max-w-5xl w-full shadow-2xl relative" role="dialog" aria-modal="true" aria-labelledby="inventory-title">
+            <button onclick="closeInventory()" class="absolute top-3 right-3 sm:top-4 sm:right-4 text-slate-400 hover:text-white text-2xl w-10 h-10 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center transition-colors" aria-label="Inventar schließen"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="inventory-title" class="text-xl sm:text-3xl font-bold text-white mb-5 sm:mb-8 pr-12 flex items-center gap-3">
                 <i class="fa-solid fa-backpack text-yellow-500"></i> Deine Masterclass-Zertifikate
             </h2>
             <!-- Grid automatically flows responsively for all badges -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mb-8" id="inventory-grid">
+            <div class="grid grid-cols-2 min-[420px]:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 mb-5 sm:mb-8" id="inventory-grid">
                 <!-- Badges populated by JS -->
             </div>
-            <div class="border-t border-slate-700 pt-6 flex justify-between items-center">
+            <div class="border-t border-slate-700 pt-4 sm:pt-6 flex flex-col sm:flex-row gap-3 sm:gap-4 sm:justify-between sm:items-center">
                 <span class="text-slate-400 text-sm" id="inventory-status-text">Sammle alle 11 Abzeichen!</span>
-                <button onclick="resetAllProgress()" class="text-xs px-4 py-2 bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 rounded transition-colors border border-slate-700 hover:border-rose-500/50">
+                <button onclick="resetAllProgress()" class="text-xs px-4 py-2 bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-400 rounded transition-colors border border-slate-700 hover:border-rose-500/50 w-full sm:w-auto">
                     <i class="fa-solid fa-trash mr-1"></i> Fortschritt löschen
                 </button>
             </div>
@@ -1497,14 +1564,14 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
                 
                 if (isEarned) {
                     grid.innerHTML += `
-                        <button onclick="previewBadge(${i})" class="flex flex-col items-center justify-center bg-slate-800 p-4 rounded-xl border ${data.border} ${data.shadow} glow-effect min-h-[120px] hover:scale-105 transition-transform w-full">
+                        <button onclick="previewBadge(${i})" class="inventory-grid-item flex flex-col items-center justify-center bg-slate-800 p-4 rounded-xl border ${data.border} ${data.shadow} glow-effect min-h-[120px] hover:scale-105 transition-transform w-full">
                             <i class="fa-solid ${data.icon} text-4xl ${data.color} mb-3"></i>
                             <span class="text-xs font-bold text-center text-white mt-2">${data.name}</span>
                         </button>
                     `;
                 } else {
                     grid.innerHTML += `
-                        <div class="flex flex-col items-center justify-center bg-slate-800/50 p-4 rounded-xl border border-slate-700 opacity-50 min-h-[120px]">
+                        <div class="inventory-grid-item flex flex-col items-center justify-center bg-slate-800/50 p-4 rounded-xl border border-slate-700 opacity-50 min-h-[120px]">
                             <i class="fa-solid fa-lock text-4xl text-slate-600 mb-3"></i>
                             <span class="text-xs font-bold text-center text-slate-500 mt-2">Level ${i}</span>
                         </div>
@@ -1522,9 +1589,33 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
             }
         }
 
+        function openInventory() {
+            const modal = document.getElementById('inventory-modal');
+            modal.classList.remove('hidden');
+            document.body.classList.add('modal-open');
+        }
+
+        function closeInventory() {
+            const modal = document.getElementById('inventory-modal');
+            modal.classList.add('hidden');
+            if (document.getElementById('celebration-modal').classList.contains('hidden')) {
+                document.body.classList.remove('modal-open');
+            }
+        }
+
         function toggleInventory() {
             const modal = document.getElementById('inventory-modal');
-            modal.classList.toggle('hidden');
+            if (modal.classList.contains('hidden')) {
+                openInventory();
+            } else {
+                closeInventory();
+            }
+        }
+
+        function handleInventoryBackdrop(event) {
+            if (event.target.id === 'inventory-modal') {
+                closeInventory();
+            }
         }
 
         function revealQuiz(containerId, clickedBtn, isCorrect, tabId) {
@@ -1635,6 +1726,7 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
             document.querySelector('#celebration-modal button').innerText = btnText;
             
             document.getElementById('celebration-modal').classList.remove('hidden');
+            document.body.classList.add('modal-open');
 
             if (tabId < 11) {
                 let nextTab = tabId + 1;
@@ -1658,18 +1750,22 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
             document.getElementById('celebration-title').classList.remove('text-brand-gold');
             document.getElementById('celebration-text').innerHTML = `Du hast das Abzeichen <strong class="text-white">${badge.name}</strong> verdient!`;
             document.querySelector('#celebration-modal button').innerText = 'Schließen';
-            document.getElementById('inventory-modal').classList.add('hidden');
+            closeInventory();
             document.getElementById('celebration-modal').classList.remove('hidden');
+            document.body.classList.add('modal-open');
         }
 
         function closeCelebration() {
             document.getElementById('celebration-modal').classList.add('hidden');
             if (currentCompletedTab === 'preview') {
-                toggleInventory();
+                openInventory();
             } else if (currentCompletedTab && currentCompletedTab < 11) {
                 showTab(currentCompletedTab + 1);
+                document.body.classList.remove('modal-open');
             } else if (currentCompletedTab === 11) {
-                toggleInventory();
+                openInventory();
+            } else {
+                document.body.classList.remove('modal-open');
             }
             currentCompletedTab = null;
         }
@@ -1756,6 +1852,22 @@ Erkläre am Ende in 2 Sätzen, was du konkret verbessert hast.</p>
                 toast.classList.add('translate-y-20', 'opacity-0');
             }, 3000);
         }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+
+            const celebrationModal = document.getElementById('celebration-modal');
+            const inventoryModal = document.getElementById('inventory-modal');
+
+            if (!celebrationModal.classList.contains('hidden')) {
+                closeCelebration();
+                return;
+            }
+
+            if (!inventoryModal.classList.contains('hidden')) {
+                closeInventory();
+            }
+        });
 
         initApp();
     </script>
