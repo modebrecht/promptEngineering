@@ -149,6 +149,14 @@
   }
   .copy svg { width: 18px; height: 18px; }
   .try-hint { margin: 8px 0 0; color: var(--muted); font-size: 0.92rem; }
+  .try-hint.solo { margin-top: 0; color: var(--soft); font-size: 1rem; }
+  .try-hint.note { margin-top: 4px; }
+  .copyable { position: relative; padding-right: 54px; scroll-margin-top: 12px; }
+  .bubble.copyable { padding-right: 52px; }
+  .copyable > .copy { top: 8px; right: 8px; }
+  button.phrase { font: inherit; font-size: 0.9rem; color: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  button.phrase svg { width: 14px; height: 14px; opacity: 0.75; flex: 0 0 auto; }
+  button.phrase:active { transform: scale(0.97); }
 
   /* Quiz */
   .quiz { border-top: 4px solid var(--lc); }
@@ -619,12 +627,11 @@ const LEVELS = [
         <div class="chip" style="--cc:#34d399"><b>Welche Form?</b><span>z. B. Stichpunkte</span></div>
       </div>
       <div class="compare">
-        <div class="ex bad"><p class="ex-label">${ICONS.x} Ungenau</p><p>«Schreib was über Vulkane.»</p></div>
-        <div class="ex good"><p class="ex-label">${ICONS.check} Klar</p><p>«<span class="hl hl-was">Erkläre, wie ein Vulkan ausbricht.</span> <span class="hl hl-wer">Für die 8. Klasse.</span> <span class="hl hl-lang">Höchstens 5 Sätze.</span> <span class="hl hl-form">Am Schluss 3 Stichworte zum Lernen.</span>»</p></div>
+        <div class="ex bad" data-copy="Schreib was über Vulkane."><p class="ex-label">${ICONS.x} Ungenau</p><p>«Schreib was über Vulkane.»</p></div>
+        <div class="ex good" data-copy="Erkläre, wie ein Vulkan ausbricht. Für die 8. Klasse. Höchstens 5 Sätze. Am Schluss 3 Stichworte zum Lernen."><p class="ex-label">${ICONS.check} Klar</p><p>«<span class="hl hl-was">Erkläre, wie ein Vulkan ausbricht.</span> <span class="hl hl-wer">Für die 8. Klasse.</span> <span class="hl hl-lang">Höchstens 5 Sätze.</span> <span class="hl hl-form">Am Schluss 3 Stichworte zum Lernen.</span>»</p></div>
       </div>`,
     tryit: {
-      prompt: "Erkläre, wie ein Vulkan ausbricht. Für die 8. Klasse. Höchstens 5 Sätze. Am Schluss 3 Stichworte zum Lernen.",
-      hint: "Probier zuerst den ungenauen und dann den klaren Prompt. Vergleiche die Antworten."
+      hint: "Kopiere oben zuerst den ungenauen, dann den klaren Prompt. Vergleiche die beiden Antworten."
     },
     questions: [
       {
@@ -675,17 +682,17 @@ const LEVELS = [
         <div class="bubble du"><small>Du</small>Zu schwierig. Erkläre es für die 8. Klasse, mit einem Beispiel aus dem Alltag.</div>
         <div class="bubble ki better"><small>KI</small>Pflanzen machen ihr Essen selbst. Dafür brauchen sie Licht, Wasser und Luft. Darum wächst eine Zimmerpflanze am Fenster besser.</div>
       </div>
-      <p class="learn" style="margin:0 0 4px;color:var(--soft)">Diese Sätze helfen beim Nachfragen:</p>
+      <p class="learn" style="margin:0 0 4px;color:var(--soft)">Diese Sätze helfen beim Nachfragen. Tippe einen an, dann ist er kopiert:</p>
       <div class="phrases">
-        <span class="phrase">Kürzer: höchstens 3 Sätze.</span>
-        <span class="phrase">Einfacher, für die 8. Klasse.</span>
-        <span class="phrase">Gib mir ein Beispiel.</span>
-        <span class="phrase">Was heisst das Wort «…»?</span>
-        <span class="phrase">Mach eine Tabelle daraus.</span>
+        <button type="button" class="phrase" data-copy="Kürzer: höchstens 3 Sätze.">Kürzer: höchstens 3 Sätze.</button>
+        <button type="button" class="phrase" data-copy="Einfacher, für die 8. Klasse.">Einfacher, für die 8. Klasse.</button>
+        <button type="button" class="phrase" data-copy="Gib mir ein Beispiel.">Gib mir ein Beispiel.</button>
+        <button type="button" class="phrase" data-copy="Was heisst das Wort «…»?">Was heisst das Wort «…»?</button>
+        <button type="button" class="phrase" data-copy="Mach eine Tabelle daraus.">Mach eine Tabelle daraus.</button>
       </div>`,
     tryit: {
       prompt: "Erkläre, wie das Internet funktioniert.",
-      hint: "Frag danach mindestens zweimal nach. Nutze die Sätze oben."
+      hint: "Frag danach mindestens zweimal nach. Tippe dafür oben einen Satz an und füge ihn in der KI ein."
     },
     questions: [
       {
@@ -851,7 +858,7 @@ const LEVELS = [
         <figcaption>Ein Beispiel ist wie eine <strong>Ausstechform</strong>: Alles bekommt die gleiche Form.</figcaption>
       </figure>
       <div class="compare">
-        <div class="ex"><p class="ex-label" style="color:#fbbf24">Dein Prompt</p><p class="mono">Schreib Lernkarten genau so wie im Beispiel:
+        <div class="ex" data-copy="Schreib Lernkarten genau so wie im Beispiel:&#10;Begriff: Maus&#10;Erklärung: Damit bewegst du den Zeiger.&#10;&#10;Jetzt für: Tastatur, Drucker"><p class="ex-label" style="color:#fbbf24">Dein Prompt</p><p class="mono">Schreib Lernkarten genau so wie im Beispiel:
 Begriff: Maus
 Erklärung: Damit bewegst du den Zeiger.
 
@@ -864,8 +871,7 @@ Begriff: Drucker
 Erklärung: Damit bringst du Texte aufs Papier.</p></div>
       </div>`,
     tryit: {
-      prompt: "Schreib Lernkarten genau so wie im Beispiel:\nBegriff: Maus\nErklärung: Damit bewegst du den Zeiger.\n\nJetzt für: Tastatur, Bildschirm, Drucker, Router",
-      hint: "Ändere die Begriffe und schau, ob die KI den Aufbau behält."
+      hint: "Kopiere oben «Dein Prompt». Ändere danach die Begriffe, zum Beispiel Bildschirm und Router. Behält die KI den Aufbau?"
     },
     questions: [
       {
@@ -905,14 +911,13 @@ Erklärung: Damit bringst du Texte aufs Papier.</p></div>
     ],
     visual: `
       <div class="chat">
-        <div class="bubble du"><small>Du</small>Frag mich 5 Fragen zu Brüchen. Immer nur eine Frage. Warte auf meine Antwort und sag mir dann, ob sie stimmt.</div>
+        <div class="bubble du" data-copy="Frag mich 5 Fragen zu Brüchen. Immer nur eine Frage. Warte auf meine Antwort. Sag mir dann, ob sie stimmt, und erkläre es kurz."><small>Du</small>Frag mich 5 Fragen zu Brüchen. Immer nur eine Frage. Warte auf meine Antwort. Sag mir dann, ob sie stimmt, und erkläre es kurz.</div>
         <div class="bubble ki"><small>KI</small>Frage 1: Kürze 4/8 so weit wie möglich.</div>
         <div class="bubble du"><small>Du</small>1/2</div>
         <div class="bubble ki better"><small>KI</small>Richtig! 4 und 8 kann man beide durch 4 teilen. Frage 2: …</div>
       </div>`,
     tryit: {
-      prompt: "Frag mich 5 Fragen zum Thema [THEMA]. Immer nur eine Frage. Warte auf meine Antwort. Sag mir dann, ob sie stimmt, und erkläre es kurz.",
-      hint: "Ersetze [THEMA] durch ein Thema, das ihr gerade in der Schule habt."
+      hint: "Kopiere oben deine erste Nachricht. Ersetze «Brüche» durch ein Thema, das ihr gerade in der Schule habt."
     },
     questions: [
       {
@@ -1226,7 +1231,7 @@ Erklärung: Damit bringst du Texte aufs Papier.</p></div>
         <div class="chip" style="--cc:#a78bfa"><b>3 Frage</b><span>Was willst du?</span></div>
       </div>
       <div class="compare">
-        <div class="ex"><p class="ex-label" style="color:#bef264">Dein Prompt</p><p><span class="hl hl-was">Antworte nur mit diesem Text. Wenn etwas nicht im Text steht, schreib: «Steht nicht im Text.»</span><br><span class="hl hl-form">Text: «Der Informatikraum ist am Mittwoch von 13.30 bis 15 Uhr offen. Bring deine Kopfhörer mit.»</span><br><span class="hl hl-wer">Frage: Wann ist der Raum offen? Gibt es dort einen Drucker?</span></p></div>
+        <div class="ex" data-copy="Antworte nur mit diesem Text. Wenn etwas nicht im Text steht, schreib: «Steht nicht im Text.»&#10;Text: «Der Informatikraum ist am Mittwoch von 13.30 bis 15 Uhr offen. Bring deine Kopfhörer mit.»&#10;Frage: Wann ist der Raum offen? Gibt es dort einen Drucker?"><p class="ex-label" style="color:#bef264">Dein Prompt</p><p><span class="hl hl-was">Antworte nur mit diesem Text. Wenn etwas nicht im Text steht, schreib: «Steht nicht im Text.»</span><br><span class="hl hl-form">Text: «Der Informatikraum ist am Mittwoch von 13.30 bis 15 Uhr offen. Bring deine Kopfhörer mit.»</span><br><span class="hl hl-wer">Frage: Wann ist der Raum offen? Gibt es dort einen Drucker?</span></p></div>
         <div class="arrow">${ICONS.arrow}</div>
         <div class="ex good"><p class="ex-label">${ICONS.robot} KI antwortet</p><p>Der Raum ist am Mittwoch von 13.30 bis 15 Uhr offen. Ob es einen Drucker gibt, steht nicht im Text.</p></div>
       </div>
@@ -1239,8 +1244,7 @@ Erklärung: Damit bringst du Texte aufs Papier.</p></div>
         </div>
       </div>`,
     tryit: {
-      prompt: "Antworte nur mit dem folgenden Text. Wenn etwas nicht im Text steht, schreib: «Steht nicht im Text.»\n\nText: [KURZEN TEXT AUS DEM SCHULBUCH EINFÜGEN]\n\nFasse den Text in 3 Stichpunkten zusammen.",
-      hint: "Füge einen kurzen Text aus eurem Schulbuch ein. Prüfe danach jeden Stichpunkt im Text nach."
+      hint: "Kopiere oben «Dein Prompt». Schreibt die KI beim Drucker «Steht nicht im Text»? Danach ersetzt du Text und Frage durch einen kurzen Text aus eurem Schulbuch."
     },
     questions: [
       {
@@ -1537,12 +1541,31 @@ function renderLevel(lvl) {
       ${lvl.visual}
       <div class="try" id="try-box">
         <p class="try-title">${ICONS.play} Probier es aus</p>
-        <div class="prompt-box"><span id="try-text">${esc(lvl.tryit.prompt)}</span><button class="copy" type="button" id="copy-btn" aria-label="Prompt kopieren">${ICONS.copy}</button></div>
-        <p class="try-hint">${esc(lvl.tryit.hint)}<br>Nur mit einer KI, die eure Schule erlaubt. Keine KI da? Dann geh direkt zum Quiz.</p>
+        ${lvl.tryit.prompt ? `<div class="prompt-box"><span id="try-text">${esc(lvl.tryit.prompt)}</span><button class="copy" type="button" id="copy-btn" aria-label="Prompt kopieren">${ICONS.copy}</button></div>` : ""}
+        <p class="try-hint${lvl.tryit.prompt ? "" : " solo"}">${esc(lvl.tryit.hint)}</p>
+        <p class="try-hint note">Nur mit einer KI, die eure Schule erlaubt. Keine KI da? Dann geh direkt zum Quiz.</p>
       </div>
     </article>
     <section class="card quiz" id="quiz" aria-labelledby="quiz-title"></section>`;
-  $("copy-btn").addEventListener("click", () => copyText($("try-text").textContent));
+  if ($("copy-btn")) $("copy-btn").addEventListener("click", () => copyText($("try-text").textContent));
+  /* Prompts in den Beispielen: direkt dort kopieren statt ein zweites Mal im Probier-Feld */
+  stage.querySelectorAll("[data-copy]").forEach((el) => {
+    if (el.tagName === "BUTTON") {
+      el.insertAdjacentHTML("beforeend", ICONS.copy);
+      el.addEventListener("click", () => copyText(el.dataset.copy));
+      return;
+    }
+    el.classList.add("copyable");
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "copy"; b.setAttribute("aria-label", "Prompt kopieren"); b.innerHTML = ICONS.copy;
+    b.addEventListener("click", () => copyText(el.dataset.copy));
+    el.append(b);
+  });
+  const firstCopy = !lvl.tryit.prompt && stage.querySelector(".copyable");
+  if (firstCopy) {
+    firstCopy.id = "try-first";
+    stage.querySelector('[data-jump="try-box"]').dataset.jump = "try-first";
+  }
   if (lvl.builder) setupBuilder(lvl);
   if (lvl.setup) lvl.setup();
   stage.querySelectorAll("[data-jump]").forEach((b) => b.addEventListener("click", () => {
