@@ -305,6 +305,8 @@ function initBasic() {
     get("station-position").textContent = `Station ${current + 1} von ${stations.length}`;
     title.textContent = station.title;
     get("station-intro").textContent = station.intro;
+    const example = get(`station-example-${current + 1}`);
+    get("station-example").replaceChildren(example.content.cloneNode(true));
     const questions = get("questions");
     questions.replaceChildren();
     station.questions.forEach((question, index) =>

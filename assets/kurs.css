@@ -94,6 +94,85 @@ progress { display: block; width: 100%; margin-top: 0.3rem; height: 0.7rem; acce
 
 .context-label { color: var(--primary-dark); font-size: 0.875rem; font-weight: 700; margin-bottom: 0.45rem; }
 
+.station-example {
+  margin: 0.9rem 0 0;
+  padding: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  background: var(--background);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.station-example svg {
+  flex: 0 0 auto;
+  width: 1.1rem;
+  height: 1.1rem;
+  color: var(--primary);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.example-prompt, .example-revision {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.example-prompt div, .example-card {
+  padding: 0.55rem;
+  border-radius: 0.35rem;
+  background: var(--paper);
+  overflow-wrap: anywhere;
+}
+
+.example-prompt dt, .example-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--primary-dark);
+  font-weight: 750;
+}
+
+.example-prompt dd, .example-card p + p { margin: 0.25rem 0 0; }
+
+.example-pattern { width: 100%; border-collapse: collapse; text-align: left; }
+
+.example-pattern th, .example-pattern td { width: 50%; padding: 0.3rem 0.55rem; }
+
+.example-pattern th { color: var(--primary-dark); }
+
+.example-pattern td { border-top: 2px solid var(--background); background: var(--paper); }
+
+.example-pattern svg { margin-right: 0.25rem; vertical-align: middle; }
+
+.example-comparison {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.example-comparison .example-card { min-height: 100%; }
+
+.example-comparison mark {
+  padding-inline: 0.16em;
+  border-radius: 0.2em;
+  color: var(--primary-dark);
+  background: var(--selected);
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.example-revision { list-style: none; }
+
+.example-instruction { background: var(--selected); }
+
 .question { margin: 1.35rem 0 0; padding: 0; border: 0; min-width: 0; }
 
 .question legend { font-weight: 700; padding: 0; }
@@ -189,6 +268,9 @@ textarea { resize: vertical; }
 
 @media (max-width: 31rem) {
   .form-grid { grid-template-columns: 1fr; }
+  .example-prompt dt { display: block; }
+  .example-prompt dt svg { display: block; margin-bottom: 0.25rem; }
+  .example-revision { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 24rem) {

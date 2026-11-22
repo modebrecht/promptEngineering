@@ -37,6 +37,7 @@
         <p class="context-label" id="station-position"></p>
         <h2 id="station-title" tabindex="-1"></h2>
         <p id="station-intro"></p>
+        <div id="station-example"></div>
         <div id="questions"></div>
         <div class="actions">
           <button type="button" class="secondary" id="station-back">Zurück</button>
@@ -44,6 +45,85 @@
         </div>
       </article>
     </section>
+
+    <template id="station-example-1">
+      <figure class="station-example" aria-label="Bausteine eines Beispielauftrags">
+        <dl class="example-prompt">
+          <div>
+            <dt>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>
+              Was?
+            </dt>
+            <dd>Vulkane erklären</dd>
+          </div>
+          <div>
+            <dt>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3"/><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/></svg>
+              Für wen?
+            </dt>
+            <dd>Für Kinder</dd>
+          </div>
+          <div>
+            <dt>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8m-8 4h6"/></svg>
+              Welche Form?
+            </dt>
+            <dd>In zwei Sätzen</dd>
+          </div>
+        </dl>
+      </figure>
+    </template>
+
+    <template id="station-example-2">
+      <figure class="station-example" aria-label="Zwei Beispiele mit demselben Aufbau">
+        <table class="example-pattern">
+          <thead><tr><th scope="col">Gemüse</th><th scope="col">Farbe</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Tomate</td>
+              <td><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="7" fill="#b73536" stroke="none"/></svg>Rot</td>
+            </tr>
+            <tr>
+              <td>Karotte</td>
+              <td><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="7" fill="#c2581b" stroke="none"/></svg>Orange</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </template>
+
+    <template id="station-example-3">
+      <figure class="station-example example-comparison" aria-label="Beispiel für eine Aussage mit Beleg">
+        <div class="example-card">
+          <p class="example-label">Mitteilung</p>
+          <p>«Das Training beginnt um <mark>16 Uhr</mark>.»</p>
+        </div>
+        <svg class="example-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15m-5-5 5 5-5 5"/></svg>
+        <div class="example-card">
+          <p class="example-label">Aussage der KI</p>
+          <p>«Training ab <mark>16 Uhr</mark>.»</p>
+        </div>
+      </figure>
+    </template>
+
+    <template id="station-example-4">
+      <figure class="station-example" aria-label="Beispiel für eine verbesserte Antwort">
+        <ol class="example-revision" role="list">
+          <li class="example-card">
+            <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 16H8l-4 4V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8 10h8"/></svg>Erste Antwort</p>
+            <p>«Wasser verdunstet.»</p>
+          </li>
+          <li class="example-card example-instruction">
+            <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 16H8l-4 4V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM12 8v5m-2.5-2.5h5"/></svg>Folgeauftrag</p>
+            <p>«Gib ein Beispiel.»</p>
+          </li>
+          <li class="example-card">
+            <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 16H8l-4 4V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8.5 10.5l2.5 2.5 4.5-4.5"/></svg>Neue Antwort</p>
+            <p>«Eine Pfütze wird kleiner, wenn Wasser daraus verdunstet.»</p>
+          </li>
+        </ol>
+      </figure>
+    </template>
 
     <section id="abschluss" aria-labelledby="abschluss-title" hidden>
       <header class="page-heading">
