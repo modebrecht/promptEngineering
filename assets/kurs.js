@@ -3,6 +3,7 @@
 const stations = [
   {
     title: "Auftrag klar machen",
+    award: { id: "auftrag", name: "Klarer Auftrag" },
     intro: "Sag der KI, was du brauchst und für wen die Antwort gedacht ist.",
     questions: [
       {
@@ -29,6 +30,7 @@ const stations = [
   },
   {
     title: "Ein Beispiel geben",
+    award: { id: "beispiel", name: "Gutes Beispiel" },
     intro: "Ein Beispiel hilft, wenn die Antwort ein bestimmtes Format haben soll.",
     questions: [
       {
@@ -55,6 +57,7 @@ const stations = [
   },
   {
     title: "Einen Beleg finden",
+    award: { id: "beleg", name: "Beleg gefunden" },
     intro: "Eine Antwort kann überzeugend klingen. Vergleiche ihre Aussage mit der Originalquelle.",
     questions: [
       {
@@ -81,6 +84,7 @@ const stations = [
   },
   {
     title: "Eine Antwort verbessern",
+    award: { id: "antwort", name: "Bessere Antwort" },
     intro: "Sag konkret, was an der Antwort besser werden soll. Prüfe danach, ob die Änderung sichtbar ist.",
     questions: [
       {
@@ -284,6 +288,8 @@ function renderQuestion(container, station, question, number, onCorrect) {
 
 function initBasic() {
   const title = get("station-title");
+  const stationAward = get("station-award");
+  const completionAwards = get("completion-awards");
   const buttonBack = get("station-back");
   const buttonNext = get("station-next");
   const form = get("abschluss-form");
@@ -291,12 +297,31 @@ function initBasic() {
   const openStation = state.answered.findIndex((_, index) => !stationComplete(index));
   let current = openStation === -1 ? stations.length - 1 : openStation;
 
-  function updateProgress() {
+  function renderAward(element, award, showCaption = false) {
+    const content = get("award-template").content.cloneNode(true);
+    content.querySelector("use").setAttribute("href", `#award-${award.id}`);
+    content.querySelector(".award-name").textContent = award.name;
+    content.querySelector(".award-caption").hidden = !showCaption;
+    element.dataset.award = award.id;
+    element.replaceChildren(content);
+  }
+
+  for (const station of stations) {
+    const award = document.createElement("li");
+    award.className = "award";
+    renderAward(award, station.award);
+    completionAwards.append(award);
+  }
+
+  function updateProgress(justAnswered = false) {
     const count = completedStations();
+    const complete = stationComplete(current);
     get("progress-label").textContent = `${count} von ${stations.length} Stationen abgeschlossen`;
     get("course-progress").value = count;
+    stationAward.hidden = !complete;
+    stationAward.classList.toggle("award-earned", complete && justAnswered);
     buttonBack.hidden = current === 0;
-    buttonNext.disabled = !stationComplete(current);
+    buttonNext.disabled = !complete;
     buttonNext.textContent = current === stations.length - 1 ? "Zum Abschluss" : "Nächste Station";
   }
 
@@ -305,12 +330,13 @@ function initBasic() {
     get("station-position").textContent = `Station ${current + 1} von ${stations.length}`;
     title.textContent = station.title;
     get("station-intro").textContent = station.intro;
+    renderAward(stationAward, station.award, true);
     const example = get(`station-example-${current + 1}`);
     get("station-example").replaceChildren(example.content.cloneNode(true));
     const questions = get("questions");
     questions.replaceChildren();
     station.questions.forEach((question, index) =>
-      renderQuestion(questions, current, question, index, updateProgress)
+      renderQuestion(questions, current, question, index, () => updateProgress(true))
     );
     updateProgress();
     if (focusHeading) title.focus();
@@ -318,9 +344,14 @@ function initBasic() {
 
   function updateCompletion() {
     const count = completedStations();
+    const complete = count === stations.length;
+    get("abschluss-title").textContent = complete ? "Basic geschafft!" : "Abschluss";
     get("abschluss-summary").textContent = `${count} von ${stations.length} Basic-Stationen abgeschlossen.`;
-    get("abschluss-pending").hidden = count === stations.length;
-    form.hidden = count !== stations.length;
+    get("completion-heading").classList.toggle("completion-celebration", complete);
+    get("completion-trophy").hidden = !complete;
+    completionAwards.hidden = !complete;
+    get("abschluss-pending").hidden = complete;
+    form.hidden = !complete;
     const practice = selectedPractice();
     get("practice-summary").textContent = practice
       ? `Im PDF enthalten: ${practice.title}.`

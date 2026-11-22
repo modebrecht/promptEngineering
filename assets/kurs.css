@@ -284,6 +284,107 @@ button:disabled { opacity: 0.55; cursor: default; }
 
 .notice { margin-bottom: 1rem; }
 
+.award-symbols { position: absolute; }
+
+.award {
+  --medal-paper: #def3ed;
+  --medal-line: #99cebc;
+  --medal-ink: #175c49;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.55rem;
+  background: var(--paper);
+}
+
+.award[data-award="beispiel"] { --medal-paper: #f0e8f8; --medal-line: #d4bce7; --medal-ink: #654184; }
+.award[data-award="beleg"] { --medal-paper: #e4f0fb; --medal-line: #a8c7e4; --medal-ink: #2c5681; }
+.award[data-award="antwort"] { --medal-paper: #fff0d8; --medal-line: #e4c286; --medal-ink: #815013; }
+
+.award-medal {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid var(--medal-line);
+  border-radius: 50%;
+  background: var(--medal-paper);
+  color: var(--medal-ink);
+}
+
+.award-medal svg, .completion-trophy svg {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.award-caption, .award-name { display: block; }
+
+.award-caption { font-size: 0.8rem; color: var(--muted); }
+
+.award-name { font-size: 0.9rem; font-weight: 750; line-height: 1.25; overflow-wrap: anywhere; }
+
+.station-award { margin-top: 1rem; border-color: var(--medal-line); background: var(--medal-paper); }
+
+.station-award .award-medal { background: var(--paper); }
+
+.award-earned .award-medal, .completion-trophy { animation: medal-appear 280ms ease-out; }
+
+@keyframes medal-appear {
+  from { opacity: 0.45; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.completion-celebration {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.65rem, 3vw, 1.2rem);
+  padding: clamp(0.8rem, 4vw, 1.35rem);
+  border: 1px solid #9bc8bd;
+  border-radius: 0.75rem;
+  background: linear-gradient(110deg, #dff2ed, #f7f9ee);
+}
+
+.completion-celebration h1 { font-size: clamp(1.65rem, 6vw, 2.75rem); }
+
+.completion-celebration p { margin-top: 0.3rem; }
+
+.completion-trophy {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: clamp(2.75rem, 10vw, 4rem);
+  aspect-ratio: 1;
+  border: 1px solid #debb79;
+  border-radius: 50%;
+  background: #fff1d0;
+  color: #7e4b13;
+}
+
+.completion-trophy svg { width: 78%; height: 78%; }
+
+.trophy-cup { fill: #efbd58; }
+
+.trophy-star { fill: #fff5d9; stroke-width: 1; }
+
+.completion-awards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.55rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1rem; margin-top: 1rem; }
 
 .form-grid, .work-fields { display: grid; gap: 0.85rem; margin: 1rem 0; }
@@ -325,8 +426,13 @@ textarea { resize: vertical; }
   .example-prompt dt { display: block; }
   .example-prompt dt svg { display: block; margin-bottom: 0.25rem; }
   .example-revision { grid-template-columns: 1fr; }
+  .completion-awards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 24rem) {
   .site-header-inner { gap: 0.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .award-earned .award-medal, .completion-trophy { animation: none; }
 }
