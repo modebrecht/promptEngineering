@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>KI clever nutzen</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --card: rgba(30, 41, 59, 0.72);
+    --line: rgba(255, 255, 255, 0.1);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --soft: #cbd5e1;
+    --ok: #10b981;
+    --bad: #f43f5e;
+    --gold: #fbbf24;
+    --lc: #06b6d4;
+    --lglow: rgba(6, 182, 212, 0.5);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(circle at top right, #1e1b4b 0%, transparent 45%),
+      radial-gradient(circle at bottom left, #083344 0%, transparent 45%);
+    background-attachment: fixed;
+    color: var(--text);
+    line-height: 1.55;
+    min-height: 100vh;
+    padding: 28px 14px calc(110px + env(safe-area-inset-bottom));
+  }
+  body.modal-open { overflow: hidden; }
+  button { font: inherit; color: inherit; }
+  svg { display: block; }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  /* Kopf */
+  .hero { text-align: center; margin-bottom: 26px; }
+  .hero-icon {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #1e293b; border: 1px solid #334155;
+    display: inline-grid; place-items: center; color: #06b6d4;
+  }
+  .hero-icon svg { width: 34px; height: 34px; }
+  h1 {
+    font-size: clamp(2.3rem, 10vw, 3.6rem); line-height: 1.05;
+    margin: 14px 0 10px; font-weight: 800; letter-spacing: -0.02em;
+  }
+  .grad {
+    background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero p { color: var(--muted); font-size: 1.1rem; margin: 0; }
+
+  /* Level-Navigation */
+  .levels { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 24px; }
+  .pill {
+    font-size: 0.92rem; font-weight: 700; padding: 8px 14px; border-radius: 999px;
+    border: 1px solid #334155; background: #1e293b; color: var(--soft);
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+  }
+  .pill svg { width: 14px; height: 14px; }
+  .pill:active { transform: scale(0.96); }
+  .pill.done svg { color: var(--ok); }
+  .pill.locked { background: rgba(30, 41, 59, 0.4); color: #64748b; border-color: #273449; }
+  .pill.active { background: var(--pc); color: #06121a; border-color: transparent; box-shadow: 0 0 16px var(--pg); }
+  .pill.active svg { color: #06121a; }
+
+  /* Karten */
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    padding: 22px 18px; margin-bottom: 18px; position: relative; overflow: hidden;
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  }
+  .card-deco { position: absolute; top: 14px; right: 14px; color: var(--lc); opacity: 0.13; }
+  .card-deco svg { width: 74px; height: 74px; }
+  .level-head { display: flex; align-items: center; gap: 12px; margin: 0 0 4px; padding-right: 60px; }
+  .num {
+    flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center;
+    font-weight: 800; color: var(--lc); background: var(--lsoft);
+  }
+  h2 { font-size: 1.55rem; line-height: 1.2; margin: 0; }
+  .tagline { color: var(--lc); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.82rem; margin: 6px 0 16px; }
+  .learn p { margin: 0 0 12px; font-size: 1.07rem; color: #e2e8f0; }
+  .learn strong { color: #fff; }
+
+  /* Visuelle Beispiele */
+  .chips { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0; }
+  .chip { border-radius: 12px; padding: 10px 12px; background: rgba(15, 23, 42, 0.7); border: 1px solid #334155; border-top: 3px solid var(--cc); }
+  .chip b { display: block; color: var(--cc); font-size: 1rem; }
+  .chip span { color: var(--muted); font-size: 0.9rem; }
+  @media (min-width: 620px) { .chips { grid-template-columns: repeat(4, 1fr); } }
+
+  .compare { display: grid; gap: 10px; margin: 14px 0; }
+  .ex { border-radius: 12px; padding: 12px 14px; background: rgba(15, 23, 42, 0.85); border-left: 4px solid #475569; }
+  .ex.bad { border-left-color: var(--bad); }
+  .ex.good { border-left-color: var(--ok); }
+  .ex-label { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 4px; }
+  .ex.bad .ex-label { color: #fb7185; }
+  .ex.good .ex-label { color: #34d399; }
+  .ex-label svg { width: 15px; height: 15px; }
+  .ex p { margin: 0; }
+  .hl { border-radius: 5px; padding: 0 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hl-was { background: rgba(6, 182, 212, 0.25); }
+  .hl-wer { background: rgba(139, 92, 246, 0.3); }
+  .hl-lang { background: rgba(234, 179, 8, 0.25); }
+  .hl-form { background: rgba(16, 185, 129, 0.25); }
+
+  .chat { display: grid; gap: 8px; margin: 14px 0; }
+  .bubble { max-width: 88%; padding: 10px 13px; border-radius: 16px; font-size: 0.98rem; }
+  .bubble small { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.75; margin-bottom: 2px; }
+  .bubble.ki { background: #1e293b; border: 1px solid #334155; border-bottom-left-radius: 4px; }
+  .bubble.du { justify-self: end; background: rgba(139, 92, 246, 0.25); border: 1px solid rgba(139, 92, 246, 0.5); border-bottom-right-radius: 4px; }
+  .bubble.ki.hard { color: var(--muted); }
+  .bubble.ki.better { border-color: rgba(16, 185, 129, 0.55); }
+
+  .phrases { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 14px; }
+  .phrase { font-size: 0.9rem; padding: 6px 10px; border-radius: 999px; background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.4); }
+
+  .steps { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 8px; }
+  .steps li { display: flex; gap: 10px; align-items: flex-start; background: rgba(15, 23, 42, 0.7); border: 1px solid #334155; border-radius: 12px; padding: 10px 12px; }
+  .steps .n { flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 0.85rem; background: var(--lsoft); color: var(--lc); }
+
+  .lights { display: grid; gap: 8px; margin: 14px 0; }
+  @media (min-width: 620px) { .lights { grid-template-columns: repeat(3, 1fr); } }
+  .light { border-radius: 12px; padding: 12px; background: rgba(15, 23, 42, 0.75); border: 1px solid #334155; border-top: 4px solid var(--cc); }
+  .light b { display: flex; align-items: center; gap: 8px; color: var(--cc); }
+  .light p { margin: 4px 0 0; font-size: 0.95rem; color: var(--soft); }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--cc); box-shadow: 0 0 10px var(--cc); flex: 0 0 auto; }
+
+  .arrow { color: var(--muted); justify-self: center; }
+  .arrow svg { width: 22px; height: 22px; transform: rotate(90deg); }
+  .mono { white-space: pre-line; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.92rem; }
+
+  /* Probier es aus */
+  .try { margin-top: 16px; border-radius: 14px; border: 1px dashed rgba(255, 255, 255, 0.22); padding: 14px; background: rgba(15, 23, 42, 0.5); }
+  .try-title { display: flex; align-items: center; gap: 8px; font-weight: 800; margin: 0 0 8px; color: #fff; }
+  .try-title svg { width: 18px; height: 18px; color: var(--lc); }
+  .prompt-box { position: relative; background: #0b1222; border-left: 4px solid var(--lc); border-radius: 0 10px 10px 0; padding: 12px 48px 12px 14px; white-space: pre-line; }
+  .copy {
+    position: absolute; top: 6px; right: 6px; width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid #334155; background: #1e293b; color: var(--soft); display: grid; place-items: center; cursor: pointer;
+  }
+  .copy svg { width: 18px; height: 18px; }
+  .try-hint { margin: 8px 0 0; color: var(--muted); font-size: 0.92rem; }
+
+  /* Quiz */
+  .quiz { border-top: 4px solid var(--lc); }
+  .quiz-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .quiz-title { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.2rem; margin: 0; }
+  .quiz-title svg { width: 20px; height: 20px; color: var(--lc); }
+  .hearts { display: flex; gap: 4px; }
+  .heart { width: 26px; height: 26px; color: var(--bad); transition: transform 0.3s, opacity 0.3s, color 0.3s; }
+  .heart.lost { color: #334155; }
+  .heart.pop { animation: heartLoss 0.6s ease; }
+  @keyframes heartLoss { 0% { transform: scale(1); } 30% { transform: scale(1.35) rotate(-10deg); } 60% { transform: scale(0.8) rotate(8deg); } 100% { transform: scale(1); } }
+  .qprog { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 0.9rem; margin: 0 0 14px; }
+  .dots { display: flex; gap: 5px; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: #334155; }
+  .dots i.on { background: var(--lc); }
+  .dots i.now { background: #fff; }
+  .qtext { font-size: 1.15rem; font-weight: 700; margin: 0 0 10px; color: #fff; }
+  .ctx { white-space: pre-line; background: rgba(15, 23, 42, 0.85); border-left: 4px solid #64748b; border-radius: 0 10px 10px 0; padding: 10px 12px; margin: 0 0 12px; color: #e2e8f0; }
+  .opts { display: grid; gap: 8px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; cursor: pointer;
+    padding: 12px 14px; border-radius: 12px; border: 1px solid #475569; background: #334155; color: #e2e8f0;
+    font-size: 1rem; line-height: 1.4; transition: transform 0.12s, background 0.2s, border-color 0.2s;
+  }
+  .opt:active { transform: scale(0.985); }
+  .letter { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; border: 2px solid currentColor; display: grid; place-items: center; font-weight: 800; font-size: 0.85rem; opacity: 0.8; }
+  .opt.wrong { background: rgba(244, 63, 94, 0.15); border-color: var(--bad); color: #fda4af; cursor: default; }
+  .opt.right { background: rgba(16, 185, 129, 0.18); border-color: var(--ok); color: #6ee7b7; }
+  .opt.dim { opacity: 0.35; cursor: default; }
+  .opt.shake { animation: shake 0.4s; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .fb, .btn-row, #quiz { scroll-margin-bottom: 104px; scroll-margin-top: 12px; }
+  .fb { margin-top: 12px; padding: 12px 14px; border-radius: 12px; font-size: 1rem; }
+  .fb:empty { display: none; }
+  .fb.ok { background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; }
+  .fb.no { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.4); color: #fecdd3; }
+  .fb b { color: #fff; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+    border: 0; border-radius: 12px; padding: 13px 22px; font-weight: 800; font-size: 1rem; color: #fff;
+    background: linear-gradient(90deg, #0891b2, #7c3aed); box-shadow: 0 8px 24px -10px rgba(124, 58, 237, 0.8);
+  }
+  .btn svg { width: 18px; height: 18px; }
+  .btn.ghost { background: #334155; box-shadow: none; border: 1px solid #475569; }
+  .btn-row { display: flex; justify-content: flex-end; margin-top: 14px; }
+  .done-box { text-align: center; padding: 8px 0 4px; }
+  .done-box p { color: var(--soft); margin: 10px 0 16px; }
+
+  /* Abzeichen */
+  .medal {
+    width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto;
+    background: radial-gradient(circle at 35% 30%, #334155, #0f172a); border: 3px solid var(--mc); color: var(--mc);
+    box-shadow: 0 0 26px var(--mg);
+  }
+  .medal svg { width: 44px; height: 44px; }
+  .medal.sm { width: 56px; height: 56px; border-width: 2px; box-shadow: 0 0 14px var(--mg); }
+  .medal.sm svg { width: 26px; height: 26px; }
+  .medal.off { --mc: #475569; --mg: transparent; opacity: 0.5; }
+
+  /* Inventar-Knopf */
+  .inv-btn {
+    position: fixed; right: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 20; cursor: pointer;
+    display: flex; align-items: center; gap: 12px; padding: 10px 16px 10px 12px; border-radius: 18px;
+    background: rgba(15, 23, 42, 0.92); border: 1px solid #334155; box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.7);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  }
+  .inv-btn > svg { width: 30px; height: 30px; color: var(--gold); }
+  .inv-btn small { display: block; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: left; }
+  .inv-btn b { display: block; font-size: 1.05rem; text-align: left; }
+  .inv-btn.bump { animation: bump 0.6s ease; }
+  @keyframes bump { 40% { transform: scale(1.12); } }
+
+  /* Modal */
+  .modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 18px; background: rgba(2, 6, 23, 0.78); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+  .modal[hidden] { display: none; }
+  .sheet {
+    width: min(100%, 460px); max-height: calc(100vh - 36px); overflow: auto; text-align: center;
+    background: #111a2e; border: 1px solid #334155; border-radius: 22px; padding: 26px 20px 22px;
+    animation: sheetIn 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+  @keyframes sheetIn { from { transform: translateY(24px) scale(0.96); opacity: 0; } }
+  .sheet h3 { font-size: 1.6rem; margin: 16px 0 6px; }
+  .sheet p { color: var(--soft); margin: 0 0 18px; }
+  .sheet .btn { width: 100%; }
+  .sheet .btn + .btn { margin-top: 10px; }
+  .pop { animation: medalPop 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.4); }
+  @keyframes medalPop { 0% { transform: scale(0) rotate(-30deg); } 70% { transform: scale(1.15) rotate(6deg); } 100% { transform: scale(1); } }
+  .eyebrow { font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 800; }
+  .grid-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0; }
+  .grid-badges div { display: grid; gap: 6px; justify-items: center; font-size: 0.78rem; font-weight: 700; color: var(--soft); }
+  .reset { background: none; border: 0; color: #64748b; font-size: 0.85rem; text-decoration: underline; cursor: pointer; margin-top: 14px; }
+  .reset.armed { color: var(--bad); }
+
+  /* Abschluss */
+  .cert { text-align: center; border: 2px solid rgba(251, 191, 36, 0.45); background: linear-gradient(160deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); }
+  .cert .trophy { color: var(--gold); width: 72px; height: 72px; margin: 4px auto 0; filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.6)); }
+  .cert h2 { font-size: 1.9rem; margin: 10px 0 4px; }
+  .cert .who { font-size: 1.35rem; font-weight: 800; color: #fff; margin: 14px 0 4px; min-height: 1.6em; }
+  .cert .what { color: var(--soft); margin: 0 0 6px; }
+  .cert .date { color: var(--muted); font-size: 0.9rem; }
+  .cert-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 18px 0 6px; }
+  .name-field { display: grid; gap: 6px; text-align: left; font-weight: 700; margin-bottom: 14px; }
+  .name-field input { font: inherit; font-size: 1.05rem; padding: 12px 14px; border-radius: 12px; border: 1px solid #475569; background: #0b1222; color: #fff; }
+  .note { color: var(--muted); font-size: 0.95rem; text-align: center; }
+
+  /* Sammelkarte */
+  @property --ang { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+  .bscene { position: relative; width: 210px; height: 292px; margin: 6px auto 4px; perspective: 900px; }
+  .brays {
+    position: absolute; left: 50%; top: 50%; width: 480px; height: 480px; margin: -240px 0 0 -240px; border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, var(--mg) 0deg 5deg, transparent 5deg 20deg);
+    -webkit-mask: radial-gradient(circle, #000 16%, transparent 60%); mask: radial-gradient(circle, #000 16%, transparent 60%);
+    opacity: 0.6; pointer-events: none; animation: spin 20s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .bfloat { width: 100%; height: 100%; transform-style: preserve-3d; animation: sway 5.5s ease-in-out infinite; }
+  @keyframes sway { 0%, 100% { transform: translateY(0) rotateY(-8deg) rotateX(3deg); } 50% { transform: translateY(-8px) rotateY(8deg) rotateX(-3deg); } }
+  .bcard {
+    --rx: 0deg; --ry: 0deg; --flip: 0deg; --px: 50%; --py: 50%;
+    position: relative; width: 100%; height: 100%; transform-style: preserve-3d; cursor: pointer; outline: none;
+    transform: rotateX(var(--rx)) rotateY(calc(var(--ry) + var(--flip)));
+    transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .bcard.flipped { --flip: 180deg; }
+  .bcard:focus-visible .bfront, .bcard:focus-visible .bback { outline: 3px solid #67e8f9; outline-offset: 3px; }
+  .bscene.reveal .bcard { animation: reveal 1.9s cubic-bezier(0.15, 0.75, 0.25, 1) both; }
+  .bscene.live .bcard { animation: none; }
+  @keyframes reveal {
+    0% { transform: translateY(70px) scale(0.3) rotateY(180deg); opacity: 0; }
+    12% { opacity: 1; }
+    100% { transform: translateY(0) scale(1) rotateY(720deg); opacity: 1; }
+  }
+  .bface {
+    position: absolute; inset: 0; border-radius: 18px; overflow: hidden;
+    -webkit-backface-visibility: hidden; backface-visibility: hidden;
+    border: 3px solid transparent;
+    box-shadow: 0 0 34px var(--mg), 0 22px 40px -12px rgba(0, 0, 0, 0.8);
+  }
+  .bfront {
+    display: flex; flex-direction: column; align-items: center; padding: 12px 12px 14px; text-align: center;
+    background:
+      radial-gradient(120% 70% at 50% 0%, var(--mg) 0%, transparent 60%) padding-box,
+      linear-gradient(165deg, #1e293b, #0a1020) padding-box,
+      conic-gradient(from var(--ang), var(--mc), #fde68a, #ffffff, var(--mc), #fbbf24, var(--mc)) border-box;
+    animation: ang 4s linear infinite;
+  }
+  @keyframes ang { to { --ang: 360deg; } }
+  .btop { width: 100%; display: flex; justify-content: space-between; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #fde68a; }
+  .bmedal {
+    width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center; margin: 22px 0 14px; color: var(--mc);
+    background: radial-gradient(circle at 35% 30%, #3b4a63, #0b1222 70%); border: 3px solid var(--mc);
+    box-shadow: 0 0 0 5px rgba(251, 191, 36, 0.28), 0 0 30px var(--mg), inset 0 0 18px rgba(0, 0, 0, 0.6);
+  }
+  .bmedal svg { width: 50px; height: 50px; filter: drop-shadow(0 0 8px var(--mg)); }
+  .bname { font-size: 1.3rem; font-weight: 800; color: #fff; margin: 0; line-height: 1.2; }
+  .blevel { font-size: 0.8rem; color: var(--muted); margin: 3px 0 0; }
+  .bstars { display: flex; gap: 4px; margin-top: auto; }
+  .star { width: 24px; height: 24px; color: #334155; }
+  .star.on { color: var(--gold); filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8)); }
+  .bholo {
+    position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: 0.55;
+    background: linear-gradient(125deg, transparent 20%, rgba(255, 0, 170, 0.22) 34%, rgba(0, 229, 255, 0.22) 48%, rgba(255, 230, 0, 0.22) 62%, transparent 78%);
+    background-size: 260% 260%; background-position: var(--px) var(--py); transition: background-position 0.2s;
+  }
+  .bshine {
+    position: absolute; top: -50%; bottom: -50%; left: -50%; width: 200%; pointer-events: none;
+    background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.5) 50%, transparent 58%);
+    transform: translateX(-75%); animation: shine 3.4s ease-in-out 1.8s infinite;
+  }
+  @keyframes shine { 0% { transform: translateX(-75%); } 40%, 100% { transform: translateX(75%); } }
+  .bback {
+    transform: rotateY(180deg); display: grid; place-items: center;
+    background:
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0 10px, transparent 10px 20px) padding-box,
+      radial-gradient(circle at 50% 45%, var(--mg), transparent 65%) padding-box,
+      linear-gradient(160deg, #1e1b4b, #0a1020) padding-box,
+      conic-gradient(from var(--ang), var(--mc), #fde68a, #ffffff, var(--mc), #fbbf24, var(--mc)) border-box;
+    animation: ang 4s linear infinite;
+  }
+  .bbackin { display: grid; justify-items: center; gap: 10px; color: #fff; font-weight: 800; font-size: 1.25rem; line-height: 1.1; text-align: center; }
+  .bbackin svg { width: 70px; height: 70px; color: var(--mc); filter: drop-shadow(0 0 12px var(--mg)); }
+  .bsparks { position: absolute; inset: -26px; pointer-events: none; }
+  .spark { position: absolute; width: 18px; height: 18px; color: #fff; filter: drop-shadow(0 0 6px #fde68a); animation: twinkle 2.4s ease-in-out infinite; transform: scale(0); }
+  @keyframes twinkle { 0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; } 50% { transform: scale(1) rotate(90deg); opacity: 1; } }
+  .award-title { font-size: 1.5rem; margin: 26px 0 4px; }
+  .card-hint { color: var(--muted); font-size: 0.85rem; margin: 2px 0 14px; }
+
+  /* Mini-Karten */
+  .minis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0 18px; }
+  .mini {
+    position: relative; aspect-ratio: 3 / 4; border-radius: 12px; overflow: hidden; cursor: pointer; padding: 6px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center;
+    border: 2px solid transparent;
+    background: linear-gradient(165deg, #1e293b, #0a1020) padding-box, linear-gradient(135deg, var(--mc), #fde68a, var(--mc)) border-box;
+    box-shadow: 0 0 16px var(--mg); color: var(--mc); transition: transform 0.15s;
+  }
+  .mini:active { transform: scale(0.96); }
+  .mini > svg { width: 30px; height: 30px; filter: drop-shadow(0 0 6px var(--mg)); }
+  .mini .mname { font-size: 0.7rem; font-weight: 800; color: #fff; line-height: 1.15; overflow-wrap: anywhere; hyphens: auto; }
+  .mini .mstars { display: flex; gap: 1px; }
+  .mini .star { width: 12px; height: 12px; }
+  .mini::after {
+    content: ""; position: absolute; top: -50%; bottom: -50%; left: -50%; width: 200%; pointer-events: none;
+    background: linear-gradient(105deg, transparent 42%, rgba(255, 255, 255, 0.45) 50%, transparent 58%);
+    transform: translateX(-75%); animation: shine 4s ease-in-out infinite; animation-delay: var(--d, 0s);
+  }
+  .mini.off { cursor: default; background: rgba(15, 23, 42, 0.7); border: 2px solid #273449; box-shadow: none; color: #475569; }
+  .mini.off::after { display: none; }
+  .mini.off .mname { color: #64748b; }
+  .cert-badges .mini { width: 58px; padding: 4px; }
+  .cert-badges .mini > svg { width: 24px; height: 24px; }
+  .cert-badges .mini .mname { display: none; }
+  .cert-badges .mini .star { width: 10px; height: 10px; }
+  .done-box .mini { width: 112px; margin: 0 auto; }
+  .done-box .mini > svg { width: 40px; height: 40px; }
+  .done-box .mini .mname { font-size: 0.8rem; }
+  .done-box .mini .star { width: 15px; height: 15px; }
+
+  /* Runden */
+  .rounds { display: flex; justify-content: center; gap: 6px; margin: 0 auto 12px; padding: 4px; border-radius: 16px; background: rgba(15, 23, 42, 0.7); border: 1px solid #273449; width: max-content; max-width: 100%; }
+  .round { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; cursor: pointer; font-weight: 800; font-size: 0.95rem; padding: 9px 16px; border-radius: 12px; color: var(--soft); }
+  .round svg { width: 14px; height: 14px; }
+  .round small { font-weight: 700; font-size: 0.75rem; color: var(--muted); }
+  .round.active { background: linear-gradient(90deg, #0891b2, #6d28d9); color: #fff; box-shadow: 0 0 16px rgba(124, 58, 237, 0.5); }
+  .round.active small { color: #e0e7ff; }
+  .round.r2.active { background: linear-gradient(90deg, #6d28d9, #db2777); }
+  .round.locked { color: #64748b; }
+  .where { margin: 0 0 8px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .r2card { border-color: rgba(196, 181, 253, 0.25); }
+
+  /* Serie 2: silber-violetter Rahmen */
+  .s2 .bfront {
+    background:
+      radial-gradient(120% 70% at 50% 0%, var(--mg) 0%, transparent 60%) padding-box,
+      linear-gradient(165deg, #241b4b, #0a1020) padding-box,
+      conic-gradient(from var(--ang), var(--mc), #c4b5fd, #ffffff, #67e8f9, var(--mc), #f0abfc, var(--mc)) border-box;
+  }
+  .s2 .bback {
+    background:
+      repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.05) 0 8px, transparent 8px 16px) padding-box,
+      radial-gradient(circle at 50% 45%, var(--mg), transparent 65%) padding-box,
+      linear-gradient(160deg, #3b0764, #0a1020) padding-box,
+      conic-gradient(from var(--ang), var(--mc), #c4b5fd, #ffffff, #67e8f9, var(--mc), #f0abfc, var(--mc)) border-box;
+  }
+  .s2 .btop { color: #ddd6fe; }
+  .s2 .bmedal { box-shadow: 0 0 0 5px rgba(196, 181, 253, 0.35), 0 0 30px var(--mg), inset 0 0 18px rgba(0, 0, 0, 0.6); }
+  .s2 .bholo { opacity: 0.8; }
+  .bbackin small { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .mini.s2 { background: linear-gradient(165deg, #241b4b, #0a1020) padding-box, linear-gradient(135deg, var(--mc), #c4b5fd, #e0f2fe, var(--mc)) border-box; }
+  .minis { grid-template-columns: repeat(var(--cols, 3), 1fr); }
+  .series-title { display: flex; justify-content: space-between; align-items: baseline; margin: 18px 2px -6px; font-weight: 800; color: #fde68a; text-align: left; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; }
+  .series-title.s2 { color: #ddd6fe; }
+  .series-title span { color: var(--muted); letter-spacing: 0; }
+  .series-locked { display: flex; align-items: center; gap: 8px; justify-content: center; margin: 16px 0 18px !important; padding: 14px; border-radius: 12px; border: 1px dashed #334155; color: var(--muted) !important; font-size: 0.9rem; }
+  .series-locked svg { width: 16px; height: 16px; flex: 0 0 auto; }
+
+  /* Prompt-Baukasten */
+  .builder { display: grid; gap: 12px; margin: 12px 0 4px; }
+  .bplabel { display: block; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--lc); margin-bottom: 6px; }
+  .bchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .bchip { cursor: pointer; padding: 8px 13px; border-radius: 999px; border: 1px solid #475569; background: #1e293b; color: var(--soft); font-weight: 600; font-size: 0.95rem; transition: transform 0.12s, background 0.2s; }
+  .bchip:active { transform: scale(0.95); }
+  .bchip[aria-pressed="true"] { background: var(--lc); border-color: transparent; color: #fff; box-shadow: 0 0 14px var(--lglow); }
+  .sketch-wrap { margin: 6px 0 0; }
+  .sketch-wrap figcaption { text-align: center; color: var(--muted); font-size: 0.82rem; margin-top: 6px; }
+  #sketch { position: relative; height: 170px; border-radius: 14px; overflow: hidden; display: grid; place-items: center; border: 1px solid #334155; }
+  #sketch .sk-main { font-size: 76px; line-height: 1; position: relative; z-index: 1; animation: bob 2.6s ease-in-out infinite; }
+  #sketch .sk-act { position: absolute; z-index: 1; font-size: 40px; right: 26%; bottom: 18%; animation: bob 2.6s ease-in-out 0.4s infinite; }
+  @keyframes bob { 50% { transform: translateY(-6px); } }
+  #sketch::before, #sketch::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+  .wo-space { background: radial-gradient(1.5px 1.5px at 15% 25%, #fff, transparent), radial-gradient(1.5px 1.5px at 70% 15%, #fff, transparent), radial-gradient(1px 1px at 40% 70%, #fff, transparent), radial-gradient(1.5px 1.5px at 85% 60%, #fff, transparent), radial-gradient(1px 1px at 25% 85%, #fff, transparent), radial-gradient(circle at 30% 20%, #312e81, #020617 75%); }
+  .wo-kitchen { background: linear-gradient(to top, #92400e 0 26%, #b45309 26% 29%, transparent 29%), repeating-linear-gradient(0deg, #cbd5e1 0 1px, transparent 1px 24px), repeating-linear-gradient(90deg, #cbd5e1 0 1px, transparent 1px 24px), #f1f5f9; }
+  .wo-mountain { background: linear-gradient(#38bdf8, #bae6fd 78%, #86efac 78%); }
+  #sketch .sk-bg { position: absolute; z-index: 0; line-height: 1; }
+  .wo-space .sk-bg { top: 10%; right: 9%; font-size: 46px; }
+  .wo-kitchen .sk-bg { top: 10%; left: 8%; font-size: 34px; }
+  .wo-mountain .sk-bg { bottom: -18px; left: 50%; transform: translateX(-50%); font-size: 170px; }
+  .stil-comic { border: 4px solid #0f172a; filter: saturate(1.5) contrast(1.15); }
+  .stil-comic::before { background: radial-gradient(rgba(0, 0, 0, 0.22) 1.2px, transparent 1.6px) 0 0 / 7px 7px; }
+  .stil-foto::after { background: radial-gradient(transparent 50%, rgba(0, 0, 0, 0.45)); }
+  .stil-pixel::before { background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 2px, transparent 2px 10px), repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 2px, transparent 2px 10px); }
+  .stil-pixel .sk-main, .stil-pixel .sk-act { filter: contrast(1.3) saturate(1.3); }
+
+  /* Konfetti & Toast */
+  .confetti { position: fixed; top: -12px; width: 9px; height: 14px; z-index: 60; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0.7; } }
+  .toast {
+    position: fixed; left: 50%; bottom: calc(92px + env(safe-area-inset-bottom)); z-index: 70; transform: translate(-50%, 20px);
+    background: #f1f5f9; color: #0f172a; font-weight: 700; padding: 10px 16px; border-radius: 999px; opacity: 0;
+    transition: opacity 0.25s, transform 0.25s; pointer-events: none; max-width: calc(100% - 28px); text-align: center;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  :focus-visible { outline: 3px solid #67e8f9; outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-icon" id="hero-icon"></div>
+    <h1>KI clever<br><span class="grad">nutzen</span></h1>
+    <p>Löse jedes Level und sammle alle Abzeichen.</p>
+  </header>
+  <div class="rounds" id="rounds" aria-label="Runden"></div>
+  <nav class="levels" id="levels" aria-label="Levels"></nav>
+  <main id="stage"></main>
+</div>
+
+<button class="inv-btn" id="inv-btn" type="button" aria-haspopup="dialog">
+  <span id="inv-icon"></span>
+  <span><small>Abzeichen</small><b id="inv-count">0/4</b></span>
+</button>
+
+<div class="modal" id="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/* ---------- Icons ---------- */
+const ICONS = {
+  robot: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 8V5"/><circle cx="12" cy="4" r="1.2"/><path d="M2 13v2M22 13v2"/><circle cx="9" cy="13" r="1.3" fill="currentColor"/><circle cx="15" cy="13" r="1.3" fill="currentColor"/><path d="M9.5 16.5h5"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  heart: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.6-4.7-9.6-9.4C1 8.2 3.3 4.8 6.8 4.8c2 0 3.5 1.1 5.2 3 1.7-1.9 3.2-3 5.2-3 3.5 0 5.8 3.4 4.4 6.8C19.6 16.3 12 21 12 21z"/></svg>',
+  broken: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11 7.2C9.4 5.6 8.3 4.8 6.8 4.8 3.3 4.8 1 8.2 2.4 11.6 4 15.5 9.4 19.3 11.2 20.5L9.6 14l2.8-2.6L11 7.2z"/><path d="M13 7.4c1.6-1.7 2.7-2.6 4.2-2.6 3.5 0 5.8 3.4 4.4 6.8-1.6 3.8-6.7 7.6-8.6 8.8l1.4-5.9-2.9-2.8L13 7.4z"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>',
+  medal: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h4l2 5M17 3h-4l-2 5"/><circle cx="12" cy="15" r="6" fill="currentColor" fill-opacity=".25"/><path d="m12 12 .9 1.9 2.1.3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L9 14.2l2.1-.3z" fill="currentColor"/></svg>',
+  trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="currentColor" fill-opacity=".3"/><path d="M7 6H4v2a3 3 0 0 0 3 3m10-5h3v2a3 3 0 0 1-3 3M12 14v4m-4 3h8m-6-3h4"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-8 8"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></svg>',
+  quiz: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7M12 17h.01"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>',
+  redo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.5"/><path d="M4 4v4.5h4.5"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 5h12v8H8l-4 3V5z"/><path d="M15 9h6v9l-3-2h-6v-3"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/><path d="m8 10.5 2 2 3.5-3.5"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 4 6v5c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10V6z"/><rect x="9" y="11" width="6" height="5" rx="1"/><path d="M10.5 11V9.5a1.5 1.5 0 0 1 3 0V11"/></svg>',
+  star: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="m12 2.5 2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17l-5.9 3.3 1.3-6.5-4.9-4.5 6.6-.8z"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 5.6 2.7 10.8 12 12-9.3 1.2-11.4 6.4-12 12-.6-5.6-2.7-10.8-12-12C9.3 10.8 11.4 5.6 12 0z"/></svg>',
+  coach: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9.5 12 5l10 4.5L12 14z"/><path d="M6 11.5V16c3.5 2.4 8.5 2.4 12 0v-4.5"/><path d="M22 9.5V15"/></svg>',
+  tone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h4l7 5V5l-7 5z"/><path d="M17.5 9a4 4 0 0 1 0 6"/><path d="M20 6.5a8 8 0 0 1 0 11"/></svg>',
+  image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>',
+  scan: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V4h3M21 7V4h-3M3 17v3h3M21 17v3h-3"/><path d="M6 12s2.4-4 6-4 6 4 6 4-2.4 4-6 4-6-4-6-4z"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg>',
+  balance: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 7h14"/><path d="M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
+  pattern: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke-dasharray="3 2"/></svg>'
+};
+
+/* ---------- Inhalte ---------- */
+const SAFE = ["Okay", "Erst Namen weglassen", "Nicht eingeben"];
+const SAFE_COLORS = ["#10b981", "#facc15", "#f43f5e"];
+function sort(context, correct, whyOk, whys) {
+  return {
+    q: "Darf das in die KI?",
+    ctx: context,
+    fixed: true,
+    options: SAFE.map((label, i) => ({ t: label, dot: SAFE_COLORS[i], ok: i === correct, why: i === correct ? whyOk : whys[i] }))
+  };
+}
+
+const LEVELS = [
+  {
+    id: 1, short: "Klar fragen", title: "Klar fragen", tagline: "Sag genau, was du willst",
+    color: "#06b6d4", glow: "rgba(6,182,212,.55)", soft: "rgba(6,182,212,.2)", icon: "target",
+    badge: "Auftrag-Profi",
+    learn: [
+      "Die KI kann nicht in deinen Kopf schauen. Fragst du ungenau, muss sie <strong>raten</strong>. Dann bekommst du oft einen langen Standardtext.",
+      "Beantworte in deinem Prompt diese <strong>vier Fragen</strong>:"
+    ],
+    visual: `
+      <div class="chips">
+        <div class="chip" style="--cc:#22d3ee"><b>Was?</b><span>Thema, Aufgabe</span></div>
+        <div class="chip" style="--cc:#a78bfa"><b>Für wen?</b><span>z. B. 8. Klasse</span></div>
+        <div class="chip" style="--cc:#facc15"><b>Wie lang?</b><span>z. B. 5 Sätze</span></div>
+        <div class="chip" style="--cc:#34d399"><b>Welche Form?</b><span>z. B. Stichpunkte</span></div>
+      </div>
+      <div class="compare">
+        <div class="ex bad"><p class="ex-label">${ICONS.x} Ungenau</p><p>«Schreib was über Vulkane.»</p></div>
+        <div class="ex good"><p class="ex-label">${ICONS.check} Klar</p><p>«<span class="hl hl-was">Erkläre, wie ein Vulkan ausbricht.</span> <span class="hl hl-wer">Für die 8. Klasse.</span> <span class="hl hl-lang">Höchstens 5 Sätze.</span> <span class="hl hl-form">Am Schluss 3 Stichworte zum Lernen.</span>»</p></div>
+      </div>`,
+    tryit: {
+      prompt: "Erkläre, wie ein Vulkan ausbricht. Für die 8. Klasse. Höchstens 5 Sätze. Am Schluss 3 Stichworte zum Lernen.",
+      hint: "Probier zuerst den ungenauen und dann den klaren Prompt. Vergleiche die Antworten."
+    },
+    questions: [
+      {
+        q: "Was fehlt beim Prompt «Schreib was über Hunde.»?",
+        options: [
+          { t: "Für wen es ist und in welcher Form.", ok: true, why: "Genau. Ohne diese Angaben muss die KI raten." },
+          { t: "Ein «Bitte» und ein «Danke».", why: "Höflich sein ist nett. Aber die KI weiss trotzdem nicht, was du brauchst." },
+          { t: "Nichts. Kurz ist immer am besten.", why: "Ein kurzer Prompt lässt die KI raten. Das Ergebnis passt dann oft nicht." }
+        ]
+      },
+      {
+        q: "Welcher Prompt ist am klarsten?",
+        options: [
+          { t: "«Erkläre Fotosynthese.»", why: "Hier fehlen Zielgruppe, Länge und Form." },
+          { t: "«Erkläre Fotosynthese für die 8. Klasse in 4 Sätzen. Mit einem Beispiel aus dem Garten.»", ok: true, why: "Richtig. Thema, Zielgruppe, Länge und Beispiel sind klar." },
+          { t: "«Erkläre Fotosynthese sehr gut und ausführlich.»", why: "«Sehr gut» sagt nicht, für wen und wie lang." }
+        ]
+      },
+      {
+        q: "Im Prompt steht «für die 8. Klasse». Welche Frage beantwortet das?",
+        options: [
+          { t: "Für wen?", ok: true, why: "Richtig. Jetzt wählt die KI passende Wörter." },
+          { t: "Wie lang?", why: "Die Länge wäre zum Beispiel «in 5 Sätzen»." },
+          { t: "Welche Form?", why: "Die Form wäre zum Beispiel «als Tabelle» oder «in Stichpunkten»." }
+        ]
+      },
+      {
+        q: "Du brauchst eine Lernkarte für den Test. Was ergänzt du?",
+        options: [
+          { t: "«Mach daraus eine Lernkarte mit 5 Stichpunkten.»", ok: true, why: "Genau. Jetzt kennt die KI die Form." },
+          { t: "«Du bist der beste Lehrer der Welt.»", why: "Solche Sätze helfen kaum. Sag lieber, welche Form du brauchst." },
+          { t: "«Mach schnell.»", why: "Die KI ist sowieso schnell. Sie braucht Infos, keine Eile." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2, short: "Nachfragen", title: "Nachfragen", tagline: "Die erste Antwort ist nur ein Entwurf",
+    color: "#8b5cf6", glow: "rgba(139,92,246,.55)", soft: "rgba(139,92,246,.22)", icon: "chat",
+    badge: "Nachfrager",
+    learn: [
+      "Du musst mit der ersten Antwort <strong>nicht zufrieden</strong> sein. Schreib einfach im gleichen Chat weiter.",
+      "Sag <strong>genau</strong>, was anders werden soll."
+    ],
+    visual: `
+      <div class="chat">
+        <div class="bubble ki hard"><small>KI</small>Fotosynthese ist ein Prozess, bei dem autotrophe Organismen Lichtenergie in chemische Energie umwandeln …</div>
+        <div class="bubble du"><small>Du</small>Zu schwierig. Erkläre es für die 8. Klasse, mit einem Beispiel aus dem Alltag.</div>
+        <div class="bubble ki better"><small>KI</small>Pflanzen machen ihr Essen selbst. Dafür brauchen sie Licht, Wasser und Luft. Darum wächst eine Zimmerpflanze am Fenster besser.</div>
+      </div>
+      <p class="learn" style="margin:0 0 4px;color:var(--soft)">Diese Sätze helfen beim Nachfragen:</p>
+      <div class="phrases">
+        <span class="phrase">Kürzer: höchstens 3 Sätze.</span>
+        <span class="phrase">Einfacher, für die 8. Klasse.</span>
+        <span class="phrase">Gib mir ein Beispiel.</span>
+        <span class="phrase">Was heisst das Wort «…»?</span>
+        <span class="phrase">Mach eine Tabelle daraus.</span>
+      </div>`,
+    tryit: {
+      prompt: "Erkläre, wie das Internet funktioniert.",
+      hint: "Frag danach mindestens zweimal nach. Nutze die Sätze oben."
+    },
+    questions: [
+      {
+        q: "Die Antwort ist dir zu schwierig. Was schreibst du?",
+        options: [
+          { t: "«Erkläre es einfacher, mit einem Beispiel aus dem Alltag.»", ok: true, why: "Genau. Du sagst, was anders werden soll." },
+          { t: "«Schreib es besser.»", why: "Was heisst «besser»? Das weiss die KI nicht." },
+          { t: "Nichts. Ich gebe auf.", why: "Die erste Antwort ist nur ein Entwurf. Frag einfach nach." }
+        ]
+      },
+      {
+        q: "Die Antwort ist viel zu lang. Was hilft am meisten?",
+        options: [
+          { t: "«Kürze auf höchstens 3 Sätze.»", ok: true, why: "Richtig. Eine Zahl ist klar." },
+          { t: "«Weniger.»", why: "Wie viel weniger? Sag eine Zahl." },
+          { t: "Ich stelle genau die gleiche Frage nochmals.", why: "Dann weiss die KI nicht, was sie ändern soll." }
+        ]
+      },
+      {
+        q: "In der Antwort steht ein Wort, das du nicht kennst. Was machst du?",
+        options: [
+          { t: "Ich frage: «Was heisst dieses Wort? Erkläre es in einem Satz.»", ok: true, why: "Gut so. Nachfragen ist erlaubt und klug." },
+          { t: "Ich schreibe das Wort einfach ab.", why: "Dann verstehst du deinen eigenen Text nicht." },
+          { t: "Ich lösche den ganzen Chat.", why: "Nicht nötig. Frag einfach im gleichen Chat nach." }
+        ]
+      },
+      {
+        q: "Woran merkst du, dass die neue Antwort besser ist?",
+        options: [
+          { t: "Sie macht, was ich verlangt habe, und ich verstehe sie.", ok: true, why: "Genau. Du prüfst selbst." },
+          { t: "Sie ist länger als vorher.", why: "Länger heisst nicht besser." },
+          { t: "Die KI schreibt: «Hier ist die verbesserte Version.»", why: "Das schreibt die KI fast immer. Prüfe selbst." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 3, short: "Prüfen", title: "KI kann sich irren", tagline: "Klingt sicher – stimmt aber nicht immer",
+    color: "#f43f5e", glow: "rgba(244,63,94,.5)", soft: "rgba(244,63,94,.2)", icon: "search",
+    badge: "Faktenchecker",
+    learn: [
+      "Die KI schreibt immer <strong>sicher</strong> und in gutem Deutsch. Trotzdem kann sie sich irren. Manchmal <strong>erfindet</strong> sie sogar Namen, Zahlen oder Quellen.",
+      "Wichtige Infos prüfst du <strong>selbst</strong>:"
+    ],
+    visual: `
+      <div class="compare">
+        <div class="ex bad"><p class="ex-label">${ICONS.robot} KI sagt</p><p>«Der Rhein ist 2500 km lang.»</p></div>
+        <div class="arrow">${ICONS.arrow}</div>
+        <div class="ex good"><p class="ex-label">${ICONS.search} Nachgeschaut</p><p>Im Lexikon steht: rund 1230 km. Die KI lag falsch.</p></div>
+      </div>
+      <ol class="steps">
+        <li><span class="n">1</span><span><strong>Quelle öffnen:</strong> Steht es dort wirklich?</span></li>
+        <li><span class="n">2</span><span><strong>Zweite Quelle suchen:</strong> Schulbuch, Lexikon, offizielle Webseite.</span></li>
+        <li><span class="n">3</span><span><strong>Besonders aufpassen</strong> bei Zahlen, Namen und Daten.</span></li>
+      </ol>`,
+    tryit: {
+      prompt: "Fasse die Biografie der Solothurner Astronautin Klara Sternenstaub zusammen.",
+      hint: "Diese Person gibt es nicht. Gibt die KI das zu – oder erfindet sie etwas?"
+    },
+    questions: [
+      {
+        q: "Die KI antwortet sehr sicher. Heisst das, es stimmt?",
+        options: [
+          { t: "Nein. Wichtiges prüfe ich selbst.", ok: true, why: "Richtig. Sicher klingen heisst nicht richtig sein." },
+          { t: "Ja, sonst würde sie nicht so sicher klingen.", why: "Die KI klingt immer sicher – auch wenn sie falsch liegt." },
+          { t: "Ja, wenn die Antwort lang ist.", why: "Auch lange Antworten können Fehler haben." }
+        ]
+      },
+      {
+        q: "Die KI nennt eine Quelle mit Link. Was machst du?",
+        options: [
+          { t: "Ich öffne den Link und schaue, ob es dort wirklich steht.", ok: true, why: "Genau so. Manchmal steht dort etwas anderes." },
+          { t: "Nichts. Ein Link beweist, dass es stimmt.", why: "Ein Link kann falsch sein oder etwas anderes sagen." },
+          { t: "Ich kopiere den Link in meine Arbeit, ohne ihn zu öffnen.", why: "Dann weisst du nicht, ob er passt." }
+        ]
+      },
+      {
+        q: "Wo musst du bei KI-Antworten besonders aufpassen?",
+        options: [
+          { t: "Bei Zahlen, Namen und Daten.", ok: true, why: "Richtig. Solche Fakten erfindet die KI am ehesten." },
+          { t: "Bei der Rechtschreibung.", why: "Rechtschreibung kann die KI gut. Die Fakten sind das Problem." },
+          { t: "Bei der Begrüssung.", why: "Die Begrüssung ist egal. Prüfe die Fakten." }
+        ]
+      },
+      {
+        q: "Was stimmt?",
+        ctx: "Brief der Schule: «Die Turnhalle ist am Freitag geschlossen.»\nDie KI fasst zusammen: «Die Turnhalle ist die ganze Woche geschlossen.»",
+        options: [
+          { t: "Die KI hat sich geirrt. Im Brief steht nur Freitag.", ok: true, why: "Genau. Du hast mit dem Original verglichen." },
+          { t: "Die KI hat recht. Sie weiss mehr als der Brief.", why: "Die KI kennt nur den Brief. Dort steht Freitag." },
+          { t: "Beides stimmt.", why: "Freitag und «die ganze Woche» ist nicht dasselbe." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 4, short: "Sicher & fair", title: "Sicher und fair", tagline: "Was gebe ich ein – und was nicht?",
+    color: "#10b981", glow: "rgba(16,185,129,.5)", soft: "rgba(16,185,129,.2)", icon: "shield",
+    badge: "Datenschützer",
+    learn: [
+      "Was du eintippst, kann <strong>gespeichert</strong> werden. Gib keine privaten Daten ein – nicht von dir und nicht von anderen.",
+      "Nutze nur KI-Tools, die eure <strong>Schule erlaubt</strong>. Und wenn dir die KI hilft: Sag es <strong>ehrlich</strong>."
+    ],
+    visual: `
+      <div class="lights">
+        <div class="light" style="--cc:#10b981"><b><span class="dot"></span>Okay</b><p>Fragen zu Schulthemen, Erklärungen, Ideen</p></div>
+        <div class="light" style="--cc:#facc15"><b><span class="dot"></span>Erst Namen weglassen</b><p>Eigene Texte, in denen andere Personen vorkommen</p></div>
+        <div class="light" style="--cc:#f43f5e"><b><span class="dot"></span>Nicht eingeben</b><p>Passwörter, Adresse, Telefonnummer, Fotos von anderen, Noten</p></div>
+      </div>`,
+    tryit: {
+      prompt: "Hilf mir bei Hausaufgaben zu Brüchen. Ich bin in der 8. Klasse. Erkläre mir zuerst, wie man Brüche kürzt.",
+      hint: "Für gute Hilfe braucht die KI weder deinen Namen noch deine Adresse."
+    },
+    questions: [
+      sort("«Erkläre mir, wie ein Regenbogen entsteht.»", 0,
+        "Richtig. Das ist eine Schulfrage ohne private Daten.",
+        [null, "Hier kommt gar keine Person vor.", "Das ist eine ganz normale Schulfrage."]),
+      sort("Dein Instagram-Passwort, damit die KI ein besseres vorschlägt.", 2,
+        "Genau. Passwörter gibst du nie ein. Für ein neues Passwort braucht die KI dein altes nicht.",
+        ["Ein Passwort gehört nur dir – auch keine KI darf es wissen.", "Auch ohne Namen bleibt ein Passwort geheim.", null]),
+      sort("Dein Aufsatz über die Ferien. Darin steht der volle Name deines Bruders. Die KI soll Rechtschreibfehler finden.", 1,
+        "Richtig. Ersetze den Namen, zum Beispiel durch «mein Bruder». Dann ist es okay.",
+        ["Fast. Ersetze aber zuerst den Namen.", null, "Den Aufsatz darfst du prüfen lassen. Nimm nur den Namen raus."]),
+      sort("Ein Foto von deiner Klasse, damit die KI lustige Bilder daraus macht.", 2,
+        "Genau. Fotos von anderen gibst du nicht ein. Sie haben nicht zugestimmt.",
+        ["Auf dem Foto sind andere Personen. Sie haben nicht zugestimmt.", "Gesichter kann man nicht einfach weglassen. Lass das Foto weg.", null]),
+      {
+        q: "Die KI hat dir bei deinem Vortrag stark geholfen. Was machst du?",
+        options: [
+          { t: "Ich sage der Lehrperson, wobei mir die KI geholfen hat.", ok: true, why: "Genau. Ehrlich sein ist fair. Frag auch nach, was erlaubt ist." },
+          { t: "Ich sage nichts. Das merkt niemand.", why: "Oft merkt man es doch. Und es ist nicht fair gegenüber den anderen." },
+          { t: "Ich sage, ich habe alles selbst gemacht.", why: "Das stimmt nicht. Sag ehrlich, wobei dir die KI geholfen hat." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 5, round: 2, short: "Beispiel", title: "Beispiel zeigen", tagline: "Zeig der KI, wie es aussehen soll",
+    color: "#fbbf24", glow: "rgba(251,191,36,.55)", soft: "rgba(251,191,36,.2)", icon: "pattern",
+    badge: "Muster-Meister",
+    learn: [
+      "Willst du immer den <strong>gleichen Aufbau</strong>? Dann zeig der KI ein Beispiel. Sie macht es dann genau so."
+    ],
+    visual: `
+      <div class="compare">
+        <div class="ex"><p class="ex-label" style="color:#fbbf24">Dein Prompt</p><p class="mono">Schreib Lernkarten genau so wie im Beispiel:
+Begriff: Maus
+Erklärung: Damit bewegst du den Zeiger.
+
+Jetzt für: Tastatur, Drucker</p></div>
+        <div class="arrow">${ICONS.arrow}</div>
+        <div class="ex good"><p class="ex-label">${ICONS.robot} KI antwortet</p><p class="mono">Begriff: Tastatur
+Erklärung: Damit tippst du Buchstaben und Zahlen.
+
+Begriff: Drucker
+Erklärung: Damit bringst du Texte aufs Papier.</p></div>
+      </div>`,
+    tryit: {
+      prompt: "Schreib Lernkarten genau so wie im Beispiel:\nBegriff: Maus\nErklärung: Damit bewegst du den Zeiger.\n\nJetzt für: Tastatur, Bildschirm, Drucker, Router",
+      hint: "Ändere die Begriffe und schau, ob die KI den Aufbau behält."
+    },
+    questions: [
+      {
+        q: "Wann hilft ein Beispiel im Prompt am meisten?",
+        options: [
+          { t: "Wenn die Antwort einen bestimmten Aufbau haben soll.", ok: true, why: "Genau. Das Beispiel zeigt den Aufbau." },
+          { t: "Wenn die KI schneller antworten soll.", why: "Ein Beispiel macht die KI nicht schneller." },
+          { t: "Wenn ich nur eine Zahl wissen will.", why: "Für eine Zahl brauchst du kein Muster." }
+        ]
+      },
+      {
+        q: "Welche Zeile passt zum Muster?",
+        ctx: "Beispiel im Prompt:\nApfel = 🍎\nBanane = 🍌",
+        options: [
+          { t: "Kirsche = 🍒", ok: true, why: "Richtig. Gleicher Aufbau: Wort = Emoji." },
+          { t: "Die Kirsche ist rot.", why: "Hier fehlt das Muster «Wort = Emoji»." },
+          { t: "🍒", why: "Hier fehlt das Wort vor dem Gleichheitszeichen." }
+        ]
+      },
+      {
+        q: "Du willst 10 Lernkarten im gleichen Aufbau. Was machst du?",
+        options: [
+          { t: "Ich schreibe eine Karte als Beispiel in den Prompt.", ok: true, why: "Genau. Dann macht die KI alle 10 gleich." },
+          { t: "Ich schreibe «Mach schöne Karten».", why: "«Schön» zeigt keinen Aufbau." },
+          { t: "Ich frage zehnmal einzeln, ohne Beispiel.", why: "Das geht, ist aber mühsam. Ein Beispiel reicht." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 6, round: 2, short: "Abfragen", title: "Lass dich abfragen", tagline: "Die KI als Lerncoach",
+    color: "#3b82f6", glow: "rgba(59,130,246,.55)", soft: "rgba(59,130,246,.22)", icon: "coach",
+    badge: "Lernprofi",
+    learn: [
+      "Die KI kann nicht nur antworten. Sie kann dir auch <strong>Fragen stellen</strong> – wie ein Lerncoach. So übst du für eine Prüfung, statt Antworten abzuschreiben.",
+      "Wichtig: Sag ihr, dass sie <strong>immer nur eine Frage</strong> stellen und auf deine Antwort warten soll."
+    ],
+    visual: `
+      <div class="chat">
+        <div class="bubble du"><small>Du</small>Frag mich 5 Fragen zu Brüchen. Immer nur eine Frage. Warte auf meine Antwort und sag mir dann, ob sie stimmt.</div>
+        <div class="bubble ki"><small>KI</small>Frage 1: Kürze 4/8 so weit wie möglich.</div>
+        <div class="bubble du"><small>Du</small>1/2</div>
+        <div class="bubble ki better"><small>KI</small>Richtig! 4 und 8 kann man beide durch 4 teilen. Frage 2: …</div>
+      </div>`,
+    tryit: {
+      prompt: "Frag mich 5 Fragen zum Thema [THEMA]. Immer nur eine Frage. Warte auf meine Antwort. Sag mir dann, ob sie stimmt, und erkläre es kurz.",
+      hint: "Ersetze [THEMA] durch ein Thema, das ihr gerade in der Schule habt."
+    },
+    questions: [
+      {
+        q: "Wofür ist «Lass dich abfragen» gut?",
+        options: [
+          { t: "Um für eine Prüfung zu üben.", ok: true, why: "Genau. Du denkst selbst nach, und die KI gibt dir Rückmeldung." },
+          { t: "Um die Hausaufgaben schneller fertig zu haben.", why: "Dann lernst du nichts. Beim Abfragen denkst du selbst." },
+          { t: "Damit sich die KI das Thema merkt.", why: "Es geht um dein Wissen, nicht um das der KI." }
+        ]
+      },
+      {
+        q: "Die KI stellt alle 10 Fragen auf einmal und schreibt die Lösungen gleich dazu. Was schreibst du?",
+        options: [
+          { t: "«Stell mir immer nur eine Frage. Die Lösung erst nach meiner Antwort.»", ok: true, why: "Richtig. So kannst du zuerst selbst überlegen." },
+          { t: "«Danke!» – und ich lese die Lösungen.", why: "Dann siehst du die Lösung, bevor du selbst nachdenkst." },
+          { t: "Ich schliesse den Chat.", why: "Nicht nötig. Sag der KI genau, wie sie fragen soll." }
+        ]
+      },
+      {
+        q: "Du hast eine Frage falsch beantwortet. Was hilft dir am meisten?",
+        options: [
+          { t: "«Erkläre mir meinen Fehler und stell mir eine ähnliche Frage.»", ok: true, why: "Genau. So übst du das, was noch nicht sitzt." },
+          { t: "«Nächste Frage.»", why: "Dann bleibt dein Fehler ungeklärt." },
+          { t: "«Sag einfach, es war richtig.»", why: "Das hilft dir an der Prüfung nicht." }
+        ]
+      },
+      {
+        q: "Die KI sagt, deine Antwort sei falsch. Du bist aber sicher, dass sie stimmt. Was machst du?",
+        options: [
+          { t: "Ich schaue im Heft oder im Buch nach.", ok: true, why: "Richtig. Auch beim Abfragen kann sich die KI irren." },
+          { t: "Ich glaube der KI. Sie hat immer recht.", why: "Erinnerst du dich an Runde 1? Die KI kann sich irren." },
+          { t: "Ich gebe auf.", why: "Schau lieber im Heft nach, wer recht hat." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 7, round: 2, short: "Ton", title: "Den richtigen Ton treffen", tagline: "Gleiche Infos – anders geschrieben",
+    color: "#f97316", glow: "rgba(249,115,22,.55)", soft: "rgba(249,115,22,.22)", icon: "tone",
+    badge: "Ton-Profi",
+    learn: [
+      "Die KI kann die gleichen Infos ganz verschieden schreiben: locker, freundlich oder höflich.",
+      "Sag ihr, <strong>wer</strong> die Nachricht liest und <strong>wie</strong> sie klingen soll."
+    ],
+    visual: `
+      <div class="compare">
+        <div class="ex" style="border-left-color:#a78bfa"><p class="ex-label" style="color:#c4b5fd">Für den Klassenchat</p><p>Hey Leute! 🏃 Dienstag ist Sporttag, Start 8.15 Uhr. Turnschuhe nicht vergessen! 👟</p></div>
+        <div class="ex" style="border-left-color:#f97316"><p class="ex-label" style="color:#fdba74">Für die Eltern</p><p>Guten Tag. Am Dienstag findet der Sporttag statt. Beginn ist um 8.15 Uhr. Bitte geben Sie Ihrem Kind Turnschuhe mit.</p></div>
+      </div>`,
+    tryit: {
+      prompt: "Schreib eine kurze Nachricht an meine Lehrperson. Ich habe mein Mathebuch in der Schule vergessen. Frag, ob ich die Aufgaben einen Tag später abgeben darf. Der Ton soll höflich sein. Höchstens 3 Sätze.",
+      hint: "Probier danach: «Schreib das Gleiche locker, für einen Kollegen.» Was ändert sich?"
+    },
+    questions: [
+      {
+        q: "Du schreibst eine E-Mail an deine Lehrperson. Welcher Ton passt?",
+        options: [
+          { t: "Höflich und sachlich", ok: true, why: "Genau. So kommt deine Bitte gut an." },
+          { t: "Locker, mit vielen Emojis", why: "Emojis passen in den Chat mit Freunden, nicht in eine E-Mail an die Lehrperson." },
+          { t: "Lustig, mit vielen Witzen", why: "Witze können falsch ankommen. Bleib höflich." }
+        ]
+      },
+      {
+        q: "Was gehört in den Prompt, damit der Ton stimmt?",
+        options: [
+          { t: "Wer die Nachricht liest und wie sie klingen soll.", ok: true, why: "Richtig. Dann muss die KI den Ton nicht raten." },
+          { t: "Möglichst viele Ausrufezeichen.", why: "Ausrufezeichen sagen der KI nicht, für wen die Nachricht ist." },
+          { t: "Nur das Thema.", why: "Mit nur dem Thema muss die KI den Ton raten." }
+        ]
+      },
+      {
+        q: "Für wen passt diese Nachricht?",
+        ctx: "«Hey Leute! 🏃 Dienstag ist Sporttag. Turnschuhe nicht vergessen! 👟»",
+        options: [
+          { t: "Für den Klassenchat", ok: true, why: "Genau. Unter Freunden darf es locker sein." },
+          { t: "Für einen Brief an die Eltern", why: "Für Eltern wäre das zu locker." },
+          { t: "Für die Schulleitung", why: "Für die Schulleitung passt ein höflicher Ton besser." }
+        ]
+      },
+      {
+        q: "Die KI hat deine Nachricht geschrieben. Was machst du vor dem Senden?",
+        options: [
+          { t: "Ich prüfe, ob alle Infos stimmen und ob der Ton passt.", ok: true, why: "Genau. Du sendest die Nachricht – also bist du verantwortlich." },
+          { t: "Nichts. Die KI hat sie ja geschrieben.", why: "Du sendest sie unter deinem Namen. Lies sie vorher durch." },
+          { t: "Ich prüfe nur, ob sie lang genug ist.", why: "Die Länge ist nicht das Wichtigste. Prüfe Infos und Ton." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 8, round: 2, short: "Bilder", title: "Bilder beschreiben", tagline: "Bau deinen Bild-Prompt",
+    color: "#ec4899", glow: "rgba(236,72,153,.55)", soft: "rgba(236,72,153,.22)", icon: "image",
+    badge: "Bild-Regisseur",
+    learn: [
+      "Eine Bild-KI malt das, was du beschreibst. Je genauer du beschreibst, desto eher bekommst du <strong>dein</strong> Bild.",
+      "Beschreibe: <strong>Wer</strong> ist zu sehen? <strong>Was</strong> passiert? <strong>Wo</strong>? In welchem <strong>Stil</strong>?",
+      "Tippe die Bausteine an und bau deinen Prompt:"
+    ],
+    visual: `<div class="builder" id="builder"></div>`,
+    builder: [
+      { key: "wer", label: "Wer?", options: [["Eine Katze", "🐱"], ["Ein Roboter", "🤖"], ["Ein Drache", "🐉"]] },
+      { key: "tut", label: "Was passiert?", options: [["kocht Spaghetti", "🍝"], ["spielt Fussball", "⚽"], ["liest ein Buch", "📖"]] },
+      { key: "wo", label: "Wo?", options: [["im Weltall", "space"], ["in einer Schulküche", "kitchen"], ["auf einem Berg", "mountain"]] },
+      { key: "stil", label: "Welcher Stil?", options: [["Comic", "comic"], ["Foto", "foto"], ["Pixel-Art", "pixel"]] }
+    ],
+    tryit: {
+      prompt: "Erstelle ein Bild: Eine Katze kocht Spaghetti im Weltall. Stil: Comic.",
+      hint: "Kopiere deinen Prompt in eine Bild-KI. Ändere danach einen Baustein und vergleiche."
+    },
+    questions: [
+      {
+        q: "Welcher Prompt gibt dir am ehesten das Bild, das du willst?",
+        options: [
+          { t: "«Eine orange Katze schläft auf einem Sofa. Stil: Comic.»", ok: true, why: "Genau. Wer, was, wo und Stil sind klar." },
+          { t: "«Katze»", why: "Die KI weiss nicht, was die Katze macht, wo sie ist und wie das Bild aussehen soll." },
+          { t: "«Mach ein schönes Bild.»", why: "«Schön» sagt nichts darüber, was zu sehen ist." }
+        ]
+      },
+      {
+        q: "Was fehlt beim Prompt «Ein Drache auf einem Berg»?",
+        options: [
+          { t: "Was er macht und welcher Stil.", ok: true, why: "Richtig. Wer und wo sind schon da." },
+          { t: "Wer auf dem Bild ist.", why: "Das steht schon da: ein Drache." },
+          { t: "Wo das Bild spielt.", why: "Das steht schon da: auf einem Berg." }
+        ]
+      },
+      {
+        q: "Darfst du ein Foto von deinem Kollegen hochladen und daraus ein lustiges KI-Bild machen?",
+        options: [
+          { t: "Nein. Fotos von anderen gebe ich nicht ein.", ok: true, why: "Genau. Was für dich lustig ist, kann für ihn verletzend sein." },
+          { t: "Ja, wenn es lustig ist.", why: "Lustig für dich kann verletzend für ihn sein. Lass es." },
+          { t: "Ja, wenn ich es nicht poste.", why: "Auch ohne Posten landet sein Foto bei der KI." }
+        ]
+      },
+      {
+        q: "Auf deinem KI-Bild hat eine Person sechs Finger. Was ist los?",
+        options: [
+          { t: "Bild-KIs machen solche Fehler. Ich schaue genau hin.", ok: true, why: "Richtig. Hände, Schrift und kleine Details sind oft falsch." },
+          { t: "Das ist Absicht.", why: "Die KI hat das nicht absichtlich gemacht. Es ist ein typischer Fehler." },
+          { t: "Das Bild ist ein echtes Foto.", why: "Echte Menschen haben fünf Finger. Das ist ein KI-Fehler." }
+        ]
+      },
+      {
+        q: "Du brauchst ein KI-Bild für deinen Vortrag. Was schreibst du darunter?",
+        options: [
+          { t: "«Bild: mit KI erstellt»", ok: true, why: "Genau. So ist klar, dass es kein echtes Foto ist." },
+          { t: "Nichts.", why: "Dann denken andere vielleicht, es sei ein echtes Foto." },
+          { t: "«Foto: von mir»", why: "Das stimmt nicht. Du hast es mit KI erstellt." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 9, round: 2, short: "Echt oder KI?", title: "Echt oder KI?", tagline: "Fälschungen erkennen",
+    color: "#14b8a6", glow: "rgba(20,184,166,.55)", soft: "rgba(20,184,166,.22)", icon: "scan",
+    badge: "Fake-Detektiv",
+    learn: [
+      "KI kann Bilder, Videos und sogar Stimmen fälschen. Solche Fälschungen heissen <strong>Deepfakes</strong>. Sie sehen oft echt aus.",
+      "Manchmal sieht man Fehler. Aber das Wichtigste ist die <strong>Quelle</strong>:"
+    ],
+    visual: `
+      <ol class="steps">
+        <li><span class="n">1</span><span><strong>Genau hinschauen:</strong> Hände, Schrift, Ohren, Schmuck, Hintergrund.</span></li>
+        <li><span class="n">2</span><span><strong>Quelle prüfen:</strong> Wer hat es zuerst gepostet?</span></li>
+        <li><span class="n">3</span><span><strong>Gegencheck:</strong> Berichten auch seriöse Medien darüber?</span></li>
+      </ol>
+      <div class="ex bad"><p class="ex-label">${ICONS.x} Achtung</p><p>Gute Fälschungen haben keine sichtbaren Fehler. Darum ist die Quelle das Wichtigste.</p></div>`,
+    tryit: {
+      prompt: "Woran erkenne ich, ob ein Bild oder Video mit KI gefälscht wurde? Nenne 5 Tipps für Jugendliche. Kurz und einfach.",
+      hint: "Vergleiche die Tipps der KI mit den drei Schritten oben."
+    },
+    questions: [
+      {
+        q: "Was ist ein Deepfake?",
+        options: [
+          { t: "Ein mit KI gefälschtes Bild, Video oder eine gefälschte Stimme.", ok: true, why: "Genau. Deepfakes sehen oft echt aus." },
+          { t: "Ein besonders scharfes Foto.", why: "Ein Deepfake ist eine Fälschung, kein gutes Foto." },
+          { t: "Ein Virus auf dem Handy.", why: "Ein Deepfake ist kein Virus, sondern eine Fälschung." }
+        ]
+      },
+      {
+        q: "Ein Video zeigt einen Star, der etwas sehr Seltsames sagt. Was machst du zuerst?",
+        options: [
+          { t: "Ich prüfe, wer es gepostet hat und ob seriöse Medien darüber berichten.", ok: true, why: "Richtig. Die Quelle ist der beste Hinweis." },
+          { t: "Ich teile es sofort mit allen.", why: "Wenn es ein Fake ist, verbreitest du eine Lüge." },
+          { t: "Ich glaube es, weil es echt aussieht.", why: "Deepfakes sehen oft echt aus. Prüfe die Quelle." }
+        ]
+      },
+      {
+        q: "Woran kann man KI-Bilder manchmal erkennen?",
+        options: [
+          { t: "An Fehlern bei Händen, Schrift oder im Hintergrund.", ok: true, why: "Genau. Aber nicht jedes KI-Bild hat solche Fehler." },
+          { t: "An der Dateigrösse.", why: "Die Dateigrösse sagt nichts darüber, ob ein Bild echt ist." },
+          { t: "KI-Bilder sind immer schwarz-weiss.", why: "KI-Bilder können jede Farbe haben." }
+        ]
+      },
+      {
+        q: "Du findest bei einem Bild keine Fehler. Ist es dann sicher echt?",
+        options: [
+          { t: "Nein. Gute Fälschungen haben keine sichtbaren Fehler.", ok: true, why: "Richtig. Darum prüfst du immer auch die Quelle." },
+          { t: "Ja. Ohne Fehler ist es echt.", why: "Gute Fälschungen sind fehlerfrei. Prüfe die Quelle." },
+          { t: "Ja, wenn es viele Likes hat.", why: "Likes sagen nichts darüber, ob etwas echt ist." }
+        ]
+      },
+      {
+        q: "Jemand macht ein Deepfake-Video von einer Mitschülerin. Was ist richtig?",
+        options: [
+          { t: "Nicht weiterleiten und einer Lehrperson Bescheid sagen.", ok: true, why: "Genau. So etwas kann sehr verletzend und sogar strafbar sein." },
+          { t: "Weiterleiten, ist ja nur Spass.", why: "Für sie ist das kein Spass. Leite es nicht weiter." },
+          { t: "Behalten und nichts sagen.", why: "Sag es einer erwachsenen Vertrauensperson. So kann man ihr helfen." }
+        ]
+      }
+    ]
+  },
+  {
+    id: 10, round: 2, short: "Sichtweisen", title: "Mehrere Sichtweisen", tagline: "Nicht nur eine Meinung",
+    color: "#6366f1", glow: "rgba(99,102,241,.6)", soft: "rgba(99,102,241,.24)", icon: "balance",
+    badge: "Meinungs-Checker",
+    learn: [
+      "Bei <strong>Meinungsfragen</strong> gibt es nicht nur eine richtige Antwort. Die KI antwortet aber oft nur aus einer Sicht.",
+      "Frag gezielt nach <strong>anderen Sichtweisen</strong> und <strong>Gegenargumenten</strong>. Dann entscheidest du selbst."
+    ],
+    visual: `
+      <div class="ex" style="border-left-color:#6366f1;margin:14px 0 8px"><p class="ex-label" style="color:#a5b4fc">Frage</p><p>Soll es an der Schule eine handyfreie Pause geben?</p></div>
+      <div class="lights">
+        <div class="light" style="--cc:#a78bfa"><b>Schüler:in</b><p>«In der Pause will ich Musik hören.»</p></div>
+        <div class="light" style="--cc:#22d3ee"><b>Lehrperson</b><p>«Ohne Handy reden alle mehr miteinander.»</p></div>
+        <div class="light" style="--cc:#facc15"><b>Eltern</b><p>«Mein Kind soll erreichbar sein, wenn etwas passiert.»</p></div>
+      </div>`,
+    tryit: {
+      prompt: "Soll es an unserer Schule eine handyfreie Pause geben? Nenne je zwei Argumente aus Sicht von Schüler:innen, Lehrpersonen und Eltern. Kurz und einfach.",
+      hint: "Entscheide danach selbst: Welches Argument überzeugt dich am meisten – und warum?"
+    },
+    questions: [
+      {
+        q: "Die KI gibt dir zu einer Meinungsfrage nur Argumente dafür. Was fragst du?",
+        options: [
+          { t: "«Nenne mir auch Argumente dagegen.»", ok: true, why: "Genau. Bei Meinungsfragen gibt es fast immer zwei Seiten." },
+          { t: "Nichts. Dann ist die Sache klar.", why: "Bei Meinungsfragen fehlt dann die andere Seite." },
+          { t: "«Schreib es länger.»", why: "Länger heisst nicht ausgewogener." }
+        ]
+      },
+      {
+        q: "Wer entscheidet am Schluss, welche Meinung du hast?",
+        options: [
+          { t: "Ich selbst.", ok: true, why: "Richtig. Die KI sammelt Argumente – entscheiden musst du." },
+          { t: "Die KI.", why: "Die KI kann Argumente sammeln. Entscheiden musst du." },
+          { t: "Wer am lautesten ist.", why: "Laut heisst nicht richtig. Überleg dir selbst, was dich überzeugt." }
+        ]
+      },
+      {
+        q: "Welche Frage ist eine Meinungsfrage?",
+        options: [
+          { t: "Sollen Hausaufgaben abgeschafft werden?", ok: true, why: "Genau. Da kann man verschiedener Meinung sein." },
+          { t: "Wie viele Kantone hat die Schweiz?", why: "Das ist eine Faktenfrage. Die Antwort ist 26." },
+          { t: "In welchem Kanton liegt Solothurn?", why: "Das ist eine Faktenfrage. Man kann es nachschlagen." }
+        ]
+      },
+      {
+        q: "Die KI antwortet «als Lehrperson». Was ist das?",
+        options: [
+          { t: "Eine gespielte Sicht. Keine echte Lehrperson hat das gesagt.", ok: true, why: "Genau. Für echte Meinungen fragst du echte Menschen." },
+          { t: "Die Meinung meiner Lehrperson.", why: "Die KI kennt deine Lehrperson nicht. Sie spielt nur eine Rolle." },
+          { t: "Ein Beweis, dass es stimmt.", why: "Eine gespielte Rolle ist kein Beweis." }
+        ]
+      }
+    ]
+  }
+];
+
+LEVELS.forEach((l) => { if (!l.round) l.round = 1; });
+const byId = (id) => LEVELS.find((l) => l.id === id);
+const inRound = (r) => LEVELS.filter((l) => l.round === r);
+const posInRound = (lvl) => inRound(lvl.round).indexOf(lvl) + 1;
+const CORE = inRound(1).length;
+const HEARTS = 3;
+
+/* ---------- Speicher ---------- */
+const KEY = "ki-clever-nutzen-v1";
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "{}");
+    const done = Array.isArray(s.done) ? s.done.filter((n) => LEVELS.some((l) => l.id === n)) : [];
+    const best = {};
+    for (const id of done) {
+      const v = s.best && Number(s.best[id]);
+      best[id] = v >= 1 && v <= HEARTS ? v : 1;
+    }
+    return { done, best, name: typeof s.name === "string" ? s.name.slice(0, 40) : "" };
+  } catch { return { done: [], best: {}, name: "" }; }
+}
+let state = load();
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* Speichern nicht möglich */ } }
+
+const isDone = (id) => state.done.includes(id);
+const doneIn = (r) => inRound(r).filter((l) => isDone(l.id)).length;
+const coreDone = () => doneIn(1);
+const r1Complete = () => coreDone() === CORE;
+function unlocked(id) {
+  if (id === "abschluss") return r1Complete();
+  const lvl = byId(id);
+  if (!lvl) return false;
+  if (lvl.round === 2 && !r1Complete()) return false;
+  const list = inRound(lvl.round);
+  const i = list.indexOf(lvl);
+  return i === 0 || isDone(list[i - 1].id);
+}
+const firstOpen = (r) => inRound(r).find((l) => !isDone(l.id)) || inRound(r)[0];
+
+/* ---------- Hilfen ---------- */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+let toastTimer;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+}
+function medal(lvl, cls = "") {
+  return `<div class="medal ${cls}" style="--mc:${lvl.color};--mg:${lvl.glow}">${ICONS[lvl.icon]}</div>`;
+}
+function starsHtml(n) {
+  let s = "";
+  for (let i = 0; i < HEARTS; i++) s += `<span class="star${i < n ? " on" : ""}">${ICONS.star}</span>`;
+  return s;
+}
+const SPARK_POS = [[4, 8], [88, 4], [96, 42], [2, 52], [92, 78], [6, 84], [50, -2]];
+function badgeCard(lvl, reveal) {
+  const best = state.best[lvl.id] || 1;
+  const no = String(posInRound(lvl)).padStart(2, "0") + " / " + String(inRound(lvl.round).length).padStart(2, "0");
+  const sparks = SPARK_POS.map(([x, y], i) =>
+    `<span class="spark" style="left:${x}%;top:${y}%;animation-delay:${(i * 0.37).toFixed(2)}s">${ICONS.spark}</span>`).join("");
+  return `
+    <div class="bscene${reveal ? " reveal" : ""}${lvl.round === 2 ? " s2" : ""}" style="--mc:${lvl.color};--mg:${lvl.glow}">
+      <div class="brays" aria-hidden="true"></div>
+      <div class="bfloat">
+        <div class="bcard" tabindex="0" role="button" aria-label="Abzeichen ${esc(lvl.badge)}, ${best} von ${HEARTS} Sternen. Tippen zum Umdrehen.">
+          <div class="bface bfront">
+            <div class="bholo"></div>
+            <div class="btop"><span>Serie ${lvl.round}</span><span>${no}</span></div>
+            <div class="bmedal">${ICONS[lvl.icon]}</div>
+            <p class="bname">${esc(lvl.badge)}</p>
+            <p class="blevel">Level ${posInRound(lvl)} · ${esc(lvl.title)}</p>
+            <div class="bstars">${starsHtml(best)}</div>
+            <div class="bshine"></div>
+          </div>
+          <div class="bface bback"><div class="bbackin">${ICONS.robot}<span>KI clever<br>nutzen</span><small>Serie ${lvl.round}</small></div></div>
+        </div>
+      </div>
+      <div class="bsparks" aria-hidden="true">${sparks}</div>
+    </div>`;
+}
+function attachCard(root) {
+  const scene = root.querySelector(".bscene");
+  if (!scene) return;
+  const card = scene.querySelector(".bcard");
+  const goLive = () => {
+    card.style.transition = "none";
+    scene.classList.add("live");
+    void card.offsetWidth;
+    card.style.transition = "";
+  };
+  if (scene.classList.contains("reveal") && !reduced.matches) card.addEventListener("animationend", (e) => { if (e.target === card) goLive(); }, { once: false });
+  else goLive();
+  scene.addEventListener("pointermove", (e) => {
+    if (!scene.classList.contains("live")) return;
+    const r = card.getBoundingClientRect();
+    const x = Math.max(-0.5, Math.min(0.5, (e.clientX - r.left) / r.width - 0.5));
+    const y = Math.max(-0.5, Math.min(0.5, (e.clientY - r.top) / r.height - 0.5));
+    card.style.setProperty("--ry", (x * 26).toFixed(1) + "deg");
+    card.style.setProperty("--rx", (-y * 20).toFixed(1) + "deg");
+    card.style.setProperty("--px", (x * 100 + 50).toFixed(0) + "%");
+    card.style.setProperty("--py", (y * 100 + 50).toFixed(0) + "%");
+  });
+  scene.addEventListener("pointerleave", () => {
+    card.style.setProperty("--ry", "0deg");
+    card.style.setProperty("--rx", "0deg");
+  });
+  const flip = () => { if (scene.classList.contains("live")) card.classList.toggle("flipped"); };
+  card.addEventListener("click", flip);
+  card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); } });
+}
+function miniCard(lvl, i = 0) {
+  if (!isDone(lvl.id)) {
+    return `<div class="mini off" aria-label="Level ${posInRound(lvl)} noch nicht geschafft">${ICONS.lock}<span class="mname">Level ${posInRound(lvl)}</span></div>`;
+  }
+  return `<button type="button" class="mini${lvl.round === 2 ? " s2" : ""}" data-card="${lvl.id}" style="--mc:${lvl.color};--mg:${lvl.glow};--d:${(i * 0.6).toFixed(1)}s" aria-label="Karte ${esc(lvl.badge)} ansehen">
+      ${ICONS[lvl.icon]}<span class="mname">${esc(lvl.badge)}</span><span class="mstars">${starsHtml(state.best[lvl.id] || 1)}</span></button>`;
+}
+function openCardView(lvl, backToInventory) {
+  openModal(`
+    ${badgeCard(lvl, true)}
+    <h3 id="sheet-title" class="award-title">${esc(lvl.badge)}</h3>
+    <p class="card-hint">Tippe auf die Karte, um sie umzudrehen.</p>
+    <button class="btn" type="button" id="card-back">${backToInventory ? "Zurück zu den Abzeichen" : "Schliessen"}</button>`);
+  $("card-back").addEventListener("click", () => { if (backToInventory) openInventory(); else closeModal(); });
+}
+
+function confetti() {
+  if (reduced.matches) return;
+  const colors = ["#06b6d4", "#8b5cf6", "#fbbf24", "#10b981", "#f43f5e", "#f8fafc"];
+  for (let i = 0; i < 46; i++) {
+    const c = document.createElement("span");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = colors[i % colors.length];
+    c.style.animationDuration = 1.6 + Math.random() * 1.6 + "s";
+    c.style.animationDelay = Math.random() * 0.3 + "s";
+    c.addEventListener("animationend", () => c.remove());
+    document.body.append(c);
+  }
+}
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.append(ta); ta.select();
+    try { document.execCommand("copy"); } catch { /* nichts */ }
+    ta.remove();
+  }
+  toast("Kopiert! Jetzt in die KI einfügen.");
+}
+
+/* ---------- Navigation ---------- */
+let current = 1;
+let viewRound = 1;
+function setAccent(lvl) {
+  const r = document.documentElement.style;
+  r.setProperty("--lc", lvl.color);
+  r.setProperty("--lglow", lvl.glow);
+  r.setProperty("--lsoft", lvl.soft);
+}
+function renderNav() {
+  const rounds = $("rounds");
+  rounds.innerHTML = "";
+  for (const r of [1, 2]) {
+    const b = document.createElement("button");
+    b.type = "button";
+    const open = r === 1 || r1Complete();
+    const complete = doneIn(r) === inRound(r).length;
+    b.className = "round" + (viewRound === r ? " active" : "") + (open ? "" : " locked") + (r === 2 ? " r2" : "");
+    b.innerHTML = (open ? (complete ? ICONS.check : "") : ICONS.lock) + `<span>Runde ${r}</span><small>${doneIn(r)}/${inRound(r).length}</small>`;
+    b.setAttribute("aria-pressed", String(viewRound === r));
+    b.addEventListener("click", () => {
+      if (!open) { toast("Schliesse zuerst Runde 1 ab."); return; }
+      go(firstOpen(r).id, true);
+    });
+    rounds.append(b);
+  }
+  const nav = $("levels");
+  nav.innerHTML = "";
+  const items = inRound(viewRound).map((l) => ({ id: l.id, label: `${posInRound(l)}. ${l.short}`, color: l.color, glow: l.glow, lvl: l }));
+  items.push({ id: "abschluss", label: "Abschluss", color: "#fbbf24", glow: "rgba(251,191,36,.55)" });
+  for (const it of items) {
+    const b = document.createElement("button");
+    b.type = "button";
+    const open = unlocked(it.id);
+    const done = it.id !== "abschluss" && isDone(it.id);
+    b.className = "pill" + (current === it.id ? " active" : "") + (open ? "" : " locked") + (done ? " done" : "");
+    b.style.setProperty("--pc", it.color);
+    b.style.setProperty("--pg", it.glow);
+    b.innerHTML = (open ? (done ? ICONS.check : "") : ICONS.lock) + `<span>${esc(it.label)}</span>`;
+    if (!open) b.setAttribute("aria-disabled", "true");
+    if (current === it.id) b.setAttribute("aria-current", "page");
+    b.addEventListener("click", () => {
+      if (!open) {
+        if (it.id === "abschluss" || it.lvl.round === 2 && !r1Complete()) toast(`Löse zuerst alle ${CORE} Levels von Runde 1.`);
+        else toast(`Löse zuerst Level ${posInRound(it.lvl) - 1}.`);
+        return;
+      }
+      go(it.id, true);
+    });
+    nav.append(b);
+  }
+}
+function updateInventory() {
+  $("inv-count").textContent = r1Complete() ? `${state.done.length}/${LEVELS.length}` : `${coreDone()}/${CORE}`;
+}
+function go(id, scroll) {
+  current = id;
+  if (id !== "abschluss") viewRound = byId(id).round;
+  if (history.replaceState) history.replaceState(null, "", "#" + (id === "abschluss" ? "abschluss" : "level-" + id));
+  renderNav();
+  if (id === "abschluss") renderFinish(); else renderLevel(byId(id));
+  if (scroll) $("rounds").scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "start" });
+}
+
+/* ---------- Level ---------- */
+let run = null;
+function renderLevel(lvl) {
+  setAccent(lvl);
+  const stage = $("stage");
+  const pos = posInRound(lvl);
+  stage.innerHTML = `
+    <article class="card${lvl.round === 2 ? " r2card" : ""}" id="level-card" aria-labelledby="level-title">
+      <div class="card-deco" aria-hidden="true">${ICONS[lvl.icon]}</div>
+      <p class="where">Runde ${lvl.round} · Level ${pos} von ${inRound(lvl.round).length}</p>
+      <div class="level-head"><span class="num">${pos}</span><h2 id="level-title" tabindex="-1">${esc(lvl.title)}</h2></div>
+      <p class="tagline">${esc(lvl.tagline)}</p>
+      <div class="learn">${lvl.learn.map((p) => `<p>${p}</p>`).join("")}</div>
+      ${lvl.visual}
+      <div class="try">
+        <p class="try-title">${ICONS.play} Probier es aus</p>
+        <div class="prompt-box"><span id="try-text">${esc(lvl.tryit.prompt)}</span><button class="copy" type="button" id="copy-btn" aria-label="Prompt kopieren">${ICONS.copy}</button></div>
+        <p class="try-hint">${esc(lvl.tryit.hint)} <br>Nur mit einer KI, die eure Schule erlaubt.</p>
+      </div>
+    </article>
+    <section class="card quiz" id="quiz" aria-labelledby="quiz-title"></section>`;
+  $("copy-btn").addEventListener("click", () => copyText($("try-text").textContent));
+  if (lvl.builder) setupBuilder(lvl);
+  if (isDone(lvl.id)) renderDoneBox(lvl); else startQuiz(lvl, false);
+}
+
+/* Prompt-Baukasten (Level «Bilder beschreiben») */
+const builderSel = {};
+function setupBuilder(lvl) {
+  const box = $("builder");
+  for (const part of lvl.builder) if (!(part.key in builderSel)) builderSel[part.key] = 0;
+  const get = (key) => lvl.builder.find((p) => p.key === key).options[builderSel[key]];
+  function update() {
+    const [wer, werEmoji] = get("wer");
+    const [tut, tutEmoji] = get("tut");
+    const [wo, woKey] = get("wo");
+    const [stil, stilKey] = get("stil");
+    $("try-text").textContent = `Erstelle ein Bild: ${wer} ${tut} ${wo}. Stil: ${stil}.`;
+    const sk = $("sketch");
+    sk.className = `sketch wo-${woKey} stil-${stilKey}`;
+    const place = { space: "🪐", kitchen: "🍳", mountain: "🏔️" }[woKey];
+    sk.innerHTML = `<span class="sk-bg">${place}</span><span class="sk-main">${werEmoji}</span><span class="sk-act">${tutEmoji}</span>`;
+    box.querySelectorAll(".bchip").forEach((c) => c.setAttribute("aria-pressed", String(builderSel[c.dataset.key] === Number(c.dataset.i))));
+  }
+  box.innerHTML = lvl.builder.map((part) => `
+    <div class="bpart" role="group" aria-label="${esc(part.label)}">
+      <span class="bplabel">${esc(part.label)}</span>
+      <div class="bchips">${part.options.map((o, i) => `<button type="button" class="bchip" data-key="${part.key}" data-i="${i}">${esc(o[0])}</button>`).join("")}</div>
+    </div>`).join("") + `<figure class="sketch-wrap"><div id="sketch" aria-hidden="true"></div><figcaption>Nur eine Skizze – das echte Bild malt die Bild-KI.</figcaption></figure>`;
+  box.querySelectorAll(".bchip").forEach((c) => c.addEventListener("click", () => {
+    builderSel[c.dataset.key] = Number(c.dataset.i);
+    update();
+  }));
+  update();
+}
+
+function renderDoneBox(lvl) {
+  run = null;
+  const best = state.best[lvl.id] || 1;
+  $("quiz").innerHTML = `
+    <div class="done-box">
+      ${miniCard(lvl)}
+      <h3 id="quiz-title" style="margin:14px 0 0;font-size:1.3rem">Level geschafft!</h3>
+      <p>${best < HEARTS ? `Du hast ${best} von ${HEARTS} Sternen. Übe nochmals ohne Fehler, dann bekommt deine Karte alle Sterne.` : "Volle Sterne! Tippe auf die Karte, um sie anzusehen."}</p>
+      <button class="btn ghost" type="button" id="practice">${ICONS.redo} ${best < HEARTS ? "Mehr Sterne holen" : "Nochmals üben"}</button>
+    </div>`;
+  $("quiz").querySelector("[data-card]").addEventListener("click", () => openCardView(lvl, false));
+  $("practice").addEventListener("click", () => startQuiz(lvl, true));
+}
+
+function startQuiz(lvl, practice) {
+  run = { lvl, practice, qi: 0, hearts: HEARTS, order: lvl.questions.map((q) => (q.fixed ? q.options.slice() : shuffle(q.options))), answered: false };
+  renderQuestion(false);
+}
+
+function heartsHtml() {
+  let h = "";
+  for (let i = 0; i < HEARTS; i++) h += `<span class="heart${i < run.hearts ? "" : " lost"}" data-h="${i}">${ICONS.heart}</span>`;
+  return h;
+}
+
+function renderQuestion(focus) {
+  const { lvl, qi } = run;
+  const q = lvl.questions[qi];
+  const total = lvl.questions.length;
+  let dots = "";
+  for (let i = 0; i < total; i++) dots += `<i class="${i < qi ? "on" : i === qi ? "now" : ""}"></i>`;
+  $("quiz").innerHTML = `
+    <div class="quiz-top">
+      <h3 class="quiz-title" id="quiz-title">${ICONS.quiz} Quiz${run.practice ? " (Übung)" : ""}</h3>
+      <div class="hearts" id="hearts" role="img" aria-label="${run.hearts} von ${HEARTS} Herzen">${heartsHtml()}</div>
+    </div>
+    <div class="qprog"><span>Frage ${qi + 1} von ${total}</span><span class="dots" aria-hidden="true">${dots}</span></div>
+    <p class="qtext" id="qtext" tabindex="-1">${esc(q.q)}</p>
+    ${q.ctx ? `<p class="ctx">${esc(q.ctx)}</p>` : ""}
+    <div class="opts" id="opts"></div>
+    <div class="fb" id="fb" role="status" aria-live="polite"></div>
+    <div class="btn-row" id="next-row" hidden></div>`;
+  const opts = $("opts");
+  run.answered = false;
+  run.order[qi].forEach((o, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt";
+    b.innerHTML = `<span class="letter">${"ABC"[i]}</span><span>${esc(o.t)}</span>${o.dot ? `<span class="dot" style="--cc:${o.dot};margin-left:auto"></span>` : ""}`;
+    b.addEventListener("click", () => answer(b, o));
+    opts.append(b);
+  });
+  if (focus) $("qtext").focus({ preventScroll: true });
+}
+
+function answer(btn, opt) {
+  if (run.answered || btn.classList.contains("wrong")) return;
+  const fb = $("fb");
+  if (opt.ok) {
+    run.answered = true;
+    btn.classList.add("right");
+    btn.querySelector(".letter").innerHTML = ICONS.check;
+    $("opts").querySelectorAll(".opt").forEach((b) => { if (b !== btn) b.classList.add("dim"); b.setAttribute("aria-disabled", "true"); });
+    fb.className = "fb ok";
+    fb.innerHTML = `<b>Richtig!</b> ${esc(opt.why)}`;
+    const last = run.qi === run.lvl.questions.length - 1;
+    const row = $("next-row");
+    row.hidden = false;
+    row.innerHTML = `<button class="btn" type="button" id="next">${last ? "Level abschliessen" : "Weiter"} ${ICONS.arrow}</button>`;
+    $("next").addEventListener("click", () => {
+      if (last) finishLevel();
+      else { run.qi++; renderQuestion(true); $("quiz").scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "start" }); }
+    });
+    row.scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "nearest" });
+  } else {
+    run.hearts--;
+    btn.classList.add("wrong", "shake");
+    btn.setAttribute("aria-disabled", "true");
+    btn.querySelector(".letter").innerHTML = ICONS.x;
+    const heart = document.querySelector(`.heart[data-h="${run.hearts}"]`);
+    if (heart) { heart.classList.add("lost", "pop"); }
+    $("hearts").setAttribute("aria-label", `${run.hearts} von ${HEARTS} Herzen`);
+    fb.className = "fb no";
+    fb.innerHTML = run.hearts > 0
+      ? `<b>Nicht ganz.</b> ${esc(opt.why)} Versuch es nochmals.`
+      : `<b>Nicht ganz.</b> ${esc(opt.why)}`;
+    fb.scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "nearest" });
+    if (run.hearts <= 0) {
+      run.answered = true;
+      setTimeout(showFail, 1400);
+    }
+  }
+}
+
+function finishLevel() {
+  const lvl = run.lvl;
+  const earned = run.hearts;
+  if (run.practice || isDone(lvl.id)) {
+    const old = state.best[lvl.id] || 1;
+    if (earned > old) {
+      state.best[lvl.id] = earned;
+      save();
+      renderDoneBox(lvl);
+      confetti();
+      openModal(`
+        ${badgeCard(lvl, true)}
+        <h3 id="sheet-title" class="award-title">Neuer Rekord!</h3>
+        <p>Deine Karte hat jetzt ${earned} von ${HEARTS} Sternen.</p>
+        <button class="btn" type="button" id="card-back">Super!</button>`);
+      $("card-back").addEventListener("click", closeModal);
+    } else {
+      toast("Gut geübt!");
+      renderDoneBox(lvl);
+    }
+    return;
+  }
+  state.done.push(lvl.id);
+  state.best[lvl.id] = earned;
+  save();
+  updateInventory();
+  const inv = $("inv-btn");
+  inv.classList.remove("bump"); void inv.offsetWidth; inv.classList.add("bump");
+  renderNav();
+  renderDoneBox(lvl);
+  confetti();
+  const list = inRound(lvl.round);
+  const pos = posInRound(lvl);
+  const next = list.find((l) => !isDone(l.id));
+  const roundComplete = !next;
+  let actions, msg;
+  if (roundComplete && lvl.round === 1) {
+    const r2 = firstOpen(2);
+    msg = `Stark! Du hast Runde 1 geschafft. <b>Runde 2 ist jetzt offen</b> – mit einer neuen Kartenserie.`;
+    actions = `<button class="btn" type="button" data-go="${r2.id}">Runde 2 starten ${ICONS.arrow}</button>
+               <button class="btn ghost" type="button" data-go="abschluss">${ICONS.trophy} Zur Urkunde</button>`;
+  } else if (roundComplete) {
+    msg = `Wow! Du hast alle ${LEVELS.length} Karten gesammelt.`;
+    actions = `<button class="btn" type="button" data-go="abschluss">${ICONS.trophy} Zur Urkunde</button>`;
+  } else {
+    msg = `Level ${pos} geschafft. Level ${posInRound(next)} ist jetzt offen.`;
+    actions = `<button class="btn" type="button" data-go="${next.id}">Weiter zu Level ${posInRound(next)} ${ICONS.arrow}</button>`;
+  }
+  const starText = earned === HEARTS ? "Ohne Fehler – alle 3 Sterne!" : `${earned} von ${HEARTS} Sternen. Mit «Mehr Sterne holen» kannst du sie später füllen.`;
+  openModal(`
+    ${badgeCard(lvl, true)}
+    <h3 id="sheet-title" class="award-title">Abzeichen verdient!</h3>
+    <p>${msg}<br><span style="color:var(--gold)">${starText}</span></p>
+    ${actions}`);
+}
+
+function showFail() {
+  const lvl = run.lvl;
+  openModal(`
+    <div style="color:var(--bad);width:84px;height:84px;margin:0 auto" class="pop">${ICONS.broken}</div>
+    <h3 id="sheet-title">Keine Herzen mehr</h3>
+    <p>Kein Problem. Lies den Text oben nochmals genau. Dann startest du das Level neu.</p>
+    <button class="btn" type="button" id="restart">${ICONS.redo} Level neu starten</button>`);
+  $("restart").addEventListener("click", () => {
+    closeModal();
+    startQuiz(lvl, run.practice);
+    $("level-card").scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "start" });
+    $("level-title").focus({ preventScroll: true });
+  });
+}
+
+/* ---------- Abschluss ---------- */
+function renderFinish() {
+  document.documentElement.style.setProperty("--lc", "#fbbf24");
+  const date = new Intl.DateTimeFormat("de-CH", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
+  const badges = LEVELS.filter((l) => isDone(l.id)).map((l, i) => miniCard(l, i)).join("");
+  const r2 = doneIn(2), r2n = inRound(2).length;
+  const extra = r2 === r2n ? " – und Runde 2 komplett" : r2 > 0 ? ` – und ${r2} von ${r2n} Levels aus Runde 2` : "";
+  $("stage").innerHTML = `
+    <section class="card">
+      <label class="name-field" for="name">Dein Vorname
+        <input id="name" type="text" maxlength="40" autocomplete="given-name" value="${esc(state.name)}" placeholder="z. B. Lea">
+      </label>
+      <p class="note" style="margin:0">Dein Name bleibt nur auf diesem Gerät.</p>
+    </section>
+    <section class="card cert" aria-labelledby="cert-title">
+      <div class="trophy">${ICONS.trophy}</div>
+      <p class="eyebrow" style="margin:10px 0 0">Urkunde</p>
+      <h2 id="cert-title" tabindex="-1">KI clever nutzen</h2>
+      <p class="who" id="cert-name">${esc(state.name) || "&nbsp;"}</p>
+      <p class="what">hat Runde 1 geschafft${extra}.</p>
+      <div class="cert-badges">${badges}</div>
+      <p class="date">${esc(date)}</p>
+    </section>
+    <p class="note">Zeig diesen Bildschirm deiner Lehrperson.</p>
+    ${r2 === r2n ? "" : `<div style="text-align:center;margin-top:14px"><button class="btn ghost" type="button" id="to-bonus">${r2 ? "Runde 2 weiterspielen" : "Runde 2 starten"} ${ICONS.arrow}</button></div>`}`;
+  $("name").addEventListener("input", (e) => {
+    state.name = e.target.value.slice(0, 40);
+    save();
+    $("cert-name").innerHTML = esc(state.name.trim()) || "&nbsp;";
+  });
+  $("stage").querySelectorAll("[data-card]").forEach((b) => b.addEventListener("click", () => openCardView(LEVELS.find((l) => l.id === Number(b.dataset.card)), false)));
+  const tb = $("to-bonus");
+  if (tb) tb.addEventListener("click", () => go(firstOpen(2).id, true));
+}
+
+/* ---------- Modal & Inventar ---------- */
+let lastFocus = null;
+function openModal(html) {
+  if ($("modal").hidden) lastFocus = document.activeElement;
+  const sheet = $("sheet");
+  sheet.innerHTML = html;
+  sheet.scrollTop = 0;
+  attachCard(sheet);
+  $("modal").hidden = false;
+  document.body.classList.add("modal-open");
+  sheet.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => {
+    closeModal();
+    const t = b.dataset.go;
+    go(t === "abschluss" ? "abschluss" : Number(t), true);
+  }));
+  const first = sheet.querySelector("button, input");
+  if (first) first.focus({ preventScroll: true });
+}
+function closeModal() {
+  $("modal").hidden = true;
+  document.body.classList.remove("modal-open");
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+}
+function openInventory() {
+  const s1 = inRound(1).map((l, i) => miniCard(l, i)).join("");
+  const s2 = r1Complete()
+    ? `<div class="minis" style="--cols:3">${inRound(2).map((l, i) => miniCard(l, i)).join("")}</div>`
+    : `<p class="series-locked">${ICONS.lock} Wird freigeschaltet, wenn du Runde 1 geschafft hast.</p>`;
+  openModal(`
+    <div style="color:var(--gold);width:48px;height:48px;margin:0 auto">${ICONS.medal}</div>
+    <h3 id="sheet-title">Deine Abzeichen</h3>
+    <p style="margin-bottom:0">${state.done.length ? "Tippe auf eine Karte, um sie anzusehen." : "Löse Levels und sammle Karten."}</p>
+    <p class="series-title">Serie 1 <span>${doneIn(1)}/${CORE}</span></p>
+    <div class="minis" style="--cols:4">${s1}</div>
+    <p class="series-title s2">Serie 2 <span>${doneIn(2)}/${inRound(2).length}</span></p>
+    ${s2}
+    <button class="btn" type="button" id="close-inv">Schliessen</button>
+    <button class="reset" type="button" id="reset">Fortschritt löschen</button>`);
+  $("close-inv").addEventListener("click", closeModal);
+  $("sheet").querySelectorAll("[data-card]").forEach((b) => b.addEventListener("click", () => openCardView(LEVELS.find((l) => l.id === Number(b.dataset.card)), true)));
+  const r = $("reset");
+  r.addEventListener("click", () => {
+    if (!r.classList.contains("armed")) { r.classList.add("armed"); r.textContent = "Wirklich alles löschen? Nochmals tippen."; return; }
+    state = { done: [], best: {}, name: "" };
+    save();
+    closeModal();
+    updateInventory();
+    go(1, true);
+    toast("Fortschritt gelöscht.");
+  });
+}
+const closable = () => $("sheet").querySelector("#close-inv, #card-back");
+$("modal").addEventListener("click", (e) => { if (e.target.id === "modal" && closable()) closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("modal").hidden && closable()) closeModal(); });
+$("inv-btn").addEventListener("click", openInventory);
+
+/* ---------- Start ---------- */
+$("hero-icon").innerHTML = ICONS.robot;
+$("inv-icon").outerHTML = ICONS.medal;
+updateInventory();
+(function init() {
+  const h = location.hash;
+  let target = null;
+  if (h === "#abschluss" && unlocked("abschluss")) target = "abschluss";
+  const m = h.match(/^#level-(\d+)$/);
+  if (m && unlocked(Number(m[1]))) target = Number(m[1]);
+  if (target === null) {
+    target = r1Complete() ? "abschluss" : firstOpen(1).id;
+  }
+  go(target, false);
+})();
+</script>
+</body>
+</html>
