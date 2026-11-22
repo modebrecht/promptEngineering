@@ -289,6 +289,8 @@ function renderQuestion(container, station, question, number, onCorrect) {
 function initBasic() {
   const title = get("station-title");
   const stationAward = get("station-award");
+  const flightLayer = get("award-flight-layer");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const completionAwards = get("completion-awards");
   const buttonBack = get("station-back");
   const buttonNext = get("station-next");
@@ -306,6 +308,19 @@ function initBasic() {
     element.replaceChildren(content);
   }
 
+  function celebrateAward(award) {
+    if (reducedMotion.matches) return;
+    const flight = document.createElement("div");
+    flight.className = "award award-flight";
+    renderAward(flight, award, true);
+    function removeFlight(event) {
+      if (event.target === flight) flight.remove();
+    }
+    flight.addEventListener("animationend", removeFlight);
+    flight.addEventListener("animationcancel", removeFlight);
+    flightLayer.replaceChildren(flight);
+  }
+
   for (const station of stations) {
     const award = document.createElement("li");
     award.className = "award";
@@ -319,13 +334,14 @@ function initBasic() {
     get("progress-label").textContent = `${count} von ${stations.length} Stationen abgeschlossen`;
     get("course-progress").value = count;
     stationAward.hidden = !complete;
-    stationAward.classList.toggle("award-earned", complete && justAnswered);
+    if (complete && justAnswered) celebrateAward(stations[current].award);
     buttonBack.hidden = current === 0;
     buttonNext.disabled = !complete;
     buttonNext.textContent = current === stations.length - 1 ? "Zum Abschluss" : "Nächste Station";
   }
 
   function renderStation(focusHeading = false) {
+    flightLayer.replaceChildren();
     const station = stations[current];
     get("station-position").textContent = `Station ${current + 1} von ${stations.length}`;
     title.textContent = station.title;
@@ -370,6 +386,7 @@ function initBasic() {
     get(inactivePage).removeAttribute("aria-current");
     document.title = completion ? "Prompt Engineering · Abschluss" : "Prompt Engineering · Basic";
     if (completion) {
+      flightLayer.replaceChildren();
       updateCompletion();
       if (focusHeading) get("abschluss-title").focus();
     }
