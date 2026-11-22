@@ -78,7 +78,7 @@
     padding: 22px 18px; margin-bottom: 18px; position: relative; overflow: hidden;
     -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
   }
-  .card-deco { position: absolute; top: 14px; right: 14px; color: var(--lc); opacity: 0.13; }
+  .card-deco { position: absolute; top: 14px; right: 14px; color: var(--lc); opacity: 0.13; pointer-events: none; }
   .card-deco svg { width: 74px; height: 74px; }
   .level-head { display: flex; align-items: center; gap: 12px; margin: 0 0 4px; padding-right: 60px; }
   .num {
@@ -433,6 +433,77 @@
   .stil-pixel::before { background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 2px, transparent 2px 10px), repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 2px, transparent 2px 10px); }
   .stil-pixel .sk-main, .stil-pixel .sk-act { filter: contrast(1.3) saturate(1.3); }
 
+  /* Orientierung */
+  .stepper { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 0 0 14px; }
+  .step { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.82rem; font-weight: 800; padding: 5px 10px 5px 5px; border-radius: 999px; background: rgba(15, 23, 42, 0.7); border: 1px solid #334155; color: var(--soft); }
+  .step b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--lsoft); color: var(--lc); font-size: 0.78rem; }
+  .step-sep { color: #475569; font-weight: 800; }
+  #try-box, #level-card { scroll-margin-top: 12px; }
+  .learn-line { margin: 14px 0 0; font-size: 1.05rem; color: #e2e8f0; }
+
+  /* Illustrationen */
+  .illu { margin: 14px 0; padding: 12px 10px 10px; border-radius: 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid #273449; }
+  .illu svg { width: 100%; height: auto; font-family: Inter, system-ui, sans-serif; }
+  .illu figcaption { text-align: center; color: var(--soft); font-size: 0.95rem; margin-top: 8px; }
+  .illu figcaption strong { color: #fff; }
+
+  .meters { margin: 14px 0; padding: 14px; border-radius: 14px; background: rgba(15, 23, 42, 0.6); border: 1px solid #273449; display: grid; gap: 12px; }
+  .meter { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; }
+  .mlabel { grid-column: 1 / -1; font-weight: 700; font-size: 0.95rem; }
+  .mbar { height: 16px; border-radius: 999px; background: #1e293b; border: 1px solid #334155; overflow: hidden; }
+  .mbar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #22d3ee, #10b981); border-radius: 999px; animation: fillbar 1.2s ease-out; transform-origin: left; }
+  @keyframes fillbar { from { transform: scaleX(0); } }
+  .mbar.q i { background: repeating-linear-gradient(-45deg, #475569 0 8px, #334155 8px 16px); animation: none; }
+  .mval { font-weight: 800; color: #34d399; min-width: 34px; text-align: center; }
+  .mval.q { color: var(--gold); font-size: 1.3rem; animation: wobble 2s ease-in-out infinite; }
+  @keyframes wobble { 50% { transform: rotate(14deg) scale(1.15); } }
+  .mnote { margin: 0; color: var(--soft); text-align: center; }
+
+  .ampel { position: relative; display: grid; grid-template-columns: 64px 1fr; column-gap: 14px; margin: 14px 0 0; }
+  .ampel::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 64px; border-radius: 20px; background: #0b1222; border: 2px solid #334155; }
+  .lamp { position: relative; width: 42px; height: 42px; margin: 10px 11px; align-self: center; border-radius: 50%; display: grid; place-items: center; color: rgba(0, 0, 0, 0.55); font-weight: 900; font-size: 1.3rem; background: radial-gradient(circle at 35% 30%, #fff8 0 8%, var(--c) 30%); box-shadow: 0 0 18px var(--c); }
+  .lamp svg { width: 22px; height: 22px; }
+  .lamp.r { --c: #f43f5e; } .lamp.y { --c: #facc15; } .lamp.g { --c: #10b981; }
+  .atext { align-self: center; padding: 8px 0; }
+  .atext b { display: block; font-size: 1.02rem; }
+  .atext span { color: var(--soft); font-size: 0.95rem; }
+
+  .tone { margin: 14px 0; }
+  .tone-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .ttab { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; padding: 8px 6px; border-radius: 12px; border: 1px solid #475569; background: #1e293b; color: var(--soft); font-weight: 700; font-size: 0.92rem; }
+  .ttab[aria-pressed="true"] { background: var(--lc); border-color: transparent; color: #fff; box-shadow: 0 0 14px var(--lglow); }
+  .tone-prompt { margin: 12px 0 8px; font-size: 0.92rem; color: var(--muted); }
+  .tone-prompt b { color: #fdba74; }
+  .tone-msg { background: #0b1222; border-left: 4px solid var(--lc); border-radius: 0 12px 12px 0; padding: 12px 14px; font-size: 1.02rem; }
+  .tone-msg small { display: block; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 4px; }
+  .tone-msg.swap { animation: swapin 0.35s ease; }
+  @keyframes swapin { from { opacity: 0; transform: translateY(6px); } }
+  .tone mark, .tone-note mark { background: rgba(249, 115, 22, 0.25); color: #fff; border-radius: 4px; padding: 0 3px; }
+  .tone-note { margin: 10px 0 0; font-size: 0.9rem; color: var(--muted); }
+
+  .spot { margin: 14px 0; }
+  .spot-svg { width: 100%; height: auto; border-radius: 14px; border: 3px solid #e2e8f0; cursor: crosshair; display: block; }
+  .hot { fill: transparent; cursor: pointer; }
+  .hot.found { fill: rgba(251, 191, 36, 0.15); stroke: #fbbf24; stroke-width: 4; stroke-dasharray: 8 5; animation: ring 1.2s linear infinite; }
+  @keyframes ring { to { stroke-dashoffset: -26; } }
+  .spot-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-weight: 800; }
+  .spot-help { background: none; border: 1px solid #475569; color: var(--muted); border-radius: 999px; padding: 5px 12px; font-size: 0.82rem; cursor: pointer; }
+  .spot-list { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 4px; }
+  .spot-list li { display: flex; align-items: center; gap: 8px; color: #a7f3d0; }
+  .spot-list svg { width: 16px; height: 16px; color: var(--ok); }
+  .spot-msg { margin: 8px 0 0; color: var(--soft); min-height: 1.2em; }
+  .spot-msg b { color: #fff; }
+
+  .flow { margin: 10px 0 4px; display: grid; justify-items: center; gap: 10px; }
+  .fnode { padding: 10px 14px; border-radius: 12px; background: #1e293b; border: 2px solid #475569; font-weight: 700; text-align: center; }
+  .fsplit { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
+  .fbranch { display: grid; justify-items: center; gap: 6px; }
+  .fyes, .fno { display: inline-flex; align-items: center; gap: 4px; font-weight: 800; font-size: 0.85rem; }
+  .fyes { color: #34d399; } .fno { color: #fb7185; }
+  .fyes svg, .fno svg { width: 14px; height: 14px; }
+  .fnode.ok { border-color: #10b981; background: rgba(16, 185, 129, 0.12); }
+  .fnode.no { border-color: #f43f5e; background: rgba(244, 63, 94, 0.1); }
+
   /* Konfetti & Toast */
   .confetti { position: fixed; top: -12px; width: 9px; height: 14px; z-index: 60; pointer-events: none; border-radius: 2px; animation: fall linear forwards; }
   @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0.7; } }
@@ -520,10 +591,27 @@ const LEVELS = [
     color: "#06b6d4", glow: "rgba(6,182,212,.55)", soft: "rgba(6,182,212,.2)", icon: "target",
     badge: "Auftrag-Profi",
     learn: [
-      "Die KI kann nicht in deinen Kopf schauen. Fragst du ungenau, muss sie <strong>raten</strong>. Dann bekommst du oft einen langen Standardtext.",
-      "Beantworte in deinem Prompt diese <strong>vier Fragen</strong>:"
+      "Die KI kann nicht in deinen Kopf schauen. Fragst du ungenau, muss sie <strong>raten</strong>. Dann bekommst du oft einen langen Standardtext."
     ],
     visual: `
+      <figure class="illu">
+        <svg viewBox="0 0 340 204" role="img" aria-label="Du denkst an viele Details. Die KI sieht nur deinen kurzen Satz und muss raten.">
+          <text x="186" y="58" font-size="11" font-weight="800" fill="#c4b5fd" letter-spacing="1.5">← DU DENKST</text>
+          <g fill="#a78bfa"><rect x="12" y="38" width="164" height="76" rx="38"/><circle cx="52" cy="44" r="24"/><circle cx="98" cy="36" r="28"/><circle cx="142" cy="46" r="22"/><circle cx="44" cy="124" r="7"/><circle cx="36" cy="140" r="4.5"/></g>
+          <g fill="#1e293b"><rect x="14.5" y="40.5" width="159" height="71" rx="35.5"/><circle cx="52" cy="44" r="21.5"/><circle cx="98" cy="36" r="25.5"/><circle cx="142" cy="46" r="19.5"/><circle cx="44" cy="124" r="5"/><circle cx="36" cy="140" r="2.5"/></g>
+          <path d="M30 96 L50 60 L70 96 Z" fill="#b45309"/><path d="M44 62 q6 -12 12 0 z" fill="#f97316"/><circle cx="46" cy="50" r="3" fill="#94a3b8"/><circle cx="54" cy="44" r="4" fill="#94a3b8"/>
+          <g font-size="12.5" font-weight="700" fill="#f1f5f9"><text x="80" y="62">8. Klasse</text><text x="80" y="80">5 Sätze</text><text x="80" y="98">3 Stichworte</text></g>
+          <circle cx="40" cy="166" r="15" fill="#c4b5fd"/><path d="M14 204 q26 -36 52 0 z" fill="#7c3aed"/>
+          <text x="180" y="128" text-anchor="middle" font-size="11" font-weight="800" fill="#94a3b8" letter-spacing="1.5">DIE KI SIEHT NUR</text>
+          <rect x="122" y="138" width="116" height="46" rx="12" fill="#334155" stroke="#64748b"/><path d="M124 170 l-14 8 18 -1 z" fill="#334155"/>
+          <g font-size="12.5" font-weight="700" fill="#f1f5f9" text-anchor="middle"><text x="180" y="157">«Schreib was</text><text x="180" y="174">über Vulkane.»</text></g>
+          <path d="M244 161 h14 m-6 -6 6 6 -6 6" fill="none" stroke="#64748b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g transform="translate(268 134)"><path d="M30 12 V3" stroke="#22d3ee" stroke-width="2.5"/><circle cx="30" cy="2" r="3" fill="#22d3ee"/><rect x="2" y="12" width="56" height="46" rx="12" fill="#0f172a" stroke="#22d3ee" stroke-width="2.5"/><circle cx="20" cy="31" r="4" fill="#22d3ee"/><circle cx="40" cy="31" r="4" fill="#22d3ee"/><path d="M19 46 q5.5 -5 11 0 t11 0" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round"/></g>
+          <g font-size="24" font-weight="800" fill="#fbbf24"><text x="262" y="122">?</text><text x="292" y="108">?</text><text x="320" y="126">?</text></g>
+        </svg>
+        <figcaption>Du weisst, was du willst. Die KI sieht nur deinen Satz – und muss <strong>raten</strong>.</figcaption>
+      </figure>
+      <p class="learn-line">Beantworte darum in deinem Prompt diese <strong>vier Fragen</strong>:</p>
       <div class="chips">
         <div class="chip" style="--cc:#22d3ee"><b>Was?</b><span>Thema, Aufgabe</span></div>
         <div class="chip" style="--cc:#a78bfa"><b>Für wen?</b><span>z. B. 8. Klasse</span></div>
@@ -640,14 +728,20 @@ const LEVELS = [
     badge: "Faktenchecker",
     learn: [
       "Die KI schreibt immer <strong>sicher</strong> und in gutem Deutsch. Trotzdem kann sie sich irren. Manchmal <strong>erfindet</strong> sie sogar Namen, Zahlen oder Quellen.",
-      "Wichtige Infos prüfst du <strong>selbst</strong>:"
+      "Wichtige Infos prüfst du <strong>selbst</strong>."
     ],
     visual: `
+      <div class="meters" role="img" aria-label="Die KI klingt sehr sicher. Ob es stimmt, ist offen.">
+        <div class="meter"><span class="mlabel">So sicher klingt die KI</span><div class="mbar"><i></i></div><span class="mval">sehr</span></div>
+        <div class="meter"><span class="mlabel">Stimmt es auch?</span><div class="mbar q"><i></i></div><span class="mval q">?</span></div>
+        <p class="mnote">Sicher klingen und richtig sein ist <strong>nicht dasselbe</strong>.</p>
+      </div>
       <div class="compare">
         <div class="ex bad"><p class="ex-label">${ICONS.robot} KI sagt</p><p>«Der Rhein ist 2500 km lang.»</p></div>
         <div class="arrow">${ICONS.arrow}</div>
         <div class="ex good"><p class="ex-label">${ICONS.search} Nachgeschaut</p><p>Im Lexikon steht: rund 1230 km. Die KI lag falsch.</p></div>
       </div>
+      <p class="learn-line">So prüfst du:</p>
       <ol class="steps">
         <li><span class="n">1</span><span><strong>Quelle öffnen:</strong> Steht es dort wirklich?</span></li>
         <li><span class="n">2</span><span><strong>Zweite Quelle suchen:</strong> Schulbuch, Lexikon, offizielle Webseite.</span></li>
@@ -702,11 +796,12 @@ const LEVELS = [
       "Nutze nur KI-Tools, die eure <strong>Schule erlaubt</strong>. Und wenn dir die KI hilft: Sag es <strong>ehrlich</strong>."
     ],
     visual: `
-      <div class="lights">
-        <div class="light" style="--cc:#10b981"><b><span class="dot"></span>Okay</b><p>Fragen zu Schulthemen, Erklärungen, Ideen</p></div>
-        <div class="light" style="--cc:#facc15"><b><span class="dot"></span>Erst Namen weglassen</b><p>Eigene Texte, in denen andere Personen vorkommen</p></div>
-        <div class="light" style="--cc:#f43f5e"><b><span class="dot"></span>Nicht eingeben</b><p>Passwörter, Adresse, Telefonnummer, Fotos von anderen, Noten</p></div>
-      </div>`,
+      <div class="ampel" role="list" aria-label="Daten-Ampel">
+        <div class="lamp r" aria-hidden="true">${ICONS.x}</div><div class="atext" role="listitem"><b style="color:#fb7185">Nicht eingeben</b><span>Passwörter, Adresse, Telefonnummer, Fotos von anderen, Noten</span></div>
+        <div class="lamp y" aria-hidden="true"><span>!</span></div><div class="atext" role="listitem"><b style="color:#facc15">Erst Namen weglassen</b><span>Eigene Texte, in denen andere Personen vorkommen</span></div>
+        <div class="lamp g" aria-hidden="true">${ICONS.check}</div><div class="atext" role="listitem"><b style="color:#34d399">Okay</b><span>Fragen zu Schulthemen, Erklärungen, Ideen</span></div>
+      </div>
+      <p class="learn-line" style="color:var(--soft)">Frag dich vor dem Eintippen: <strong>Welche Farbe hat das?</strong></p>`,
     tryit: {
       prompt: "Hilf mir bei Hausaufgaben zu Brüchen. Ich bin in der 8. Klasse. Erkläre mir zuerst, wie man Brüche kürzt.",
       hint: "Für gute Hilfe braucht die KI weder deinen Namen noch deine Adresse."
@@ -742,6 +837,19 @@ const LEVELS = [
       "Willst du immer den <strong>gleichen Aufbau</strong>? Dann zeig der KI ein Beispiel. Sie macht es dann genau so."
     ],
     visual: `
+      <figure class="illu">
+        <svg viewBox="0 0 330 112" role="img" aria-label="Ein Beispiel ist wie eine Ausstechform. Alle Teile bekommen die gleiche Form.">
+          <path d="M50.0 18.0L58.8 39.9L82.3 41.5L64.3 56.6L70.0 79.5L50.0 67.0L30.0 79.5L35.7 56.6L17.7 41.5L41.2 39.9Z" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linejoin="round" stroke-dasharray="7 4"/>
+          <path d="M104 52 h28 m-8 -8 8 8 -8 8" fill="none" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#fbbf24" stroke="#b45309" stroke-width="2" stroke-linejoin="round">
+            <path d="M178.0 28.0L184.2 43.5L200.8 44.6L188.0 55.2L192.1 71.4L178.0 62.5L163.9 71.4L168.0 55.2L155.2 44.6L171.8 43.5Z"/>
+            <path d="M234.0 28.0L240.2 43.5L256.8 44.6L244.0 55.2L248.1 71.4L234.0 62.5L219.9 71.4L224.0 55.2L211.2 44.6L227.8 43.5Z"/>
+            <path d="M290.0 28.0L296.2 43.5L312.8 44.6L300.0 55.2L304.1 71.4L290.0 62.5L275.9 71.4L280.0 55.2L267.2 44.6L283.8 43.5Z"/>
+          </g>
+          <g font-size="12" font-weight="800" fill="#94a3b8" text-anchor="middle" letter-spacing="1"><text x="50" y="104">BEISPIEL</text><text x="234" y="104">ALLE GLEICH</text></g>
+        </svg>
+        <figcaption>Ein Beispiel ist wie eine <strong>Ausstechform</strong>: Alles bekommt die gleiche Form.</figcaption>
+      </figure>
       <div class="compare">
         <div class="ex"><p class="ex-label" style="color:#fbbf24">Dein Prompt</p><p class="mono">Schreib Lernkarten genau so wie im Beispiel:
 Begriff: Maus
@@ -846,14 +954,11 @@ Erklärung: Damit bringst du Texte aufs Papier.</p></div>
     color: "#f97316", glow: "rgba(249,115,22,.55)", soft: "rgba(249,115,22,.22)", icon: "tone",
     badge: "Ton-Profi",
     learn: [
-      "Die KI kann die gleichen Infos ganz verschieden schreiben: locker, freundlich oder höflich.",
-      "Sag ihr, <strong>wer</strong> die Nachricht liest und <strong>wie</strong> sie klingen soll."
+      "Die KI kann die gleichen Infos ganz verschieden schreiben: locker, herzlich oder höflich.",
+      "Sag ihr, <strong>wer</strong> die Nachricht liest und <strong>wie</strong> sie klingen soll. Tippe auf die Knöpfe:"
     ],
-    visual: `
-      <div class="compare">
-        <div class="ex" style="border-left-color:#a78bfa"><p class="ex-label" style="color:#c4b5fd">Für den Klassenchat</p><p>Hey Leute! 🏃 Dienstag ist Sporttag, Start 8.15 Uhr. Turnschuhe nicht vergessen! 👟</p></div>
-        <div class="ex" style="border-left-color:#f97316"><p class="ex-label" style="color:#fdba74">Für die Eltern</p><p>Guten Tag. Am Dienstag findet der Sporttag statt. Beginn ist um 8.15 Uhr. Bitte geben Sie Ihrem Kind Turnschuhe mit.</p></div>
-      </div>`,
+    visual: `<div class="tone" id="tone"></div>`,
+    setup: setupTone,
     tryit: {
       prompt: "Schreib eine kurze Nachricht an meine Lehrperson. Ich habe mein Mathebuch in der Schule vergessen. Frag, ob ich die Aufgaben einen Tag später abgeben darf. Der Ton soll höflich sein. Höchstens 3 Sätze.",
       hint: "Probier danach: «Schreib das Gleiche locker, für einen Kollegen.» Was ändert sich?"
@@ -963,15 +1068,47 @@ Erklärung: Damit bringst du Texte aufs Papier.</p></div>
     badge: "Fake-Detektiv",
     learn: [
       "KI kann Bilder, Videos und sogar Stimmen fälschen. Solche Fälschungen heissen <strong>Deepfakes</strong>. Sie sehen oft echt aus.",
-      "Manchmal sieht man Fehler. Aber das Wichtigste ist die <strong>Quelle</strong>:"
+      "Manchmal sieht man Fehler. <strong>Finde die 3 KI-Fehler</strong> in diesem Bild – tippe darauf:"
     ],
+    setup: setupSpot,
     visual: `
+      <div class="spot" id="spot">
+        <svg viewBox="0 0 320 220" class="spot-svg" id="spot-svg" role="img" aria-label="KI-Bild mit drei versteckten Fehlern">
+          <rect width="320" height="220" fill="#7dd3fc"/><rect y="172" width="320" height="48" fill="#86efac"/><circle cx="292" cy="34" r="16" fill="#fde047"/>
+          <path d="M20 160 q20 -30 40 0 M250 150 q18 -26 36 0" fill="none"/>
+          <rect x="58" y="82" width="8" height="96" fill="#92400e"/>
+          <rect x="10" y="34" width="104" height="54" rx="6" fill="#fef3c7" stroke="#92400e" stroke-width="3"/>
+          <g font-size="16" font-weight="800" fill="#b91c1c" text-anchor="middle" font-family="system-ui, sans-serif"><text x="62" y="57">SHCULE</text><text x="62" y="78">FSETT!</text></g>
+          <rect x="154" y="160" width="12" height="24" rx="4" fill="#1e3a8a"/><rect x="174" y="160" width="12" height="24" rx="4" fill="#1e3a8a"/>
+          <rect x="148" y="108" width="44" height="58" rx="14" fill="#f97316"/>
+          <path d="M151 122 l-14 32" stroke="#fcd9b6" stroke-width="9" stroke-linecap="round"/>
+          <path d="M189 120 L216 80" stroke="#fcd9b6" stroke-width="9" stroke-linecap="round"/>
+          <circle cx="222" cy="72" r="9" fill="#fcd9b6"/>
+          <path d="M215.4 69.6L206.0 66.2M217.3 66.8L210.6 59.4M220.1 65.3L217.3 55.7M223.2 65.1L225.0 55.3M226.1 66.3L232.0 58.2M228.2 68.7L237.0 64.0" stroke="#fcd9b6" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="170" cy="86" r="22" fill="#fcd9b6"/>
+          <path d="M148 84 a22 22 0 0 1 44 0 q-10 -11 -22 -9 q-12 -2 -22 9 z" fill="#78350f"/>
+          <circle cx="162" cy="89" r="2.6" fill="#1e293b"/><circle cx="178" cy="89" r="2.6" fill="#1e293b"/>
+          <path d="M162 97 q8 7 16 0" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+          <g fill="none" stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+            <circle cx="228" cy="193" r="11"/><circle cx="258" cy="193" r="11"/><circle cx="288" cy="193" r="11"/>
+            <path d="M228 193 L244 173 L272 173 L258 193 Z M272 173 L288 193 M244 173 l-3 -7 h10 M272 173 l3 -9 h7"/>
+          </g>
+          <g class="hots">
+            <circle class="hot" data-spot="0" cx="62" cy="61" r="46"/>
+            <circle class="hot" data-spot="1" cx="222" cy="66" r="28"/>
+            <circle class="hot" data-spot="2" cx="260" cy="184" r="38"/>
+          </g>
+        </svg>
+        <div class="spot-bar"><span id="spot-count">Gefunden: 0 von 3</span><button type="button" class="spot-help" id="spot-help">Lösung zeigen</button></div>
+        <ul class="spot-list" id="spot-list"></ul>
+        <p class="spot-msg" id="spot-msg" role="status" aria-live="polite"></p>
+      </div>
+      <p class="learn-line">Aber Achtung: Viele Fälschungen haben <strong>keine</strong> sichtbaren Fehler. Das Wichtigste ist die <strong>Quelle</strong>:</p>
       <ol class="steps">
         <li><span class="n">1</span><span><strong>Genau hinschauen:</strong> Hände, Schrift, Ohren, Schmuck, Hintergrund.</span></li>
         <li><span class="n">2</span><span><strong>Quelle prüfen:</strong> Wer hat es zuerst gepostet?</span></li>
         <li><span class="n">3</span><span><strong>Gegencheck:</strong> Berichten auch seriöse Medien darüber?</span></li>
-      </ol>
-      <div class="ex bad"><p class="ex-label">${ICONS.x} Achtung</p><p>Gute Fälschungen haben keine sichtbaren Fehler. Darum ist die Quelle das Wichtigste.</p></div>`,
+      </ol>`,
     tryit: {
       prompt: "Woran erkenne ich, ob ein Bild oder Video mit KI gefälscht wurde? Nenne 5 Tipps für Jugendliche. Kurz und einfach.",
       hint: "Vergleiche die Tipps der KI mit den drei Schritten oben."
@@ -1092,6 +1229,14 @@ Erklärung: Damit bringst du Texte aufs Papier.</p></div>
         <div class="ex"><p class="ex-label" style="color:#bef264">Dein Prompt</p><p><span class="hl hl-was">Antworte nur mit diesem Text. Wenn etwas nicht im Text steht, schreib: «Steht nicht im Text.»</span><br><span class="hl hl-form">Text: «Der Informatikraum ist am Mittwoch von 13.30 bis 15 Uhr offen. Bring deine Kopfhörer mit.»</span><br><span class="hl hl-wer">Frage: Wann ist der Raum offen? Gibt es dort einen Drucker?</span></p></div>
         <div class="arrow">${ICONS.arrow}</div>
         <div class="ex good"><p class="ex-label">${ICONS.robot} KI antwortet</p><p>Der Raum ist am Mittwoch von 13.30 bis 15 Uhr offen. Ob es einen Drucker gibt, steht nicht im Text.</p></div>
+      </div>
+      <p class="learn-line">So soll die KI bei jeder Frage entscheiden:</p>
+      <div class="flow" role="img" aria-label="Steht die Antwort im Text? Ja: Antwort aus dem Text. Nein: Steht nicht im Text.">
+        <div class="fnode">Steht die Antwort im Text?</div>
+        <div class="fsplit">
+          <div class="fbranch"><span class="fyes">${ICONS.check} Ja</span><div class="fnode ok">Antwort aus dem Text</div></div>
+          <div class="fbranch"><span class="fno">${ICONS.x} Nein</span><div class="fnode no">«Steht nicht im Text.»</div></div>
+        </div>
       </div>`,
     tryit: {
       prompt: "Antworte nur mit dem folgenden Text. Wenn etwas nicht im Text steht, schreib: «Steht nicht im Text.»\n\nText: [KURZEN TEXT AUS DEM SCHULBUCH EINFÜGEN]\n\nFasse den Text in 3 Stichpunkten zusammen.",
@@ -1381,20 +1526,82 @@ function renderLevel(lvl) {
     <article class="card${lvl.round === 2 ? " r2card" : ""}" id="level-card" aria-labelledby="level-title">
       <div class="card-deco" aria-hidden="true">${ICONS[lvl.icon]}</div>
       <p class="where">Runde ${lvl.round} · Level ${pos} von ${inRound(lvl.round).length}</p>
+      <div class="stepper" aria-label="So gehst du vor">
+        <button type="button" class="step" data-jump="level-card"><b>1</b>Lesen</button><span class="step-sep" aria-hidden="true">›</span>
+        <button type="button" class="step" data-jump="try-box"><b>2</b>Probieren</button><span class="step-sep" aria-hidden="true">›</span>
+        <button type="button" class="step" data-jump="quiz"><b>3</b>Quiz</button>
+      </div>
       <div class="level-head"><span class="num">${pos}</span><h2 id="level-title" tabindex="-1">${esc(lvl.title)}</h2></div>
       <p class="tagline">${esc(lvl.tagline)}</p>
       <div class="learn">${lvl.learn.map((p) => `<p>${p}</p>`).join("")}</div>
       ${lvl.visual}
-      <div class="try">
+      <div class="try" id="try-box">
         <p class="try-title">${ICONS.play} Probier es aus</p>
         <div class="prompt-box"><span id="try-text">${esc(lvl.tryit.prompt)}</span><button class="copy" type="button" id="copy-btn" aria-label="Prompt kopieren">${ICONS.copy}</button></div>
-        <p class="try-hint">${esc(lvl.tryit.hint)} <br>Nur mit einer KI, die eure Schule erlaubt.</p>
+        <p class="try-hint">${esc(lvl.tryit.hint)}<br>Nur mit einer KI, die eure Schule erlaubt. Keine KI da? Dann geh direkt zum Quiz.</p>
       </div>
     </article>
     <section class="card quiz" id="quiz" aria-labelledby="quiz-title"></section>`;
   $("copy-btn").addEventListener("click", () => copyText($("try-text").textContent));
   if (lvl.builder) setupBuilder(lvl);
+  if (lvl.setup) lvl.setup();
+  stage.querySelectorAll("[data-jump]").forEach((b) => b.addEventListener("click", () => {
+    $(b.dataset.jump).scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "start" });
+  }));
   if (isDone(lvl.id)) renderDoneBox(lvl); else startQuiz(lvl, false);
+}
+
+/* Ton-Umschalter (Level «Den richtigen Ton treffen») */
+const TONES = [
+  { label: "Klassenchat", icon: "💬", forText: "für den Klassenchat", ton: "locker",
+    msg: "Hey Leute! 🏃 <mark>Dienstag</mark> ist Sporttag, Start <mark>8.15 Uhr</mark>. <mark>Turnschuhe</mark> nicht vergessen! 👟" },
+  { label: "Grosi", icon: "👵", forText: "für mein Grosi", ton: "herzlich",
+    msg: "Liebes Grosi ❤️ Am <mark>Dienstag</mark> haben wir Sporttag! Es geht um <mark>8.15 Uhr</mark> los. Ich nehme meine <mark>Turnschuhe</mark> mit. Liebe Grüsse" },
+  { label: "Eltern", icon: "📄", forText: "für einen Brief an die Eltern", ton: "höflich",
+    msg: "Guten Tag. Am <mark>Dienstag</mark> findet der Sporttag statt. Beginn ist um <mark>8.15 Uhr</mark>. Bitte geben Sie Ihrem Kind <mark>Turnschuhe</mark> mit." }
+];
+function setupTone() {
+  const box = $("tone");
+  box.innerHTML = `
+    <div class="tone-tabs" role="group" aria-label="Für wen ist die Nachricht?">
+      ${TONES.map((t, i) => `<button type="button" class="ttab" data-t="${i}"><span aria-hidden="true" style="font-size:1.3rem">${t.icon}</span>${esc(t.label)}</button>`).join("")}
+    </div>
+    <p class="tone-prompt" id="tone-prompt"></p>
+    <div class="tone-msg" id="tone-msg" aria-live="polite"></div>
+    <p class="tone-note">Gleiche Infos, anderer Ton: <mark>Dienstag</mark> <mark>8.15 Uhr</mark> <mark>Turnschuhe</mark></p>`;
+  function show(i) {
+    const t = TONES[i];
+    box.querySelectorAll(".ttab").forEach((b) => b.setAttribute("aria-pressed", String(Number(b.dataset.t) === i)));
+    $("tone-prompt").innerHTML = `Prompt: «Schreib die Infos zum Sporttag <b>${esc(t.forText)}</b>. Ton: <b>${esc(t.ton)}</b>.»`;
+    const m = $("tone-msg");
+    m.innerHTML = `<small>${esc(t.label)} · ${esc(t.ton)}</small>${t.msg}`;
+    m.classList.remove("swap"); void m.offsetWidth; m.classList.add("swap");
+  }
+  box.querySelectorAll(".ttab").forEach((b) => b.addEventListener("click", () => show(Number(b.dataset.t))));
+  show(0);
+}
+
+/* Fehlersuchbild (Level «Echt oder KI?») */
+const SPOTS = ["Buchstabensalat auf dem Schild", "Hand mit 6 Fingern", "Velo mit 3 Rädern"];
+function setupSpot() {
+  const found = new Set();
+  const svg = $("spot-svg");
+  function mark(i) {
+    if (found.has(i)) return;
+    found.add(i);
+    svg.querySelector(`.hot[data-spot="${i}"]`).classList.add("found");
+    $("spot-count").textContent = `Gefunden: ${found.size} von ${SPOTS.length}`;
+    $("spot-list").innerHTML = [...found].map((n) => `<li>${ICONS.check}<span>${esc(SPOTS[n])}</span></li>`).join("");
+    if (found.size === SPOTS.length) {
+      $("spot-msg").innerHTML = "<b>Alle gefunden!</b> Solche Fehler verraten KI-Bilder. Aber gute Fälschungen haben sie nicht – darum prüfst du die Quelle.";
+      $("spot-help").hidden = true;
+    } else {
+      $("spot-msg").textContent = "Gut gesehen! Such weiter.";
+    }
+  }
+  svg.querySelectorAll(".hot").forEach((h) => h.addEventListener("click", (e) => { e.stopPropagation(); mark(Number(h.dataset.spot)); }));
+  svg.addEventListener("click", () => { if (found.size < SPOTS.length) $("spot-msg").textContent = "Da ist alles normal. Schau genau hin: Schrift, Hände, Dinge im Hintergrund."; });
+  $("spot-help").addEventListener("click", () => SPOTS.forEach((_, i) => mark(i)));
 }
 
 /* Prompt-Baukasten (Level «Bilder beschreiben») */
