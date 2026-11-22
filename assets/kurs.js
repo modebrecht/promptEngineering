@@ -29,7 +29,7 @@ const stations = [
   },
   {
     title: "Ein Beispiel geben",
-    intro: "Ein Beispiel zeigt, wie die Antwort aussehen soll.",
+    intro: "Ein Beispiel hilft, wenn die Antwort ein bestimmtes Format haben soll.",
     questions: [
       {
         prompt: "Welche Musterzeile zeigt das gewünschte Format?",
@@ -111,11 +111,11 @@ const tasks = {
   feedback: {
     title: "Eine Antwort gezielt verbessern",
     steps: [
-      "Lass dir erklären, was ein Betriebssystem macht. Lies die erste Antwort.",
+      "Lass dir erklären, was ein Betriebssystem macht. Nenne die Zielgruppe und ein Kriterium, etwa dass ein Alltagsbeispiel vorkommen soll.",
       "Entscheide, was für eine 7. Klasse noch zu schwierig ist. Fordere genau dazu eine Änderung an.",
       "Vergleiche die beiden Antworten. Wähle einen kurzen Ausschnitt, an dem man die Änderung sieht."
     ],
-    criteria: "Die Änderung ist im zweiten Text erkennbar. Ein Fachwort wird erklärt oder ein passendes Beispiel kommt dazu."
+    criteria: "Lies beide Antworten und prüfe dein Kriterium selbst. Zeige die Stelle, an der die Verbesserung sichtbar wird."
   },
   stil: {
     title: "Einen Stil konkret vorgeben",
@@ -149,7 +149,7 @@ const tasks = {
     steps: [
       "Dein Ziel ist ein Entwurf für ein Aushangbild: Eine gelbe Ente im Regen, mit Platz oben für eine Überschrift.",
       "Lass dir einen Prompt für ein Bildtool vorschlagen. Überarbeite ihn so, dass Motiv, Bildausschnitt und Platz für den Titel klar sind.",
-      "Teste den Prompt im Bildtool, falls eines verfügbar ist. Sonst prüfe den erstellten Prompt an den drei Vorgaben."
+      "Teste den Prompt im Bildtool, falls eines verfügbar ist. Beschreibe kurz, was im Bild zu sehen ist. Ohne Bildtool kann dir ein Chat Rückmeldung zu den drei Vorgaben geben."
     ],
     criteria: "Man erkennt Motiv und Bildausschnitt. Der obere Bereich ist für die Überschrift vorgesehen. Ohne Bildtool kannst du als Ergebnis eine kurze KI-Rückmeldung zum Prompt verwenden."
   },
@@ -160,7 +160,7 @@ const tasks = {
       "Frage, wann der Raum geöffnet ist und ob dort ein Drucker verfügbar ist. Verlange für belegte Aussagen ein kurzes Zitat aus der Mitteilung.",
       "Prüfe, ob die Antwort die Öffnungszeit belegt und die Frage zum Drucker offenlässt."
     ],
-    criteria: "Die Zeit stimmt mit der Mitteilung überein. Die Antwort weist darauf hin, dass die Mitteilung nichts über einen Drucker sagt."
+    criteria: "Die Zeit stimmt mit der Mitteilung überein. Die Antwort weist darauf hin, dass die Mitteilung nichts über einen Drucker sagt. Bei einer Websuche öffnest du den angegebenen Link und suchst dort die Stelle, die die Aussage belegt."
   },
   vorlage: {
     title: "Eine Prompt-Schablone wiederverwenden",

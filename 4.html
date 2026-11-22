@@ -115,7 +115,7 @@
             <button onclick="showTab(3)" id="tab-btn-3" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>3. Few-Shot</button>
             <button onclick="showTab(4)" id="tab-btn-4" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>4. Halluzination</button>
             <button onclick="showTab(5)" id="tab-btn-5" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>5. Negativ-Prompt</button>
-            <button onclick="showTab(6)" id="tab-btn-6" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>6. CoT</button>
+            <button onclick="showTab(6)" id="tab-btn-6" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>6. Lösungsweg</button>
             <button onclick="showTab(7)" id="tab-btn-7" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>7. Multi-Persona</button>
             <button onclick="showTab(8)" id="tab-btn-8" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>8. Meta</button>
             <button onclick="showTab(9)" id="tab-btn-9" class="tab-btn px-4 py-2 rounded-full bg-slate-800/40 text-slate-500 text-xs cursor-not-allowed font-semibold transition-all border border-slate-700" data-locked="true"><i class="fa-solid fa-lock mr-2 text-[10px]"></i>9. Daten-Anker</button>
@@ -163,10 +163,10 @@
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">1.1 Warum ist die Zuweisung einer "Rolle" (z.B. "Du bist ein Lehrer") so effektiv?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">1.1 Wann kann eine Rolle wie «Lehrperson» hilfreich sein?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q1-1', this, false, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dadurch Zugriff auf geheime Datenbanken bekommt.</button>
-                                <button onclick="revealQuiz('q1-1', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil sie das Sprachmodell zwingt, bestimmte Vokabeln und Tonalitäten zu priorisieren.</button>
+                                <button onclick="revealQuiz('q1-1', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Sie kann Stil und Blickwinkel vorgeben. Ziel, Zielgruppe und Format machen den Auftrag konkret.</button>
                             </div>
                             <div id="q1-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -182,7 +182,7 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">1.3 Was ist die größte Gefahr bei extrem kurzen Prompts ("Schreibe ein Gedicht")?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q1-3', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI greift auf den absoluten Durchschnitt ihrer Daten zurück (Klischees).</button>
+                                <button onclick="revealQuiz('q1-3', this, true, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI muss mehr selbst entscheiden. Das Ergebnis kann an dem vorbeigehen, was du brauchst.</button>
                                 <button onclick="revealQuiz('q1-3', this, false, 1)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI verweigert die Antwort wegen fehlendem Kontext.</button>
                             </div>
                             <div id="q1-3" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -207,7 +207,7 @@
                         <span class="bg-brand-secondary/20 text-brand-secondary w-8 h-8 rounded-lg flex items-center justify-center text-sm">2</span>
                         Micro-Prompting
                     </h2>
-                    <p class="text-brand-secondary text-sm font-semibold mb-6 uppercase tracking-wider">Aufgaben in Teilschritte zerlegen</p>
+                    <p class="text-brand-secondary text-sm font-semibold mb-6 uppercase tracking-wider">Teilschritte nutzen, wenn du zwischendurch entscheiden willst</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white">Schritt 1: Macro (Alles sofort)</p>
@@ -259,7 +259,7 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">2.3 Im Micro-Prompting haben wir der KI die Wahl gelassen ("Nenne 3 Optionen"). Warum ist das klug?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q2-3', this, true, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es nutzt das divergente Denken der KI für kreative Ideen.</button>
+                                <button onclick="revealQuiz('q2-3', this, true, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Du kannst die Ideen vergleichen und eine auswählen, bevor die Geschichte geschrieben wird.</button>
                                 <button onclick="revealQuiz('q2-3', this, false, 2)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es verhindert Halluzinationen zu 100%.</button>
                             </div>
                             <div id="q2-3" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -284,10 +284,10 @@
                         <span class="bg-yellow-500/20 text-yellow-500 w-8 h-8 rounded-lg flex items-center justify-center text-sm">3</span>
                         Few-Shot Prompting
                     </h2>
-                    <p class="text-yellow-500 text-sm font-semibold mb-6 uppercase tracking-wider">Der KI Muster beibringen</p>
+                    <p class="text-yellow-500 text-sm font-semibold mb-6 uppercase tracking-wider">Mit Beispielen ein Format zeigen</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
-                            <p class="font-semibold text-white">Aufgabe: Sende folgenden Textblock ab:</p>
+                            <p class="font-semibold text-white">Probiere den Auftrag zuerst ohne Beispiele. Teste dann, ob die Beispielzeilen das gewünschte Format deutlicher machen.</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-yellow-500 group/copy">
                                 <p id="prompt3a" class="whitespace-pre-line text-sm">Übersetze die folgenden Begriffe in maximal drei Emojis. Behalte das Muster exakt bei.
                                 
@@ -355,7 +355,7 @@
                     <p class="text-brand-accent text-sm font-semibold mb-6 uppercase tracking-wider">Grenzen testen & Fakten prüfen</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
-                            <p class="font-semibold text-white">Aufgabe: Stelle der KI unmögliche Fragen.</p>
+                            <p class="font-semibold text-white">Teste die erfundene Astronautin im Beispiel. Falls die KI eine Quelle nennt, öffne sie und prüfe, welche Aussage dort tatsächlich belegt ist.</p>
                             <div class="grid gap-2">
                                 <div class="prompt-box p-3 rounded-r-lg relative border-l-brand-accent group/copy">
                                     <p id="prompt4a" class="text-sm">Fasse die Biografie der Solothurner Astronautin Klara Sternenstaub zusammen.</p>
@@ -373,17 +373,17 @@
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">4.1 Was ist die technische Ursache für Halluzinationen?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">4.1 Warum kann eine KI überzeugend klingen und trotzdem etwas Falsches sagen?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q4-1', this, false, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI sucht live im Internet und findet dort Fehler.</button>
-                                <button onclick="revealQuiz('q4-1', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI "weiß" nichts, sie berechnet nur das wahrscheinlich nächste Wort.</button>
+                                <button onclick="revealQuiz('q4-1', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI kann eine plausible Antwort formulieren, auch wenn ihr dafür verlässliche Informationen fehlen.</button>
                             </div>
                             <div id="q4-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">4.2 Warum fallen Menschen so leicht auf KI-Lügen herein?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">4.2 Warum kann eine erfundene Aussage leicht unbemerkt bleiben?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q4-2', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil der Text extrem selbstbewusst und wohlstrukturiert formuliert wird.</button>
+                                <button onclick="revealQuiz('q4-2', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Ein flüssiger und selbstbewusster Text kann glaubwürdig wirken.</button>
                                 <button onclick="revealQuiz('q4-2', this, false, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil Halluzinationen absichtlich grün markiert werden.</button>
                             </div>
                             <div id="q4-2" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -391,7 +391,7 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">4.3 Wie verringert man das Risiko?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q4-3', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Satz anfügen: "Wenn du es nicht weißt, erfinde nichts, sondern sag es."</button>
+                                <button onclick="revealQuiz('q4-3', this, true, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Fehlende Informationen kennzeichnen lassen und wichtige Aussagen in einer verlässlichen Quelle nachprüfen.</button>
                                 <button onclick="revealQuiz('q4-3', this, false, 4)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man schreibt den Prompt komplett in Großbuchstaben.</button>
                             </div>
                             <div id="q4-3" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -416,12 +416,12 @@
                         <span class="bg-indigo-500/20 text-indigo-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">5</span>
                         Negative Prompting
                     </h2>
-                    <p class="text-indigo-400 text-sm font-semibold mb-6 uppercase tracking-wider">Der KI verbieten, was sie am liebsten tut</p>
+                    <p class="text-indigo-400 text-sm font-semibold mb-6 uppercase tracking-wider">Den gewünschten Stil konkret vorgeben</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
-                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der Negative Prompt</p>
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Stil und Grenzen benennen</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-green-400 group/copy">
-                                <p id="prompt5b">Schreibe einen kurzen Werbetext für ein neues E-Bike. WICHTIG: Verwende auf GAR KEINEN FALL die Wörter "revolutionär", "ultimativ", "innovativ". Verzichte komplett auf Ausrufezeichen (!).</p>
+                                <p id="prompt5b">Schreibe zwei kurze, sachliche Sätze über ein E-Bike. Beschreibe die fünf Unterstützungsstufen und den abnehmbaren Akku. Nutze Punkte am Satzende und überprüfe, ob beide Angaben stimmen.</p>
                                 <button onclick="copyText('prompt5b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
                         </div>
@@ -435,17 +435,17 @@
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">5.1 Warum nutzt die KI ohne Negativ-Prompt ständig Wörter wie "bahnbrechend"?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">5.1 Warum können bei einem offenen Werbeauftrag Floskeln entstehen?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q5-1', this, false, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil sie heimlich Werbung macht.</button>
-                                <button onclick="revealQuiz('q5-1', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil dieses "Klischee-Vokabular" durch das Training statistisch am nächsten liegt.</button>
+                                <button onclick="revealQuiz('q5-1', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Der Auftrag lässt den Stil offen. Werbefloskeln sind ein häufiges Muster in Werbetexten.</button>
                             </div>
                             <div id="q5-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">5.2 Manchmal ignoriert die KI ein Verbot wie "Benutze kein Ausrufezeichen". Warum?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">5.2 Was hilft, wenn der Text ohne Ausrufezeichen auskommen soll?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q5-2', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Sprachmodelle tun sich schwer mit Negationen. Die bloße Nennung kann es auslösen.</button>
+                                <button onclick="revealQuiz('q5-2', this, true, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Sag, welche Satzzeichen du möchtest, und kontrolliere die fertige Antwort.</button>
                                 <button onclick="revealQuiz('q5-2', this, false, 5)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI rebelliert absichtlich.</button>
                             </div>
                             <div id="q5-2" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -476,14 +476,14 @@
                     </div>
                     <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
                         <span class="bg-orange-500/20 text-orange-500 w-8 h-8 rounded-lg flex items-center justify-center text-sm">6</span>
-                        Chain of Thought
+                        Einen Lösungsweg prüfen
                     </h2>
-                    <p class="text-orange-500 text-sm font-semibold mb-6 uppercase tracking-wider">Zwinge die KI zum Nachdenken</p>
+                    <p class="text-orange-500 text-sm font-semibold mb-6 uppercase tracking-wider">Eine Rechnung mit einem kurzen Rechencheck überprüfen</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
-                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Ketten-Denken</p>
+                            <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Ergebnis und Rechencheck</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-orange-500 group/copy">
-                                <p id="prompt6b" class="text-sm">Eine Schnecke klettert einen 10 Meter hohen Brunnen hinauf. Tagsüber schafft sie 3 Meter, nachts rutscht sie 2 Meter ab. Wie viele Tage braucht sie, um den Rand zu erreichen? WICHTIG: Denke Schritt für Schritt laut nach und zeige mir deine Rechnung für jeden einzelnen Tag, bevor du die finale Antwort nennst.</p>
+                                <p id="prompt6b" class="text-sm">Eine Schnecke klettert einen 10 Meter hohen Brunnen hinauf. Tagsüber schafft sie 3 Meter, nachts rutscht sie 2 Meter ab. Am Rand ist sie draussen. Wie viele Tage braucht sie? Nenne das Ergebnis und zeige kurz die Höhe am Morgen und am Ende des letzten Klettertags.</p>
                                 <button onclick="copyText('prompt6b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
                         </div>
@@ -497,26 +497,26 @@
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">6.1 Warum hilft der Befehl "Denke Schritt für Schritt"?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.1 Warum ist eine kurze Rechnung zusammen mit dem Ergebnis hilfreich?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q6-1', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er zwingt das Modell, Zwischenschritte als Text auszugeben, wodurch es sich selbst kontrolliert und Rechenfehler verringert.</button>
+                                <button onclick="revealQuiz('q6-1', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Du kannst die entscheidende Rechnung selbst überprüfen.</button>
                                 <button onclick="revealQuiz('q6-1', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er schaltet einen versteckten "Mathe-Prozessor" in der KI ein.</button>
                             </div>
                             <div id="q6-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">6.2 Für welche Art von Aufgaben ist CoT am wichtigsten?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.2 Worauf kommt es beim Schneckenrätsel am letzten Tag an?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q6-2', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für kreative Gedichte und emotionale Werbetexte.</button>
-                                <button onclick="revealQuiz('q6-2', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Für Mathematik, komplexe Logik-Rätsel und Programmierung.</button>
+                                <button onclick="revealQuiz('q6-2', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Schnecke muss am letzten Tag noch einmal zwei Meter abrutschen.</button>
+                                <button onclick="revealQuiz('q6-2', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Sobald die Schnecke den Rand erreicht, rutscht sie in dieser Nacht nicht mehr ab.</button>
                             </div>
                             <div id="q6-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">6.3 Was ist ein offensichtlicher "Nachteil" dieser Methode?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">6.3 Wie kannst du die Lösung «8 Tage» überprüfen?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q6-3', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Generierung dauert länger und der ausgegebene Text ist viel länger.</button>
-                                <button onclick="revealQuiz('q6-3', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI wird dadurch extrem unfreundlich und pedantisch.</button>
+                                <button onclick="revealQuiz('q6-3', this, true, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Am Morgen des 8. Tags ist sie auf 7 Metern. Mit 3 weiteren Metern erreicht sie den Rand.</button>
+                                <button onclick="revealQuiz('q6-3', this, false, 6)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Schau, ob die Rechnung möglichst viele Zeilen hat.</button>
                             </div>
                             <div id="q6-3" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
@@ -540,7 +540,7 @@
                         <span class="bg-teal-400/20 text-teal-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">7</span>
                         Multi-Persona
                     </h2>
-                    <p class="text-teal-400 text-sm font-semibold mb-6 uppercase tracking-wider">Lass Experten diskutieren</p>
+                    <p class="text-teal-400 text-sm font-semibold mb-6 uppercase tracking-wider">Argumente aus simulierten Sichtweisen vergleichen</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Das Experten-Panel</p>
@@ -561,7 +561,7 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">7.1 Was ist der Hauptvorteil dieser Methode im Vergleich zu einer simplen Pro/Contra-Liste?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q7-1', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Argumente werden emotionaler und aus echten menschlichen Blickwinkeln beleuchtet.</button>
+                                <button onclick="revealQuiz('q7-1', this, true, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die simulierten Rollen können unterschiedliche Anliegen sichtbar machen. Überprüfe faktische Aussagen separat.</button>
                                 <button onclick="revealQuiz('q7-1', this, false, 7)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Es spart sehr viel Zeit, da die KI viel kürzer antwortet.</button>
                             </div>
                             <div id="q7-1" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -602,12 +602,12 @@
                         <span class="bg-brand-pink/20 text-brand-pink w-8 h-8 rounded-lg flex items-center justify-center text-sm">8</span>
                         Meta-Prompting
                     </h2>
-                    <p class="text-brand-pink text-sm font-semibold mb-6 uppercase tracking-wider">Lass die KI deine Arbeit machen</p>
+                    <p class="text-brand-pink text-sm font-semibold mb-6 uppercase tracking-wider">Einen Promptentwurf erstellen und ausprobieren</p>
                     <div class="space-y-4 text-slate-300">
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der Meta-Prompt (Die KI baut den Prompt)</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-brand-pink group/copy bg-brand-pink/5">
-                                <p id="prompt8b" class="text-sm">Du bist ein Weltklasse-Experte für KI-Bildgeneratoren (Prompt-Engineering). Ich möchte ein Bild von einem Golden Retriever im Herbstwald erstellen.<br><br>Schreibe mir den perfekten, hochdetaillierten englischen Prompt, den ich in die Bild-KI eingeben muss. Erwähne Kameraeinstellungen, Lichtverhältnisse (z.B. Cinematic Lighting), Stil und Atmosphäre. Gib mir NUR den fertigen Prompt aus, ohne weitere Erklärungen.</p>
+                                <p id="prompt8b" class="text-sm">Entwirf einen kurzen Prompt für ein fotorealistisches Bild von einem Golden Retriever im Herbstwald. Der Hund soll links stehen, und rechts soll Platz für einen Titel bleiben. Beschreibe Bildausschnitt und Licht so, dass sie zum Motiv passen.</p>
                                 <button onclick="copyText('prompt8b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
                         </div>
@@ -621,9 +621,9 @@
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">8.1 Warum funktioniert Meta-Prompting so unfassbar gut?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">8.1 Wobei kann Meta-Prompting helfen?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q8-1', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI kennt die Struktur ihrer eigenen Trainingsdaten am besten und weiß genau, auf welche Schlüsselwörter andere KIs optimal reagieren.</button>
+                                <button onclick="revealQuiz('q8-1', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI kann dein Ziel in einen ersten, strukturierten Promptentwurf übersetzen.</button>
                                 <button onclick="revealQuiz('q8-1', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Weil die KI dadurch Mitleid mit dem Nutzer bekommt.</button>
                             </div>
                             <div id="q8-1" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -639,7 +639,7 @@
                         <div class="bg-slate-800/50 p-4 rounded-lg">
                             <p class="text-slate-200 mb-3 text-sm font-medium">8.3 Was ist der logisch nächste Schritt, nachdem die KI dir den Meta-Prompt ausgegeben hat?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q8-3', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man kopiert den von ihr geschriebenen Text und fügt ihn als *neuen* Prompt ein.</button>
+                                <button onclick="revealQuiz('q8-3', this, true, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Prüfe den Entwurf an deinen Bildvorgaben und teste ihn im gewählten Bildtool.</button>
                                 <button onclick="revealQuiz('q8-3', this, false, 8)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man muss sich den Text ausdrucken und dem Lehrer abgeben.</button>
                             </div>
                             <div id="q8-3" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -662,26 +662,26 @@
                     </div>
                     <h2 class="text-2xl font-bold mb-2 flex items-center gap-3">
                         <span class="bg-blue-500/20 text-blue-400 w-8 h-8 rounded-lg flex items-center justify-center text-sm">9</span>
-                        Der Daten-Anker (RAG-Light)
+                        Mit einem Quelltext arbeiten
                     </h2>
-                    <p class="text-blue-400 text-sm font-semibold mb-6 uppercase tracking-wider">Zwinge die KI auf deine Fakten</p>
+                    <p class="text-blue-400 text-sm font-semibold mb-6 uppercase tracking-wider">Aussagen am vorgegebenen Text belegen</p>
                     
                     <div class="space-y-4 text-slate-300">
-                        <p><strong>Ziel:</strong> Die KI daran hindern, "Wissen" aus dem Internet zu erfinden, indem wir ihr exakt vorschreiben, welche Quelle sie nutzen darf.</p>
+                        <p><strong>Ziel:</strong> Nur belegte Informationen aus einem vorgegebenen Text übernehmen und offene Fragen erkennen.</p>
                         
                         <div class="space-y-2 mt-4">
-                            <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Der gefährliche Prompt</p>
+                            <p class="font-semibold text-white"><i class="fa-solid fa-xmark text-brand-accent mr-2"></i>Schritt 1: Die Frage ohne Quelle</p>
                             <div class="prompt-box p-4 rounded-r-lg relative group/copy">
-                                <p id="prompt9a" class="text-sm">Fasse die Ursachen für den Untergang des Römischen Reiches zusammen.</p>
+                                <p id="prompt9a" class="text-sm">Wann ist der Informatikraum geöffnet? Kann ich dort einen Drucker nutzen?</p>
                                 <button onclick="copyText('prompt9a', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
-                            <p class="text-xs text-slate-400 mt-1">Hier rät die KI wild aus ihrem Trainingsmaterial zusammen. Für eine seriöse Hausarbeit ist das oft zu ungenau oder schlicht falsch.</p>
+                            <p class="text-xs text-slate-400 mt-1">Für diese Fragen braucht die KI eine Mitteilung der Schule oder eine andere passende Quelle.</p>
                         </div>
 
                         <div class="space-y-2 mt-4">
                             <p class="font-semibold text-white"><i class="fa-solid fa-check text-green-400 mr-2"></i>Schritt 2: Der Daten-Anker</p>
                             <div class="prompt-box p-4 rounded-r-lg relative border-l-blue-400 group/copy bg-blue-500/5">
-                                <p id="prompt9b" class="text-sm">Hier ist ein Textauszug aus meinem Geschichtsbuch: <br><br>"[Füge hier irgendeinen beliebigen Wikipedia-Satz über Rom ein]"<br><br>Fasse die Ursachen für den Untergang Roms AUSSCHLIESSLICH basierend auf dem oben stehenden Text zusammen. Nutze kein externes Wissen. Wenn der Text die Frage nicht beantwortet, sage: "Das steht nicht im Text."</p>
+                                <p id="prompt9b" class="text-sm">Antworte anhand der folgenden Schulmitteilung. «Am Mittwoch ist der Informatikraum von 13.30 bis 15 Uhr offen. Bring deine Kopfhörer mit.»<br><br>Wann ist der Raum offen? Kann ich dort einen Drucker nutzen? Nenne die passende Textstelle für jede belegte Aussage. Kennzeichne, was in der Mitteilung offenbleibt.</p>
                                 <button onclick="copyText('prompt9b', this)" class="absolute top-2 right-2 text-slate-500 hover:text-white transition-colors" title="Kopieren"><i class="fa-regular fa-copy"></i></button>
                             </div>
                         </div>
@@ -696,25 +696,25 @@
                     </h3>
                     <div class="space-y-6">
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">9.1 Warum ist der Daten-Anker bei Hausaufgaben oder Recherchen so unfassbar wichtig?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.1 Was bringt ein bereitgestellter Quelltext?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q9-1', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er verhindert Halluzinationen zu fast 100%, weil die KI als "Text-Zusammenfasser" anstatt als "Wissens-Orakel" agiert.</button>
+                                <button onclick="revealQuiz('q9-1', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Du kannst Antworten mit den Textstellen vergleichen und erkennst leichter, welche Aussagen unbelegt sind.</button>
                                 <button onclick="revealQuiz('q9-1', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Er sorgt dafür, dass die KI längere Antworten schreibt.</button>
                             </div>
                             <div id="q9-1" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">9.2 Was bedeutet der Profi-Begriff "RAG" (Retrieval-Augmented Generation) in diesem Zusammenhang?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.2 Was kommt bei RAG gegenüber einem eingefügten Text hinzu?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <button onclick="revealQuiz('q9-2', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Random AI Generation (Zufällige Erzeugung von Texten).</button>
-                                <button onclick="revealQuiz('q9-2', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Man "holt" (Retrieval) zuerst verlässliche Fakten (z.B. aus einem PDF) und gibt sie der KI mit, damit sie ihren Text darauf aufbaut (Augmented).</button>
+                                <button onclick="revealQuiz('q9-2', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Das System sucht vor der Antwort selbst nach passenden Dokumenten oder Textstellen und gibt sie dem Modell mit.</button>
                             </div>
                             <div id="q9-2" class="hidden mt-3 p-3 rounded text-sm"></div>
                         </div>
                         <div class="bg-slate-800/50 p-4 rounded-lg">
-                            <p class="text-slate-200 mb-3 text-sm font-medium">9.3 Was passiert, wenn der mitgelieferte Text die Frage gar nicht beantwortet?</p>
+                            <p class="text-slate-200 mb-3 text-sm font-medium">9.3 Was sollte die Antwort sagen, wenn die Information im Text fehlt?</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                <button onclick="revealQuiz('q9-3', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Wenn der Prompt gut ist, gibt die KI zu, dass die Info im Text fehlt ("Das steht nicht im Text"), anstatt zu lügen.</button>
+                                <button onclick="revealQuiz('q9-3', this, true, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die Information steht nicht im Text. Die Frage bleibt offen.</button>
                                 <button onclick="revealQuiz('q9-3', this, false, 9)" class="text-left text-sm border border-slate-600 bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg text-slate-300 transition-all">Die KI stürzt ab und der Browser muss neu geladen werden.</button>
                             </div>
                             <div id="q9-3" class="hidden mt-3 p-3 rounded text-sm"></div>
@@ -786,10 +786,10 @@
             3: "Few-Shot",
             4: "Halluzination",
             5: "Negativ-Prompt",
-            6: "Chain of Thought",
+            6: "Lösungsweg prüfen",
             7: "Multi-Persona",
             8: "Meta-Prompting",
-            9: "Daten-Anker (RAG)"
+            9: "Mit einem Quelltext arbeiten"
         };
 
         const badgeData = {

@@ -108,7 +108,7 @@ async function createCoursePdf({ name, className, date, stationTitles, practice 
     await paragraph(practice.title, { font: bold });
     for (const [label, value] of [
       ["Mein Prompt", practice.prompt],
-      ["Ausschnitt aus der Antwort", practice.result],
+      ["Ausschnitt oder Bildbeschreibung", practice.result],
       ["Das habe ich verbessert", practice.change]
     ]) {
       y -= 6;
