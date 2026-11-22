@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prompt Engineering · Basic</title>
+  <link rel="stylesheet" href="assets/kurs.css">
+  <script defer src="assets/kurs.js"></script>
+  <script defer src="assets/abschluss.js"></script>
+</head>
+<body data-page="basic">
+  <svg class="award-symbols" aria-hidden="true" focusable="false" width="0" height="0" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="award-auftrag" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 12h.01"/></symbol>
+    <symbol id="award-beispiel" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h2m3 0h3m-8 4h2m3 0h3"/></symbol>
+    <symbol id="award-beleg" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="5.5"/><path d="m14.5 14.5 4 4m-10-8 1.5 1.5 2.5-3"/></symbol>
+    <symbol id="award-antwort" viewBox="0 0 24 24"><path d="M20 15.5H8L4 19V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM9 10.5l2 2 4-4"/></symbol>
+  </svg>
+  <div class="award-flight-layer" id="award-flight-layer" aria-hidden="true"></div>
+  <a class="skip-link" href="#inhalt">Zum Inhalt</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="index.html">Prompt Engineering</a>
+      <nav aria-label="Lernbereiche">
+        <a href="index.html" id="nav-basic" aria-current="page">Basic</a>
+        <a href="erweitert.html">Erweitert</a>
+        <a href="#abschluss" id="nav-abschluss">Abschluss</a>
+      </nav>
+    </div>
+  </header>
+  <main id="inhalt" tabindex="-1">
+    <noscript><p class="notice">Aktiviere JavaScript, um die Stationen zu bearbeiten und das PDF zu erstellen.</p></noscript>
+    <p id="storage-notice" class="notice" role="status" hidden>Dieser Browser kann deinen Fortschritt nicht speichern.</p>
+
+    <section id="basic" aria-labelledby="basic-title">
+      <header class="page-heading">
+        <h1 id="basic-title">Basic</h1>
+        <p>Vier Stationen mit je zwei Klickfragen. Bei jeder Antwort siehst du direkt, worauf es ankommt.</p>
+      </header>
+      <div class="progress-area">
+        <label id="progress-label" for="course-progress">0 von 4 Stationen abgeschlossen</label>
+        <progress id="course-progress" max="4" value="0"></progress>
+      </div>
+      <article class="panel" aria-labelledby="station-title">
+        <p class="context-label" id="station-position"></p>
+        <h2 id="station-title" tabindex="-1"></h2>
+        <p id="station-intro"></p>
+        <div id="station-example"></div>
+        <div id="questions"></div>
+        <div class="award station-award" id="station-award" hidden></div>
+        <div class="actions">
+          <button type="button" class="secondary" id="station-back">Zurück</button>
+          <button type="button" id="station-next" disabled>Weiter</button>
+        </div>
+      </article>
+    </section>
+
+    <template id="station-example-1">
+      <figure class="course-example" aria-label="Bausteine eines Beispielauftrags">
+        <dl class="example-prompt">
+          <div>
+            <dt>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>
+              Was?
+            </dt>
+            <dd>Vulkane erklären</dd>
+          </div>
+          <div>
+            <dt>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3"/><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/></svg>
+              Für wen?
+            </dt>
+            <dd>Für Kinder</dd>
+          </div>
+          <div>
+            <dt>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 10h8m-8 4h6"/></svg>
+              Welche Form?
+            </dt>
+            <dd>In zwei Sätzen</dd>
+          </div>
+        </dl>
+      </figure>
+    </template>
+
+    <template id="station-example-2">
+      <figure class="course-example" aria-label="Zwei Beispiele mit demselben Aufbau">
+        <table class="example-pattern">
+          <thead><tr><th scope="col">Gemüse</th><th scope="col">Farbe</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Tomate</td>
+              <td><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="7" fill="#b73536" stroke="none"/></svg>Rot</td>
+            </tr>
+            <tr>
+              <td>Karotte</td>
+              <td><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="7" fill="#c2581b" stroke="none"/></svg>Orange</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </template>
+
+    <template id="station-example-3">
+      <figure class="course-example example-comparison" aria-label="Beispiel für eine Aussage mit Beleg">
+        <div class="example-card">
+          <p class="example-label">Mitteilung</p>
+          <p>«Das Training beginnt um <mark>16 Uhr</mark>.»</p>
+        </div>
+        <svg class="example-arrow" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 12h15m-5-5 5 5-5 5"/></svg>
+        <div class="example-card">
+          <p class="example-label">Aussage der KI</p>
+          <p>«Training ab <mark>16 Uhr</mark>.»</p>
+        </div>
+      </figure>
+    </template>
+
+    <template id="station-example-4">
+      <figure class="course-example" aria-label="Beispiel für eine verbesserte Antwort">
+        <ol class="example-revision" role="list">
+          <li class="example-card">
+            <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 16H8l-4 4V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8 10h8"/></svg>Erste Antwort</p>
+            <p>«Wasser verdunstet.»</p>
+          </li>
+          <li class="example-card example-instruction">
+            <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 16H8l-4 4V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM12 8v5m-2.5-2.5h5"/></svg>Folgeauftrag</p>
+            <p>«Gib ein Beispiel.»</p>
+          </li>
+          <li class="example-card">
+            <p class="example-label"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 16H8l-4 4V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2zM8.5 10.5l2.5 2.5 4.5-4.5"/></svg>Neue Antwort</p>
+            <p>«Eine Pfütze wird kleiner, wenn Wasser daraus verdunstet.»</p>
+          </li>
+        </ol>
+      </figure>
+    </template>
+
+    <template id="award-template">
+      <span class="award-medal" aria-hidden="true">
+        <svg viewBox="0 0 24 24" focusable="false"><use></use></svg>
+      </span>
+      <span class="award-copy">
+        <span class="award-caption" hidden>Abzeichen verdient</span>
+        <span class="award-name"></span>
+      </span>
+    </template>
+
+    <section id="abschluss" aria-labelledby="abschluss-title" hidden>
+      <header class="page-heading">
+        <div class="completion-heading" id="completion-heading">
+          <span class="completion-trophy" id="completion-trophy" aria-hidden="true" hidden>
+            <svg viewBox="0 0 40 40" focusable="false">
+              <path class="trophy-cup" d="M13 9h14v10a7 7 0 0 1-14 0z"/>
+              <path d="M13 12H8v4a5 5 0 0 0 5 5m14-9h5v4a5 5 0 0 1-5 5m-7 5v6m-6 0h12"/>
+              <path class="trophy-star" d="m20 12 1 2.5h2.7l-2.1 1.7.8 2.6-2.4-1.6-2.4 1.6.8-2.6-2.1-1.7H19z"/>
+              <path class="trophy-sparks" d="M7 4v6M4 7h6m24 17v7m-3.5-3.5h7"/>
+            </svg>
+          </span>
+          <div>
+            <h1 id="abschluss-title" tabindex="-1">Abschluss</h1>
+            <p id="abschluss-summary"></p>
+          </div>
+        </div>
+        <ul class="completion-awards" id="completion-awards" aria-label="Deine Abzeichen" role="list" hidden></ul>
+      </header>
+      <section class="panel" id="abschluss-pending" hidden>
+        <h2>Dein Fortschritt</h2>
+        <p>Schliesse alle vier Stationen ab, um dein PDF herunterzuladen.</p>
+        <a class="button" href="index.html">Weiter zu Basic</a>
+      </section>
+      <form class="panel" id="abschluss-form" hidden>
+        <h2>Dein Abschluss-PDF</h2>
+        <div class="form-grid">
+          <label for="student-name">Vor- und Nachname
+            <input id="student-name" name="student-name" type="text" maxlength="65" autocomplete="name" required>
+          </label>
+          <label for="student-class">Klasse
+            <input id="student-class" name="student-class" type="text" maxlength="24" required>
+          </label>
+        </div>
+        <p id="practice-summary"></p>
+        <div class="actions">
+          <button type="submit">Abschluss-PDF herunterladen</button>
+          <a href="erweitert.html">Zum freiwilligen Praxisauftrag</a>
+        </div>
+        <p id="download-status" role="status" hidden></p>
+      </form>
+    </section>
+  </main>
+</body>
+</html>
