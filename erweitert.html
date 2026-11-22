@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prompt Engineering · Erweitert</title>
+  <link rel="stylesheet" href="assets/kurs.css">
+  <script defer src="assets/kurs.js"></script>
+</head>
+<body data-page="erweitert">
+  <a class="skip-link" href="#inhalt">Zum Inhalt</a>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-name" href="index.html">Prompt Engineering</a>
+      <nav aria-label="Lernbereiche">
+        <a href="index.html">Basic</a>
+        <a href="erweitert.html" aria-current="page">Erweitert</a>
+        <a href="index.html#abschluss">Abschluss</a>
+      </nav>
+    </div>
+  </header>
+  <main id="inhalt">
+    <noscript><p class="notice">Aktiviere JavaScript, um einen Auftrag zu wählen und deine Ergebnisse festzuhalten.</p></noscript>
+    <p id="storage-notice" class="notice" role="status" hidden>Dieser Browser kann deinen Fortschritt nicht speichern.</p>
+
+    <header class="page-heading">
+      <h1>Erweitert</h1>
+      <p>Wähle einen freiwilligen Praxisauftrag. Halte am Ende deinen Prompt, einen Ausschnitt aus der Antwort und deine wichtigste Verbesserung fest.</p>
+    </header>
+    <section class="panel" aria-labelledby="praxis-title">
+      <h2 id="praxis-title">Praxisauftrag auswählen</h2>
+      <label for="task-choice">Auftrag
+        <select id="task-choice">
+          <option value="">Auftrag wählen</option>
+        </select>
+      </label>
+      <div id="task-content" hidden>
+        <h3 id="task-title"></h3>
+        <ol id="task-steps" class="task-steps"></ol>
+        <details class="self-check">
+          <summary>Woran erkenne ich ein gutes Ergebnis?</summary>
+          <p id="task-criteria"></p>
+        </details>
+        <div class="work-fields">
+          <label for="work-prompt">Dein endgültiger Prompt <small>(max. 340 Zeichen)</small>
+            <textarea id="work-prompt" rows="3" maxlength="340"></textarea>
+          </label>
+          <label for="work-result">Ein kurzer Ausschnitt aus der Antwort <small>(max. 340 Zeichen)</small>
+            <textarea id="work-result" rows="3" maxlength="340"></textarea>
+          </label>
+          <label for="work-change">Was hast du verbessert? <small>(max. 180 Zeichen)</small>
+            <textarea id="work-change" rows="2" maxlength="180"></textarea>
+          </label>
+        </div>
+        <p id="work-status" role="status"></p>
+      </div>
+      <div class="actions">
+        <a class="button" href="index.html#abschluss">Zum Abschluss</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
