@@ -94,7 +94,7 @@ progress { display: block; width: 100%; margin-top: 0.3rem; height: 0.7rem; acce
 
 .context-label { color: var(--primary-dark); font-size: 0.875rem; font-weight: 700; margin-bottom: 0.45rem; }
 
-.station-example {
+.course-example {
   margin: 0.9rem 0 0;
   padding: 0.55rem;
   border: 1px solid var(--line);
@@ -104,7 +104,7 @@ progress { display: block; width: 100%; margin-top: 0.3rem; height: 0.7rem; acce
   line-height: 1.35;
 }
 
-.station-example svg {
+.course-example svg {
   flex: 0 0 auto;
   width: 1.1rem;
   height: 1.1rem;
@@ -160,7 +160,7 @@ progress { display: block; width: 100%; margin-top: 0.3rem; height: 0.7rem; acce
 
 .example-comparison .example-card { min-height: 100%; }
 
-.example-comparison mark {
+.course-example mark {
   padding-inline: 0.16em;
   border-radius: 0.2em;
   color: var(--primary-dark);
@@ -172,6 +172,60 @@ progress { display: block; width: 100%; margin-top: 0.3rem; height: 0.7rem; acce
 .example-revision { list-style: none; }
 
 .example-instruction { background: var(--selected); }
+
+.example-pair, .example-motion {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.example-motion { align-items: center; max-width: 26rem; }
+
+.example-motion > svg { width: 100%; height: 4.75rem; }
+
+.example-guide { stroke: #a0b9bd; stroke-dasharray: 3 4; }
+
+.example-descent { stroke: var(--warning); }
+
+.example-motion-labels {
+  margin: 0;
+  padding: 0.55rem;
+  border-radius: 0.35rem;
+  background: var(--paper);
+}
+
+.example-motion-labels div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 0.6rem; }
+
+.example-motion-labels div + div { margin-top: 0.35rem; }
+
+.example-motion-labels dd { margin: 0; font-weight: 750; white-space: nowrap; }
+
+.example-frame { max-width: 26rem; }
+
+.example-frame-title, .example-frame-content {
+  padding: 0.6rem;
+  border-radius: 0.35rem;
+  text-align: center;
+}
+
+.example-frame-title {
+  border: 1px dashed var(--primary);
+  background: var(--paper);
+  color: var(--primary-dark);
+  font-weight: 750;
+}
+
+.example-frame-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.85rem;
+  margin-top: 0.4rem;
+  background: var(--selected);
+}
+
+.example-table-heading { margin-bottom: 0.3rem; }
 
 .question { margin: 1.35rem 0 0; padding: 0; border: 0; min-width: 0; }
 

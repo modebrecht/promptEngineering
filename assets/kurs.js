@@ -428,8 +428,14 @@ function initPractice() {
     const task = tasks[state.task];
     get("task-content").hidden = !task;
     choice.value = state.task;
-    if (!task) return;
+    const example = get("practice-example");
+    if (!task) {
+      example.replaceChildren();
+      return;
+    }
     get("task-title").textContent = task.title;
+    const template = get(`practice-example-${state.task}`);
+    example.replaceChildren(template.content.cloneNode(true));
     const steps = get("task-steps");
     steps.replaceChildren();
     task.steps.forEach((step) => appendText(steps, "li", step));
